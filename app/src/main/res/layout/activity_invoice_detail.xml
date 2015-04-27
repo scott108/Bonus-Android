@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="FamilyMart"
+        android:id="@+id/storeNameTextView"
+        android:paddingTop="10dp"
+        android:textSize="40dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="電子發票證明聯"
+        android:id="@+id/proveTextView"
+        android:textSize="25dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="103年01-02月"
+        android:id="@+id/datelineTextView"
+        android:textSize="25dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="AA-12345678"
+        android:id="@+id/invoiceNumTextView"
+        android:textSize="35dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="2015-01-01 00:00:00"
+        android:id="@+id/currentTimeTextView"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="賣方12345678"
+        android:id="@+id/storeNumTextView"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="交易明細"
+        android:id="@+id/goodsListTextView"
+        android:paddingTop="25dp"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="店號:000000-機01-序00000000"
+        android:id="@+id/storePhoneTextView"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="熱拿鐵    45*    1    45T"
+        android:id="@+id/goodsDetailTextView"
+        android:paddingTop="5dp"
+        android:textSize="25dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="1項    合計45"
+        android:id="@+id/totalMoneyTextView"
+        android:paddingTop="5dp"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="現金    $100找零    $55"
+        android:id="@+id/payDetailTextView"
+        android:paddingBottom="50dp"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>
