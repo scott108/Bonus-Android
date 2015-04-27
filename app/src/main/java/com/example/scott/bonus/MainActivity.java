@@ -261,18 +261,18 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
             invoiceStoreNum.setText(jsonObject.getString("StoreNum"));
             invoiceStorePhone.setText(jsonObject.getString("StorePhone"));
             invoiceGoodsList.setText("");
-            for(int i = 1;; i++) {
+            for(int i = 0;; i++) {
                 if(!jsonObject.has("Goods" + i)) {
                     break;
                 }
 
                 String[] token = jsonObject.getString("Goods" + i).split(",");
-                if(i == 1) {
-                    invoiceGoodsList.setText(invoiceGoodsList.getText() + token[0] + "*" + "    " + token[1] + "    "
+                if(i == 0) {
+                    invoiceGoodsList.setText(invoiceGoodsList.getText() + token[0] + "    " + token[1] + "*" + "    "
                             + token[2] + "    " + token[3] + "T");
                 }
                 else {
-                    invoiceGoodsList.setText(invoiceGoodsList.getText() + "\n" + token[0] + "*" + "    " + token[1] + "    "
+                    invoiceGoodsList.setText(invoiceGoodsList.getText() + "\n" + token[0] + "    " + token[1] + "*" + "    "
                                                                         + token[2] + "    " + token[3] + "T");
                 }
             }
@@ -297,7 +297,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
             invoiceItem.setStorePhone(jsonObject.getString("StorePhone"));
             invoiceItem.setTotalMoney(jsonObject.getString("TotalMoney"));
             invoiceItem.setPayDetail(jsonObject.getString("PayDetail"));
-            for(int i = 1;; i++) {
+            for(int i = 0;; i++) {
                 if(!jsonObject.has("Goods" + i)) {
                     break;
                 }
