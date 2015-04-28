@@ -297,6 +297,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
             invoiceItem.setStorePhone(jsonObject.getString("StorePhone"));
             invoiceItem.setTotalMoney(jsonObject.getString("TotalMoney"));
             invoiceItem.setPayDetail(jsonObject.getString("PayDetail"));
+            invoiceItem.setSignature(jsonObject.getString("Signature"));
             for(int i = 0;; i++) {
                 if(!jsonObject.has("Goods" + i)) {
                     break;

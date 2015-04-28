@@ -29,6 +29,7 @@ public class InvoiceDAO {
     public static final String STOREPHONE_COLUMN = "store_phone";
     public static final String TOTALMOMEY_COLUMN = "total_money";
     public static final String PAYDETAIL_COLUMN = "pay_detail";
+    public static final String SIGNATURE_COLUMN = "signature";
 
     // 使用上面宣告的變數建立表格的SQL指令
     public static final String CREATE_TABLE =
@@ -40,7 +41,8 @@ public class InvoiceDAO {
                     STORENUM_COLUMN + " TEXT NOT NULL, " +
                     STOREPHONE_COLUMN + " TEXT NOT NULL, " +
                     TOTALMOMEY_COLUMN + " TEXT NOT NULL, " +
-                    PAYDETAIL_COLUMN + " TEXT NOT NULL)";
+                    PAYDETAIL_COLUMN + " TEXT NOT NULL," +
+                    SIGNATURE_COLUMN + "  TEXT NOT NULL)";
 
     // 資料庫物件
     private SQLiteDatabase db;
@@ -70,6 +72,7 @@ public class InvoiceDAO {
         cv.put(STOREPHONE_COLUMN, invoiceItem.getStorePhone());
         cv.put(TOTALMOMEY_COLUMN, invoiceItem.getTotalMoney());
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
+        cv.put(SIGNATURE_COLUMN, invoiceItem.getSignature());
 
         // 第一個參數是表格名稱
         // 第二個參數是沒有指定欄位值的預設值
@@ -160,6 +163,7 @@ public class InvoiceDAO {
         result.setStorePhone(cursor.getString(5));
         result.setTotalMoney(cursor.getString(6));
         result.setPayDetail(cursor.getString(7));
+        result.setSignature(cursor.getString(8));
 
         // 回傳結果
         return result;

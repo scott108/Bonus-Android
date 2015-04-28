@@ -12,6 +12,7 @@ public class InvoiceItem {
     private String storePhone;
     private String totalMoney;
     private String payDetail;
+    private String signature;
 
     public String getStoreName() {
         return storeName;
@@ -77,6 +78,14 @@ public class InvoiceItem {
         this.payDetail = payDetail;
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     public InvoiceItem()
     {
 
@@ -84,7 +93,7 @@ public class InvoiceItem {
 
     public InvoiceItem(String storeName, String dateline, String invoiceNum,
                        String currentTime, String storeNum, String storePhone,
-                       String totalMoney, String payDetail)
+                       String totalMoney, String payDetail, String signature)
     {
         this.storeName = storeName;
         this.dateline = dateline;
@@ -94,5 +103,6 @@ public class InvoiceItem {
         this.storePhone = storePhone;
         this.totalMoney = totalMoney;
         this.payDetail = payDetail;
+        this.signature = signature;
     }
 }

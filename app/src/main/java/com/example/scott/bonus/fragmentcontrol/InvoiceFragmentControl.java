@@ -1,11 +1,13 @@
 package com.example.scott.bonus.fragmentcontrol;
 
 import android.app.Dialog;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
@@ -121,5 +123,6 @@ public class InvoiceFragmentControl {
         //query SQLite to add to dialog
 
         invoiceDetailDialog.show();
+        Toast.makeText(mainActivity, "簽章：" + invoiceItem.getSignature(), Toast.LENGTH_LONG).show();
     }
 }
