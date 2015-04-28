@@ -37,6 +37,7 @@ public abstract class CategoryAdapter extends BaseAdapter {
     public void addCategoryInExistClass(String title, String invoiceNum, String listContentTitle) {
         Category category = classHashMap.get(title);
         ArrayAdapter adapter = category.getAdapter();
+        System.out.println(adapter.getItem(0));
         adapter.add(listContentTitle);
         invoiceNumHashMap.put(adapter.getItem(adapter.getCount() - 1).toString(), invoiceNum);
     }

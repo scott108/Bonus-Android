@@ -27,7 +27,6 @@ public class InvoiceFragmentControl {
 
     public InvoiceFragmentControl(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        tempInvoiceList = new ArrayList<String>();
 
         //get screen size
         DisplayMetrics dm = new DisplayMetrics();
@@ -42,12 +41,12 @@ public class InvoiceFragmentControl {
         List<InvoiceItem> invoiceItems =  mainActivity.getInvoiceDAO().getAll();
         for(int i = 0; i < invoiceItems.size(); i++) {
             String listContentTitle = "\n發票統編：" + invoiceItems.get(i).getInvoiceNum() + "\n店名：" + invoiceItems.get(i).getStoreName()  + "\n消費時間："+ invoiceItems.get(i).getCurrentTime() + "\n";
-            if(!mCategoryAdapter.getClassName().contains(invoiceItems.get(i).getDateline())) {
-                tempInvoiceList.clear();
+            if(!mCategoryAdapter.getClassName().contains(invoiceItems.get(i).getStoreName())) {
+                tempInvoiceList = new ArrayList<String>();
                 tempInvoiceList.add(listContentTitle);
-                mCategoryAdapter.addCategory(invoiceItems.get(i).getDateline(), invoiceItems.get(i).getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+                mCategoryAdapter.addCategory(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
             } else {
-                mCategoryAdapter.addCategoryInExistClass(invoiceItems.get(i).getDateline(), invoiceItems.get(i).getInvoiceNum(), listContentTitle);
+                mCategoryAdapter.addCategoryInExistClass(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), listContentTitle);
             }
         }
     }
@@ -62,7 +61,6 @@ public class InvoiceFragmentControl {
             } else {
                 titleView = (TextView)convertView;
             }
-
             titleView.setText(title);
 
             return titleView;
@@ -76,16 +74,14 @@ public class InvoiceFragmentControl {
     public void addNewInvoiceIntoAdapter(InvoiceItem invoiceItem) {
 
         //get invoice data to add into listView
-
         String listContentTitle = "\n發票統編：" + invoiceItem.getInvoiceNum() + "\n店名：" + invoiceItem.getStoreName()  + "\n消費時間："+ invoiceItem.getCurrentTime() + "\n";
-        if(!mCategoryAdapter.getClassName().contains(invoiceItem.getDateline())) {
-            tempInvoiceList.clear();
+        if(!mCategoryAdapter.getClassName().contains(invoiceItem.getStoreName())) {
+            tempInvoiceList = new ArrayList<String>();
             tempInvoiceList.add(listContentTitle);
-            mCategoryAdapter.addCategory(invoiceItem.getDateline(), invoiceItem.getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+            mCategoryAdapter.addCategory(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
         } else {
-            mCategoryAdapter.addCategoryInExistClass(invoiceItem.getDateline(), invoiceItem.getInvoiceNum(), listContentTitle);
+            mCategoryAdapter.addCategoryInExistClass(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), listContentTitle);
         }
-
     }
 
     public void showInvoiceDetailDialog(String invoiceNum) {

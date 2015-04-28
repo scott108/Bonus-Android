@@ -8,13 +8,11 @@ import android.widget.ArrayAdapter;
 
 public class Category {
     private String mTitle;
-
     private ArrayAdapter mAdapter;
     public Category(String title, ArrayAdapter adapter) {
         mTitle = title;
         mAdapter = adapter;
     }
-
     public void setTile(String title) {
         mTitle = title;
     }
