@@ -2,6 +2,9 @@ package com.example.scott.bonus.fragmentcontrol;
 
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 
@@ -57,14 +60,22 @@ public class CouponFragmentControl {
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
             mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-
             for (int i = 0; i < 10; i++) {
                 CouponInfo couponInfo = new CouponInfo();
-                couponInfo.setName("test");
-                couponInfo.setNumber("123");
+                couponInfo.setName("店名：7-ELEVEN");
+                couponInfo.setNumber("優惠項目：飲料買一送一");
+                Bitmap bitmap = ((BitmapDrawable)mainActivity.getResources().getDrawable( R.drawable.icon )).getBitmap();
+                int oldwidth = bitmap.getWidth();
+                int oldheight = bitmap.getHeight();
+                float scaleWidth = 200 / (float)oldwidth;
+                float scaleHeight = 200 / (float)oldheight;
+                Matrix matrix = new Matrix();
+                matrix.postScale(scaleWidth, scaleHeight);
+                // create the new Bitmap object
+                Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, oldwidth,oldheight, matrix, true);
+                couponInfo.setIcon(resizedBitmap);
                 applicationList.add(couponInfo);
             }
-
 
             return null;
         }

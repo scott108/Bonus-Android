@@ -7,6 +7,6 @@
     android:minHeight = "30dip"
     android:gravity = "center_vertical"
     android:paddingLeft = "10dip"
-    android:background = "@color/background_color"
+    android:background = "@color/dividers"
     android:textColor="@color/title_text"
     />

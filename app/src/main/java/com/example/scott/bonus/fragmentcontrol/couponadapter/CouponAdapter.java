@@ -1,5 +1,8 @@
 package com.example.scott.bonus.fragmentcontrol.couponadapter;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +59,8 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
         viewHolder.name.setText(couponInfo.getName());
         viewHolder.number.setText(couponInfo.getNumber());
+
+        viewHolder.image.setImageBitmap(couponInfo.getIcon());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

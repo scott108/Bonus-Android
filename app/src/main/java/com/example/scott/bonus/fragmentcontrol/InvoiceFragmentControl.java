@@ -59,7 +59,7 @@ public class InvoiceFragmentControl {
             TextView titleView;
 
             if (convertView == null) {
-                titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_title, null);
+                titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
             } else {
                 titleView = (TextView)convertView;
             }

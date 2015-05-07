@@ -9,7 +9,9 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
@@ -22,6 +24,15 @@ public class CouponInfo {
     private String number;
     private String deadline;
     private String content;
+    private Bitmap icon;
+
+    public Bitmap getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Bitmap icon) {
+        this.icon = icon;
+    }
 
     public String getName() {
         return name;

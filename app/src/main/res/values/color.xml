@@ -5,6 +5,7 @@
     <color name="title_text">#fff</color>
     <color name="background_color">#FF7744</color>
     <color name="block">#E63F00</color>
+    <color name="hyperlink">#0066FF</color>
 
     <!-- general text colors -->
     <color name="text">#212121</color>

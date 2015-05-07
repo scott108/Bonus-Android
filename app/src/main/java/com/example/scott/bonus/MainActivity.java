@@ -104,6 +104,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
 
         origIntent = getIntent();
 
+
     }
 
     @Override
