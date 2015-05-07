@@ -18,6 +18,7 @@ import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,8 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     private InvoiceFragmentControl invoiceFragmentControl;
     String domain = "com.example.scott.androidbream";
     String type = "icheedata";
+    int width;
+    int height;
 
     public InvoiceFragment getInvoiceFragment() {
         return invoiceFragment;
@@ -179,12 +182,9 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         //get screen size
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width=dm.widthPixels;
-        int height=dm.heightPixels;
+        width=dm.widthPixels;
+        height=dm.heightPixels;
         invoiceDetailDialog = new Dialog(this);
-        invoiceDetailDialog.getWindow().setLayout(width, height);
-        invoiceDetailDialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-
     }
 
     private void initNFCAdapter() {
@@ -283,6 +283,12 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         }
 
         invoiceDetailDialog.show();
+        WindowManager.LayoutParams params = invoiceDetailDialog.getWindow()
+                .getAttributes();
+        params.width = width;
+        params.height = height * 4 / 5;
+        params.windowAnimations = R.style.PauseDialogAnimation;
+        invoiceDetailDialog.getWindow().setAttributes(params);
     }
 
     void insertToSQLite(byte[] invoiceByte) {

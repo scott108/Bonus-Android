@@ -5,6 +5,7 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,18 +27,19 @@ public class InvoiceFragmentControl {
     private MainActivity mainActivity;
     private ArrayList<String> tempInvoiceList;
     private Dialog invoiceDetailDialog;
-
+    int width;
+    int height;
     public InvoiceFragmentControl(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+
 
         //get screen size
         DisplayMetrics dm = new DisplayMetrics();
         mainActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width=dm.widthPixels;
-        int height=dm.heightPixels;
+        width=dm.widthPixels;
+        height=dm.heightPixels;
         invoiceDetailDialog = new Dialog(mainActivity);
-        invoiceDetailDialog.getWindow().setLayout(width, height);
-        invoiceDetailDialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+        //invoiceDetailDialog.getWindow().setLayout(width, height);
 
         //get invoice data to add into listView
         List<InvoiceItem> invoiceItems =  mainActivity.getInvoiceDAO().getAll();
@@ -123,6 +125,12 @@ public class InvoiceFragmentControl {
         //query SQLite to add to dialog
 
         invoiceDetailDialog.show();
-        Toast.makeText(mainActivity, "簽章：" + invoiceItem.getSignature(), Toast.LENGTH_LONG).show();
+        WindowManager.LayoutParams params = invoiceDetailDialog.getWindow()
+                .getAttributes();
+        params.width = width;
+        params.height = height * 4 / 5;
+        params.windowAnimations = R.style.PauseDialogAnimation;
+        invoiceDetailDialog.getWindow().setAttributes(params);
+       // Toast.makeText(mainActivity, "簽章：" + invoiceItem.getSignature(), Toast.LENGTH_LONG).show();
     }
 }
