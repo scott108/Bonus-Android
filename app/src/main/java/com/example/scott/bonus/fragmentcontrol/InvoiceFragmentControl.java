@@ -91,46 +91,49 @@ public class InvoiceFragmentControl {
     public void showInvoiceDetailDialog(String invoiceNum) {
         // custom dialog
         InvoiceItem invoiceItem = mainActivity.getInvoiceDAO().get(invoiceNum);
-        List<InvoiceGoodsItem> invoiceGoodsItems = mainActivity.getInvoiceGoodsDAO().get(invoiceNum);
-        invoiceDetailDialog.setContentView(R.layout.activity_invoice_detail);
-        TextView storeNameTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storeNameTextView);
-        TextView datelineTextView = (TextView)invoiceDetailDialog.findViewById(R.id.datelineTextView);
-        TextView invoiceNumTextView = (TextView)invoiceDetailDialog.findViewById(R.id.invoiceNumTextView);
-        TextView currentTimeTextView = (TextView)invoiceDetailDialog.findViewById(R.id.currentTimeTextView);
-        TextView storeNumTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storeNumTextView);
-        TextView storePhoneTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storePhoneTextView);
-        TextView goodsDetailTextView = (TextView)invoiceDetailDialog.findViewById(R.id.goodsDetailTextView);
-        TextView totalMoneyTextView = (TextView)invoiceDetailDialog.findViewById(R.id.totalMoneyTextView);
-        TextView payDetailTextView = (TextView)invoiceDetailDialog.findViewById(R.id.payDetailTextView);
 
-        storeNameTextView.setText(invoiceItem.getStoreName());
-        datelineTextView.setText(invoiceItem.getDateline());
-        invoiceNumTextView.setText(invoiceItem.getInvoiceNum());
-        currentTimeTextView.setText(invoiceItem.getCurrentTime());
-        storeNumTextView.setText(invoiceItem.getStoreNum());
-        storePhoneTextView.setText(invoiceItem.getStorePhone());
-        goodsDetailTextView.setText("");
-        for(int i = 0; i < invoiceGoodsItems.size(); i++) {
-            String goods = invoiceGoodsItems.get(i).getGoodsName() + "    " + invoiceGoodsItems.get(i).getGoodsPrice() + "*" + "    "+
+        if (invoiceItem != null) {
+            List<InvoiceGoodsItem> invoiceGoodsItems = mainActivity.getInvoiceGoodsDAO().get(invoiceNum);
+            invoiceDetailDialog.setContentView(R.layout.activity_invoice_detail);
+            TextView storeNameTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storeNameTextView);
+            TextView datelineTextView = (TextView)invoiceDetailDialog.findViewById(R.id.datelineTextView);
+            TextView invoiceNumTextView = (TextView)invoiceDetailDialog.findViewById(R.id.invoiceNumTextView);
+            TextView currentTimeTextView = (TextView)invoiceDetailDialog.findViewById(R.id.currentTimeTextView);
+            TextView storeNumTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storeNumTextView);
+            TextView storePhoneTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storePhoneTextView);
+            TextView goodsDetailTextView = (TextView)invoiceDetailDialog.findViewById(R.id.goodsDetailTextView);
+            TextView totalMoneyTextView = (TextView)invoiceDetailDialog.findViewById(R.id.totalMoneyTextView);
+            TextView payDetailTextView = (TextView)invoiceDetailDialog.findViewById(R.id.payDetailTextView);
+
+            storeNameTextView.setText(invoiceItem.getStoreName());
+            datelineTextView.setText(invoiceItem.getDateline());
+            invoiceNumTextView.setText(invoiceItem.getInvoiceNum());
+            currentTimeTextView.setText(invoiceItem.getCurrentTime());
+            storeNumTextView.setText(invoiceItem.getStoreNum());
+            storePhoneTextView.setText(invoiceItem.getStorePhone());
+            goodsDetailTextView.setText("");
+            for(int i = 0; i < invoiceGoodsItems.size(); i++) {
+                String goods = invoiceGoodsItems.get(i).getGoodsName() + "    " + invoiceGoodsItems.get(i).getGoodsPrice() + "*" + "    "+
                         invoiceGoodsItems.get(i).getGoodsQuantity() + "    " + invoiceGoodsItems.get(i).getGoodsTotalPrice() + "T";
-            if(i == 0) {
-                goodsDetailTextView.setText(goodsDetailTextView.getText() + goods);
-            } else {
-                goodsDetailTextView.setText(goodsDetailTextView.getText() + "\n" + goods);
+                if(i == 0) {
+                    goodsDetailTextView.setText(goodsDetailTextView.getText() + goods);
+                } else {
+                    goodsDetailTextView.setText(goodsDetailTextView.getText() + "\n" + goods);
+                }
             }
+            totalMoneyTextView.setText(invoiceItem.getTotalMoney());
+            payDetailTextView.setText(invoiceItem.getPayDetail());
+
+            //query SQLite to add to dialog
+
+            invoiceDetailDialog.show();
+            WindowManager.LayoutParams params = invoiceDetailDialog.getWindow()
+                    .getAttributes();
+            params.width = width;
+            params.height = height * 4 / 5;
+            params.windowAnimations = R.style.PauseDialogAnimation;
+            invoiceDetailDialog.getWindow().setAttributes(params);
+            // Toast.makeText(mainActivity, "簽章：" + invoiceItem.getSignature(), Toast.LENGTH_LONG).show();
         }
-        totalMoneyTextView.setText(invoiceItem.getTotalMoney());
-        payDetailTextView.setText(invoiceItem.getPayDetail());
-
-        //query SQLite to add to dialog
-
-        invoiceDetailDialog.show();
-        WindowManager.LayoutParams params = invoiceDetailDialog.getWindow()
-                .getAttributes();
-        params.width = width;
-        params.height = height * 4 / 5;
-        params.windowAnimations = R.style.PauseDialogAnimation;
-        invoiceDetailDialog.getWindow().setAttributes(params);
-       // Toast.makeText(mainActivity, "簽章：" + invoiceItem.getSignature(), Toast.LENGTH_LONG).show();
     }
 }
