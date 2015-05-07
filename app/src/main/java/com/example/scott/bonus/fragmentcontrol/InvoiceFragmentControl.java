@@ -1,18 +1,16 @@
 package com.example.scott.bonus.fragmentcontrol;
 
 import android.app.Dialog;
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
-import com.example.scott.bonus.gategory.CategoryAdapter;
+import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
 import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 
@@ -45,17 +43,17 @@ public class InvoiceFragmentControl {
         List<InvoiceItem> invoiceItems =  mainActivity.getInvoiceDAO().getAll();
         for(int i = 0; i < invoiceItems.size(); i++) {
             String listContentTitle = "\n發票統編：" + invoiceItems.get(i).getInvoiceNum() + "\n店名：" + invoiceItems.get(i).getStoreName()  + "\n消費時間："+ invoiceItems.get(i).getCurrentTime() + "\n";
-            if(!mCategoryAdapter.getClassName().contains(invoiceItems.get(i).getStoreName())) {
+            if(!invoiceAdapter.getGroupNames().contains(invoiceItems.get(i).getStoreName())) {
                 tempInvoiceList = new ArrayList<String>();
                 tempInvoiceList.add(listContentTitle);
-                mCategoryAdapter.addCategory(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+                invoiceAdapter.addInvoice(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
             } else {
-                mCategoryAdapter.addCategoryInExistClass(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), listContentTitle);
+                invoiceAdapter.addInvoiceInExistGroup(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), listContentTitle);
             }
         }
     }
 
-    private CategoryAdapter mCategoryAdapter = new CategoryAdapter() {
+    private InvoiceAdapter invoiceAdapter = new InvoiceAdapter() {
         @Override
         protected View getTitleView(String title, int index, View convertView, ViewGroup parent) {
             TextView titleView;
@@ -71,20 +69,20 @@ public class InvoiceFragmentControl {
         }
     };
 
-    public CategoryAdapter getmCategoryAdapter() {
-        return mCategoryAdapter;
+    public InvoiceAdapter getInvoiceAdapter() {
+        return invoiceAdapter;
     }
 
     public void addNewInvoiceIntoAdapter(InvoiceItem invoiceItem) {
 
         //get invoice data to add into listView
         String listContentTitle = "\n發票統編：" + invoiceItem.getInvoiceNum() + "\n店名：" + invoiceItem.getStoreName()  + "\n消費時間："+ invoiceItem.getCurrentTime() + "\n";
-        if(!mCategoryAdapter.getClassName().contains(invoiceItem.getStoreName())) {
+        if(!invoiceAdapter.getGroupNames().contains(invoiceItem.getStoreName())) {
             tempInvoiceList = new ArrayList<String>();
             tempInvoiceList.add(listContentTitle);
-            mCategoryAdapter.addCategory(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+            invoiceAdapter.addInvoice(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
         } else {
-            mCategoryAdapter.addCategoryInExistClass(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), listContentTitle);
+            invoiceAdapter.addInvoiceInExistGroup(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), listContentTitle);
         }
     }
 

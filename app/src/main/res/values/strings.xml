@@ -5,4 +5,19 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+
+    <string name="activity_detail_title">DetailActivity</string>
+    <string name="activity_login_title">LoginActivity</string>
+
+    <string name="drawer_switch">SwitchSample</string>
+    <string name="drawer_opensource">Open Source</string>
+
+
+    <string name="dialog_nointernet">No internet connection!</string>
+    <string name="dialog_uploading">Progress Sample&#8230;</string>
+    <string name="dialog_processinganduploading">Showing a sample progress. Please be patient! (This does nothing. Just waiting 100ms / application)</string>
+    <string name="server_login_url">http://140.120.15.85:8080/iChee/user/login/</string>
+
 </resources>

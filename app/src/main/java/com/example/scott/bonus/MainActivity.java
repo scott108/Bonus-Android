@@ -16,18 +16,15 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.scott.bonus.fragment.CouponFragment;
 import com.example.scott.bonus.fragment.InvoiceFragment;
 import com.example.scott.bonus.fragment.UserFragment;
+import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
-import com.example.scott.bonus.gategory.CategoryAdapter;
 import com.example.scott.bonus.sqlite.doa.InvoiceDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
@@ -38,7 +35,6 @@ import com.example.scott.bonus.utility.utility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
@@ -54,10 +50,15 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     private CouponFragment couponFragment;
     private UserFragment userFragment;
     private InvoiceFragmentControl invoiceFragmentControl;
+    private CouponFragmentControl couponFragmentControl;
     String domain = "com.example.scott.androidbream";
     String type = "icheedata";
     int width;
     int height;
+
+    public CouponFragmentControl getCouponFragmentControl() {
+        return couponFragmentControl;
+    }
 
     public InvoiceFragment getInvoiceFragment() {
         return invoiceFragment;
@@ -91,6 +92,8 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         buildSQLite();
 
         invoiceFragmentControl = new InvoiceFragmentControl(this);
+
+        couponFragmentControl = new CouponFragmentControl(this);
 
         initTabFragment();
 

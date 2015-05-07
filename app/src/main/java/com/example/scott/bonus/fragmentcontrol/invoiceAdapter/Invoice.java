@@ -1,4 +1,4 @@
-package com.example.scott.bonus.gategory;
+package com.example.scott.bonus.fragmentcontrol.invoiceAdapter;
 
 /**
  * Created by Scott on 15/4/20.
@@ -6,10 +6,10 @@ package com.example.scott.bonus.gategory;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
-public class Category {
+public class Invoice {
     private String mTitle;
     private ArrayAdapter mAdapter;
-    public Category(String title, ArrayAdapter adapter) {
+    public Invoice(String title, ArrayAdapter adapter) {
         mTitle = title;
         mAdapter = adapter;
     }
