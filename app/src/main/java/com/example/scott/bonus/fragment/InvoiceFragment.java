@@ -42,7 +42,6 @@ public class InvoiceFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         invoiceAdapter = mainActivity.getInvoiceFragmentControl().getInvoiceAdapter();
-        mainActivity.getActionBar().setCustomView(R.layout.invoice_title);
         textView = (TextView) this.getView().findViewById(R.id.textView);
         categoryList = (ListView) this.getView().findViewById(R.id.invoiceList);
         categoryList.setAdapter(invoiceAdapter);
