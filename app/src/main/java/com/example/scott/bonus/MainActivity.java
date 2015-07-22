@@ -10,13 +10,20 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,22 +44,42 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
+public class MainActivity extends ActionBarActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
+    private Toolbar toolbar;
+    private DrawerLayout Drawer;
+    private ActionBarDrawerToggle mDrawerToggle;
     private Dialog invoiceDetailDialog;
     private NfcAdapter mNfcAdapter;
     private NdefMessage ndefMessage;
     protected PendingIntent nfcPendingIntent;
     private IntentFilter[] tagFilters;
     private Intent origIntent;
+
+    private LinearLayout invoiceMenuBtn;
+    private LinearLayout couponMenuBtn;
+    private LinearLayout myCouponMenuBtn;
+    private LinearLayout settingMenuBtn;
+
+    //Sqlite dao
     private InvoiceDAO invoiceDAO;
     private InvoiceGoodsDAO invoiceGoodsDAO;
+
+    //Fragment controller
+    private InvoiceFragmentControl invoiceFragmentControl;
+    private CouponFragmentControl couponFragmentControl;
+
+    //fragment
+    private FragmentManager fragmentManager;
     private InvoiceFragment invoiceFragment;
     private CouponFragment couponFragment;
     private UserFragment userFragment;
-    private InvoiceFragmentControl invoiceFragmentControl;
-    private CouponFragmentControl couponFragmentControl;
-    String domain = "com.example.scott.androidbream";
-    String type = "icheedata";
+
+    private ClickEventHandler clickEventHandler;
+
+    //NFC domain
+    final String domain = "com.example.scott.androidbream";
+    final String type = "icheedata";
+
     int width;
     int height;
 
@@ -80,14 +107,22 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        initDrawer(toolbar);
 
-        //set custom action bar title
-        getActionBar().setDisplayShowTitleEnabled(false);
-        getActionBar().setDisplayShowCustomEnabled(true);
+        fragmentManager = getSupportFragmentManager();
+
+
+        clickEventHandler = new ClickEventHandler();
 
         invoiceFragment = new InvoiceFragment();
         couponFragment  = new CouponFragment();
         userFragment = new UserFragment();
+
+        initFragment(invoiceFragment);
+
+        setOnDrawerMenuClickListener();
 
         buildSQLite();
 
@@ -95,15 +130,11 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
 
         couponFragmentControl = new CouponFragmentControl(this);
 
-        initTabFragment();
-
         initDialog();
 
         initNFCAdapter();
 
-
         origIntent = getIntent();
-
 
     }
 
@@ -136,7 +167,7 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
     @Override
     protected void onPause() {
         super.onPause();
-        mNfcAdapter.disableForegroundDispatch(this);
+        //mNfcAdapter.disableForegroundDispatch(this);
     }
 
     @Override
@@ -159,27 +190,50 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         ndefMessage = null;
     }
 
-    private void initTabFragment() {
-        //Fragment tab setting
-        FragmentTabHost tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
-        tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+    private void initDrawer(Toolbar toolbar) {
 
-        //1
-        tabHost.addTab(tabHost.newTabSpec("電子發票")
-                        .setIndicator("電子發票"),
-                invoiceFragment.getClass(),
-                null);
-        //2
-        tabHost.addTab(tabHost.newTabSpec("優惠卷")
-                        .setIndicator("優惠卷"),
-                couponFragment.getClass(),
-                null);
-        //3
-        tabHost.addTab(tabHost.newTabSpec("帳戶")
-                        .setIndicator("帳戶"),
-                userFragment.getClass(),
-                null);
+        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
+        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, 0, 0){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                // open I am not going to put anything here)
+            }
 
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // Code here will execute once drawer is closed
+            }
+        }; // Drawer Toggle Object Made
+        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+    }
+
+    private void initFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_content, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void nextFragment(Fragment nextFragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_content, nextFragment);
+        fragmentTransaction.commit();
+        Drawer.closeDrawers();
+    }
+
+    private void setOnDrawerMenuClickListener() {
+        invoiceMenuBtn = (LinearLayout) findViewById(R.id.invoice_menu_btn);
+        couponMenuBtn = (LinearLayout) findViewById(R.id.coupon_menu_btn);
+        myCouponMenuBtn = (LinearLayout) findViewById(R.id.my_coupon_menu_btn);
+        settingMenuBtn = (LinearLayout) findViewById(R.id.my_acount_menu_btn);
+
+        invoiceMenuBtn.setOnClickListener(clickEventHandler);
+        couponMenuBtn.setOnClickListener(clickEventHandler);
+        myCouponMenuBtn.setOnClickListener(clickEventHandler);
+        settingMenuBtn.setOnClickListener(clickEventHandler);
     }
 
     private void initDialog() {
@@ -244,8 +298,6 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
         invoiceDetailDialog.setContentView(R.layout.activity_invoice_detail);
 
         JSONObject jsonObject = utility.Base64ByteToJson(invoiceByte);
-
-        //System.out.println("FUK" + message);
 
         TextView invoiceStore = (TextView) invoiceDetailDialog.findViewById(R.id.storeNameTextView);
         TextView invoiceDateline = (TextView) invoiceDetailDialog.findViewById(R.id.datelineTextView);
@@ -349,5 +401,31 @@ public class MainActivity extends FragmentActivity implements CreateNdefMessageC
 
     public void setNfcMessage(byte[] mimeData) {
         ndefMessage = new NdefMessage(new NdefRecord[]{NdefRecord.createExternal(domain, type, mimeData)});
+    }
+
+    class ClickEventHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.invoice_menu_btn:
+                    nextFragment(invoiceFragment);
+                    System.out.println("Click invoice menu");
+                    break;
+                case R.id.coupon_menu_btn:
+                    nextFragment(couponFragment);
+                    System.out.println("Click coupon menu");
+                    break;
+                case R.id.my_coupon_menu_btn:
+                    nextFragment(userFragment);
+                    System.out.println("Click my coupon menu");
+                    break;
+                case R.id.my_acount_menu_btn:
+                    nextFragment(userFragment);
+                    System.out.println("Click my account menu");
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

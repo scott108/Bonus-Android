@@ -8,5 +8,4 @@
     android:gravity = "center_vertical"
     android:paddingLeft = "10dip"
     android:background = "@color/dividers"
-    android:textColor="@color/title_text"
     />
