@@ -85,15 +85,15 @@
             android:layout_gravity="center_horizontal" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="熱拿鐵    45*    1    45T"
-                android:id="@+id/goodsDetailTextView"
-                android:paddingTop="5dp"
-                android:textSize="25dp"
-                android:layout_gravity="center_horizontal" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="熱拿鐵    45*    1    45T"
+            android:id="@+id/goodsDetailTextView"
+            android:paddingTop="5dp"
+            android:textSize="25dp"
+            android:layout_gravity="center_horizontal" />
 
 
         <TextView

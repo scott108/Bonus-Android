@@ -35,7 +35,7 @@ public class InvoiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.activity_invoice, container, false);
+        return inflater.inflate(R.layout.fragment_invoice, container, false);
     }
 
     @Override

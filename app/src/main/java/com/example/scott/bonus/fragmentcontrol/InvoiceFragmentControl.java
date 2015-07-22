@@ -92,7 +92,7 @@ public class InvoiceFragmentControl {
 
         if (invoiceItem != null) {
             List<InvoiceGoodsItem> invoiceGoodsItems = mainActivity.getInvoiceGoodsDAO().get(invoiceNum);
-            invoiceDetailDialog.setContentView(R.layout.activity_invoice_detail);
+            invoiceDetailDialog.setContentView(R.layout.invoice_detail);
             TextView storeNameTextView = (TextView)invoiceDetailDialog.findViewById(R.id.storeNameTextView);
             TextView datelineTextView = (TextView)invoiceDetailDialog.findViewById(R.id.datelineTextView);
             TextView invoiceNumTextView = (TextView)invoiceDetailDialog.findViewById(R.id.invoiceNumTextView);

@@ -299,7 +299,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     private void showInvoiceDetailDialog(byte[] invoiceByte) {
         // custom dialog
-        invoiceDetailDialog.setContentView(R.layout.activity_invoice_detail);
+        invoiceDetailDialog.setContentView(R.layout.invoice_detail);
 
         JSONObject jsonObject = utility.Base64ByteToJson(invoiceByte);
 
