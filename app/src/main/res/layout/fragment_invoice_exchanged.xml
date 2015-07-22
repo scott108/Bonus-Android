@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ListView
-        android:id = "@+id/invoiceList"
+        android:id = "@+id/invoiceExchangedList"
         android:layout_width = "fill_parent"
         android:layout_height = "fill_parent"
         />
@@ -14,7 +14,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="20dp"
         android:text="發票匣是空的"
-        android:id="@+id/textView"
+        android:id="@+id/invoiceExchangedTextView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

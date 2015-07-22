@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/primary"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:elevation="4dp"
+    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
     >
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

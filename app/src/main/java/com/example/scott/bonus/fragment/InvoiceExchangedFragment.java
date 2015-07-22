@@ -1,54 +1,52 @@
 package com.example.scott.bonus.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.widget.ArrayAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.scott.bonus.LoginActivity;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
+import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
 
 /**
- * Created by Scott on 15/4/20.
+ * Created by Scott on 15/7/22.
  */
-public class UserFragment extends Fragment{
-
+public class InvoiceExchangedFragment extends Fragment {
+    ListView categoryList;
     MainActivity mainActivity;
-    Intent loginActivityIntent;
+    LayoutInflater inflater;
+    InvoiceAdapter invoiceAdapter;
+    TextView invoiceExchangedTextView;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         MainActivity mainActivity = (MainActivity)activity;
         this.mainActivity = mainActivity;
-        loginActivityIntent = new Intent(mainActivity, LoginActivity.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_user, container, false);
+        this.inflater = inflater;
+        return inflater.inflate(R.layout.fragment_invoice_unexchanged, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TextView loginClickText =(TextView)this.getView().findViewById(R.id.loginClickText);
-        loginClickText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(loginActivityIntent);
-            }
-        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
     }
 
     @Override
