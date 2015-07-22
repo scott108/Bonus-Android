@@ -42,7 +42,6 @@ public class UserFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mainActivity.getActionBar().setCustomView(R.layout.user_title);
         TextView loginClickText =(TextView)this.getView().findViewById(R.id.loginClickText);
         loginClickText.setOnClickListener(new View.OnClickListener() {
             @Override

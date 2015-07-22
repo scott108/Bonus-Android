@@ -10,6 +10,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,7 @@ import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +55,11 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private IntentFilter[] tagFilters;
     private Intent origIntent;
 
+    private LinearLayout invoiceMenuBtn;
+    private LinearLayout couponMenuBtn;
+    private LinearLayout myCouponMenuBtn;
+    private LinearLayout settingMenuBtn;
+
     //Sqlite dao
     private InvoiceDAO invoiceDAO;
     private InvoiceGoodsDAO invoiceGoodsDAO;
@@ -66,6 +73,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private InvoiceFragment invoiceFragment;
     private CouponFragment couponFragment;
     private UserFragment userFragment;
+
+    private ClickEventHandler clickEventHandler;
 
     //NFC domain
     final String domain = "com.example.scott.androidbream";
@@ -104,13 +113,16 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         fragmentManager = getSupportFragmentManager();
 
-        //invoiceFragment = new InvoiceFragment();
-        //couponFragment  = new CouponFragment();
-        //userFragment = new UserFragment();
 
-        initFragment();
+        clickEventHandler = new ClickEventHandler();
 
-        drawerMenuClickListener();
+        invoiceFragment = new InvoiceFragment();
+        couponFragment  = new CouponFragment();
+        userFragment = new UserFragment();
+
+        initFragment(invoiceFragment);
+
+        setOnDrawerMenuClickListener();
 
         buildSQLite();
 
@@ -199,15 +211,29 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
     }
 
-    private void initFragment() {
-        invoiceFragment = new InvoiceFragment();
-        FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_content, invoiceFragment);
+    private void initFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_content, fragment);
         fragmentTransaction.commit();
     }
 
-    private void drawerMenuClickListener() {
+    private void nextFragment(Fragment nextFragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_content, nextFragment);
+        fragmentTransaction.commit();
+        Drawer.closeDrawers();
+    }
 
+    private void setOnDrawerMenuClickListener() {
+        invoiceMenuBtn = (LinearLayout) findViewById(R.id.invoice_menu_btn);
+        couponMenuBtn = (LinearLayout) findViewById(R.id.coupon_menu_btn);
+        myCouponMenuBtn = (LinearLayout) findViewById(R.id.my_coupon_menu_btn);
+        settingMenuBtn = (LinearLayout) findViewById(R.id.my_acount_menu_btn);
+
+        invoiceMenuBtn.setOnClickListener(clickEventHandler);
+        couponMenuBtn.setOnClickListener(clickEventHandler);
+        myCouponMenuBtn.setOnClickListener(clickEventHandler);
+        settingMenuBtn.setOnClickListener(clickEventHandler);
     }
 
     private void initDialog() {
@@ -375,5 +401,31 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     public void setNfcMessage(byte[] mimeData) {
         ndefMessage = new NdefMessage(new NdefRecord[]{NdefRecord.createExternal(domain, type, mimeData)});
+    }
+
+    class ClickEventHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.invoice_menu_btn:
+                    nextFragment(invoiceFragment);
+                    System.out.println("Click invoice menu");
+                    break;
+                case R.id.coupon_menu_btn:
+                    nextFragment(couponFragment);
+                    System.out.println("Click coupon menu");
+                    break;
+                case R.id.my_coupon_menu_btn:
+                    nextFragment(userFragment);
+                    System.out.println("Click my coupon menu");
+                    break;
+                case R.id.my_acount_menu_btn:
+                    nextFragment(userFragment);
+                    System.out.println("Click my account menu");
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

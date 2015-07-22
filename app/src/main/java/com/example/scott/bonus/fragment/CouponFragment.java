@@ -43,7 +43,6 @@ public class CouponFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mainActivity.getActionBar().setCustomView(R.layout.coupon_title);
         mRecyclerView = (RecyclerView) this.getView().findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setAdapter(mainActivity.getCouponFragmentControl().getmAdapter());
