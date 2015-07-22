@@ -10,6 +10,8 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -50,14 +52,22 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     protected PendingIntent nfcPendingIntent;
     private IntentFilter[] tagFilters;
     private Intent origIntent;
+
+    //Sqlite dao
     private InvoiceDAO invoiceDAO;
     private InvoiceGoodsDAO invoiceGoodsDAO;
-    private InvoiceFragment invoiceFragment;
-    private CouponFragment couponFragment;
-    private UserFragment userFragment;
+
+    //Fragment controller
     private InvoiceFragmentControl invoiceFragmentControl;
     private CouponFragmentControl couponFragmentControl;
 
+    //fragment
+    private FragmentManager fragmentManager;
+    private InvoiceFragment invoiceFragment;
+    private CouponFragment couponFragment;
+    private UserFragment userFragment;
+
+    //NFC domain
     final String domain = "com.example.scott.androidbream";
     final String type = "icheedata";
 
@@ -92,22 +102,25 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         setSupportActionBar(toolbar);
         initDrawer(toolbar);
 
+        fragmentManager = getSupportFragmentManager();
+
         //invoiceFragment = new InvoiceFragment();
         //couponFragment  = new CouponFragment();
         //userFragment = new UserFragment();
 
-        //buildSQLite();
+        initFragment();
 
-        //invoiceFragmentControl = new InvoiceFragmentControl(this);
+        drawerMenuClickListener();
 
-        //couponFragmentControl = new CouponFragmentControl(this);
+        buildSQLite();
 
+        invoiceFragmentControl = new InvoiceFragmentControl(this);
 
+        couponFragmentControl = new CouponFragmentControl(this);
 
-        //initDialog();
+        initDialog();
 
-        //initNFCAdapter();
-
+        initNFCAdapter();
 
         origIntent = getIntent();
 
@@ -130,13 +143,13 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     public void onResume() {
         super.onResume();
         System.out.println("On Resume Thread : " + Thread.currentThread().getName().toString());
-        /*mNfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, tagFilters, null);
+        mNfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, tagFilters, null);
         // Check to see that the Activity started due to an Android Beam
         System.out.println("intent :" + getIntent().getAction().toString());
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             processIntent(getIntent());
             setIntent(origIntent);
-        }*/
+        }
     }
 
     @Override
@@ -184,6 +197,17 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         }; // Drawer Toggle Object Made
         Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+    }
+
+    private void initFragment() {
+        invoiceFragment = new InvoiceFragment();
+        FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_content, invoiceFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void drawerMenuClickListener() {
+
     }
 
     private void initDialog() {
@@ -248,8 +272,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         invoiceDetailDialog.setContentView(R.layout.activity_invoice_detail);
 
         JSONObject jsonObject = utility.Base64ByteToJson(invoiceByte);
-
-        //System.out.println("FUK" + message);
 
         TextView invoiceStore = (TextView) invoiceDetailDialog.findViewById(R.id.storeNameTextView);
         TextView invoiceDateline = (TextView) invoiceDetailDialog.findViewById(R.id.datelineTextView);
