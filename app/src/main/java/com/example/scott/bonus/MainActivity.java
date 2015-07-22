@@ -55,6 +55,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private IntentFilter[] tagFilters;
     private Intent origIntent;
 
+    private TextView title;
+
     private LinearLayout invoiceMenuBtn;
     private LinearLayout couponMenuBtn;
     private LinearLayout myCouponMenuBtn;
@@ -108,11 +110,12 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         initDrawer(toolbar);
+        title = (TextView) findViewById(R.id.tool_bar_title);
 
         fragmentManager = getSupportFragmentManager();
-
 
         clickEventHandler = new ClickEventHandler();
 
@@ -215,6 +218,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_content, fragment);
         fragmentTransaction.commit();
+        title.setText("發票匣");
     }
 
     private void nextFragment(Fragment nextFragment) {
@@ -409,18 +413,22 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             switch (v.getId()) {
                 case R.id.invoice_menu_btn:
                     nextFragment(invoiceFragment);
+                    title.setText("發票匣");
                     System.out.println("Click invoice menu");
                     break;
                 case R.id.coupon_menu_btn:
                     nextFragment(couponFragment);
+                    title.setText("優惠卷列表");
                     System.out.println("Click coupon menu");
                     break;
                 case R.id.my_coupon_menu_btn:
                     nextFragment(userFragment);
+                    title.setText("我的優惠卷");
                     System.out.println("Click my coupon menu");
                     break;
                 case R.id.my_acount_menu_btn:
                     nextFragment(userFragment);
+                    title.setText("帳戶設定");
                     System.out.println("Click my account menu");
                     break;
                 default:
