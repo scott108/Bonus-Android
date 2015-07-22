@@ -30,7 +30,6 @@ public class InvoiceFragmentControl {
     public InvoiceFragmentControl(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
 
-
         //get screen size
         DisplayMetrics dm = new DisplayMetrics();
         mainActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);

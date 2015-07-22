@@ -22,4 +22,16 @@
     <string name="hyperlink_login"><u>請先登入</u></string>
     <string name="app_title">iBonus</string>
 
+    <!-- Sliding tabs indicator colors -->
+    <string-array name="indicator_colors">
+        <item>#009688</item>
+        <item>#b388ff</item>
+        <item>#0277bd</item>
+        <item>#607d8b</item>
+        <item>#ffa726</item>
+        <item>#d32f2f</item>
+    </string-array>
+
+    <string name="indicator_divider_color">#cfd8dc</string>
+
 </resources>
