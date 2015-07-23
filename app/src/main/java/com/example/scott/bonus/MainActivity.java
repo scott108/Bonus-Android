@@ -10,11 +10,9 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,8 +32,6 @@ import com.example.scott.bonus.fragment.InvoiceFragment;
 import com.example.scott.bonus.fragment.UserFragment;
 import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
-import com.example.scott.bonus.fragmentcontrol.viewpageradapter.ViewPagerAdapter;
-import com.example.scott.bonus.slidingtab.SlidingTabLayout;
 import com.example.scott.bonus.sqlite.doa.InvoiceDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
@@ -434,21 +430,21 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
                     nextFragment(couponFragment);
                     title.setText("優惠卷列表");
-                    toolbar.setElevation(4);
+                    toolbar.setElevation(8);
                     System.out.println("Click coupon menu");
                     break;
                 case R.id.my_coupon_menu_btn:
                     userFragment = new UserFragment();
                     nextFragment(userFragment);
                     title.setText("我的優惠卷");
-                    toolbar.setElevation(4);
+                    toolbar.setElevation(8);
                     System.out.println("Click my coupon menu");
                     break;
                 case R.id.my_acount_menu_btn:
                     userFragment = new UserFragment();
                     nextFragment(userFragment);
                     title.setText("帳戶設定");
-                    toolbar.setElevation(4);
+                    toolbar.setElevation(8);
                     System.out.println("Click my account menu");
                     break;
                 default:

@@ -1,21 +1,14 @@
 package com.example.scott.bonus.fragment;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.widget.AdapterView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
-
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
-import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.Invoice;
-import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
 import com.example.scott.bonus.fragmentcontrol.viewpageradapter.ViewPagerAdapter;
 import com.example.scott.bonus.slidingtab.SlidingTabLayout;
 
