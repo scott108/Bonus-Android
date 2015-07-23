@@ -89,6 +89,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return fragmentManager;
     }
 
+    public CouponFragment getCouponFragment() {
+        return couponFragment;
+    }
+
     public CouponFragmentControl getCouponFragmentControl() {
         return couponFragmentControl;
     }
@@ -125,6 +129,9 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         buildSQLite();
 
+        invoiceFragment = new InvoiceFragment();
+        couponFragment = new CouponFragment();
+
         invoiceFragmentControl = new InvoiceFragmentControl(this);
 
         couponFragmentControl = new CouponFragmentControl(this);
@@ -133,13 +140,9 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         initNFCAdapter();
 
-        invoiceFragment = new InvoiceFragment();
-
         initFragment(invoiceFragment);
 
         setOnDrawerMenuClickListener();
-
-
 
         origIntent = getIntent();
 
