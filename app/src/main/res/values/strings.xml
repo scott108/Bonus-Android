@@ -19,7 +19,7 @@
     <string name="dialog_uploading">Progress Sample&#8230;</string>
     <string name="dialog_processinganduploading">Showing a sample progress. Please be patient! (This does nothing. Just waiting 100ms / application)</string>
     <string name="server_login_url">http://140.120.15.85:8080/iChee/user/login/</string>
-    <string name="hyperlink_login"><u>請先登入</u></string>
+    <string name="hyperlink_login">按此登入</string>
     <string name="app_title">iBonus</string>
 
     <!-- Sliding tabs indicator colors -->

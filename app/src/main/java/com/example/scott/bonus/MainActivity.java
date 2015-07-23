@@ -56,6 +56,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private Intent origIntent;
 
     private TextView title;
+    private LinearLayout loginClick;
+    private Intent loginActivityIntent;
 
     private LinearLayout invoiceMenuBtn;
     private LinearLayout couponMenuBtn;
@@ -146,6 +148,9 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         origIntent = getIntent();
 
+        loginActivityIntent = loginActivityIntent = new Intent(this, LoginActivity.class);
+        loginClick = (LinearLayout) findViewById(R.id.loginClick);
+        loginClick.setOnClickListener(clickEventHandler);
     }
 
     @Override
@@ -437,18 +442,25 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     System.out.println("Click coupon menu");
                     break;
                 case R.id.my_coupon_menu_btn:
-                    userFragment = new UserFragment();
-                    nextFragment(userFragment);
-                    title.setText("我的優惠卷");
-                    toolbar.setElevation(8);
+                    //userFragment = new UserFragment();
+                    //nextFragment(userFragment);
+                    //title.setText("我的優惠卷");
+                    //toolbar.setElevation(8);
+                    Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    Drawer.closeDrawers();
                     System.out.println("Click my coupon menu");
                     break;
                 case R.id.my_acount_menu_btn:
-                    userFragment = new UserFragment();
-                    nextFragment(userFragment);
-                    title.setText("帳戶設定");
-                    toolbar.setElevation(8);
+                    //userFragment = new UserFragment();
+                    //nextFragment(userFragment);
+                    //title.setText("帳戶設定");
+                    //toolbar.setElevation(8);
+                    Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    Drawer.closeDrawers();
                     System.out.println("Click my account menu");
+                    break;
+                case R.id.loginClick:
+                    startActivity(loginActivityIntent);
                     break;
                 default:
                     break;
