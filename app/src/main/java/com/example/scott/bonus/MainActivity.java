@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
+    private static Intent origIntent;
     private Toolbar toolbar;
     private DrawerLayout Drawer;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -53,7 +54,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private NdefMessage ndefMessage;
     protected PendingIntent nfcPendingIntent;
     private IntentFilter[] tagFilters;
-    private Intent origIntent;
 
     private TextView title;
     private LinearLayout loginClick;
@@ -148,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         origIntent = getIntent();
 
-        loginActivityIntent = loginActivityIntent = new Intent(this, LoginActivity.class);
+        loginActivityIntent = new Intent(this, LoginActivity.class);
         loginClick = (LinearLayout) findViewById(R.id.loginClick);
         loginClick.setOnClickListener(clickEventHandler);
     }
@@ -172,7 +172,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         System.out.println("On Resume Thread : " + Thread.currentThread().getName().toString());
         mNfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, tagFilters, null);
         // Check to see that the Activity started due to an Android Beam
-        System.out.println("intent :" + getIntent().getAction().toString());
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             processIntent(getIntent());
             setIntent(origIntent);
@@ -460,6 +459,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     System.out.println("Click my account menu");
                     break;
                 case R.id.loginClick:
+                    Drawer.closeDrawers();
                     startActivity(loginActivityIntent);
                     break;
                 default:
