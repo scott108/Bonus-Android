@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -33,11 +34,14 @@ import com.example.scott.bonus.fragment.UserFragment;
 import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
 import com.example.scott.bonus.session.SessionManager;
+import com.example.scott.bonus.sharepreference.LoginSharePreference;
 import com.example.scott.bonus.sqlite.doa.InvoiceDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
 import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 import com.example.scott.bonus.sqlite.MyDBHelper;
+import com.example.scott.bonus.user.User;
+import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.example.scott.bonus.utility.utility;
 
 import org.json.JSONException;
@@ -80,6 +84,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private UserFragment userFragment;
 
     private ClickEventHandler clickEventHandler;
+
+    private SharedPreferences sharePreference;
 
     //NFC domain
     final String domain = "com.example.scott.androidbream";
@@ -152,6 +158,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         loginActivityIntent = new Intent(this, LoginActivity.class);
         loginClick = (LinearLayout) findViewById(R.id.loginClick);
         loginClick.setOnClickListener(clickEventHandler);
+
+        loginCheck();
     }
 
     @Override
@@ -400,8 +408,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         invoiceFragmentControl.addNewInvoiceIntoAdapter(invoiceItem);
     }
 
-
-
     /**
      * Parses the NDEF Message from the intent and prints to the TextView
      */
@@ -419,6 +425,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     public void setNfcMessage(byte[] mimeData) {
         ndefMessage = new NdefMessage(new NdefRecord[]{NdefRecord.createExternal(domain, type, mimeData)});
+    }
+
+    private void loginCheck() {
+        sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
+        User user = LoginSharePreference.getInstance().getLoginData(sharePreference);
+        if(!user.getEmail().equals("") && !user.getPassword().equals("")) {
+            new BackgroundLoginTask().execute(user.getEmail(), user.getPassword());
+        }
     }
 
     class ClickEventHandler implements View.OnClickListener {

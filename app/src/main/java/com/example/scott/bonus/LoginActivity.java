@@ -10,7 +10,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.scott.bonus.interfaces.Login;
@@ -32,25 +31,6 @@ public class LoginActivity extends Activity{
     private ClickEventHandler clickEventHandler;
     private RestAdapter restAdapter;
     private final String serverURL = "http://140.120.15.80:8080/iBonus-server";
-    public final int LOGIN_PROGRESS_START = 1;
-    public final int LOGIN_PROGRESS_FINISH = 0;
-
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch(msg.what){
-                case LOGIN_PROGRESS_START:
-
-                    break;
-                case LOGIN_PROGRESS_FINISH:
-
-                    break;
-            }
-
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
