@@ -22,6 +22,8 @@
     <string name="hyperlink_login">按此登入</string>
     <string name="app_title">iBonus</string>
 
+    <string name="signup_title">帳號註冊</string>
+
     <!-- Sliding tabs indicator colors -->
     <string-array name="indicator_colors">
         <item>#009688</item>

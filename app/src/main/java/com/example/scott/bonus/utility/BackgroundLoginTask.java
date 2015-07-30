@@ -41,6 +41,8 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
         System.out.println(result);
         if(result.equals("true")) {
             SessionManager.setAttribute(true);
+        } else {
+            SessionManager.setAttribute(false);
         }
     }
 }

@@ -68,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private LinearLayout couponMenuBtn;
     private LinearLayout myCouponMenuBtn;
     private LinearLayout settingMenuBtn;
+    private LinearLayout logoutMenuBtn;
 
     //Sqlite dao
     private InvoiceDAO invoiceDAO;
@@ -132,32 +133,16 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         initDrawer(toolbar);
         title = (TextView) findViewById(R.id.tool_bar_title);
 
-        fragmentManager = getSupportFragmentManager();
-
-        clickEventHandler = new ClickEventHandler();
-
         buildSQLite();
 
         invoiceFragment = new InvoiceFragment();
         couponFragment = new CouponFragment();
-
         invoiceFragmentControl = new InvoiceFragmentControl(this);
-
         couponFragmentControl = new CouponFragmentControl(this);
 
-        initDialog();
-
-        initNFCAdapter();
-
-        initFragment(invoiceFragment);
-
-        setOnDrawerMenuClickListener();
+        initUI();
 
         origIntent = getIntent();
-
-        loginActivityIntent = new Intent(this, LoginActivity.class);
-        loginClick = (LinearLayout) findViewById(R.id.loginClick);
-        loginClick.setOnClickListener(clickEventHandler);
 
         loginCheck();
     }
@@ -213,6 +198,25 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         ndefMessage = null;
     }
 
+    private void initUI() {
+
+        fragmentManager = getSupportFragmentManager();
+
+        clickEventHandler = new ClickEventHandler();
+
+        initDialog();
+
+        initNFCAdapter();
+
+        initFragment(invoiceFragment);
+
+        setOnDrawerMenuClickListener();
+
+        loginActivityIntent = new Intent(this, LoginActivity.class);
+        loginClick = (LinearLayout) findViewById(R.id.loginClick);
+        loginClick.setOnClickListener(clickEventHandler);
+    }
+
     private void initDrawer(Toolbar toolbar) {
 
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
@@ -253,11 +257,13 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         couponMenuBtn = (LinearLayout) findViewById(R.id.coupon_menu_btn);
         myCouponMenuBtn = (LinearLayout) findViewById(R.id.my_coupon_menu_btn);
         settingMenuBtn = (LinearLayout) findViewById(R.id.my_acount_menu_btn);
+        logoutMenuBtn = (LinearLayout) findViewById(R.id.logout_menu_btn);
 
         invoiceMenuBtn.setOnClickListener(clickEventHandler);
         couponMenuBtn.setOnClickListener(clickEventHandler);
         myCouponMenuBtn.setOnClickListener(clickEventHandler);
         settingMenuBtn.setOnClickListener(clickEventHandler);
+        logoutMenuBtn.setOnClickListener(clickEventHandler);
     }
 
     private void initDialog() {
@@ -473,6 +479,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     Drawer.closeDrawers();
                     System.out.println("Click my account menu");
                     break;
+                case R.id.logout_menu_btn:
+                    Drawer.closeDrawers();
+                    if(SessionManager.hasAttribute()) {
+
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
+                    break;
                 case R.id.loginClick:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {
@@ -481,6 +495,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                         startActivity(loginActivityIntent);
                     }
                     break;
+
                 default:
                     break;
             }
