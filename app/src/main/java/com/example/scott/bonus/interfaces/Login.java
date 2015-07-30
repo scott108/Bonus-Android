@@ -1,7 +1,10 @@
 package com.example.scott.bonus.interfaces;
 
+import java.util.List;
+
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.POST;
 
 /**

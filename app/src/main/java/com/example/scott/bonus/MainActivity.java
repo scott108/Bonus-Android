@@ -32,6 +32,7 @@ import com.example.scott.bonus.fragment.InvoiceFragment;
 import com.example.scott.bonus.fragment.UserFragment;
 import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
+import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sqlite.doa.InvoiceDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
@@ -460,7 +461,11 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     break;
                 case R.id.loginClick:
                     Drawer.closeDrawers();
-                    startActivity(loginActivityIntent);
+                    if(SessionManager.hasAttribute()) {
+
+                    } else {
+                        startActivity(loginActivityIntent);
+                    }
                     break;
                 default:
                     break;

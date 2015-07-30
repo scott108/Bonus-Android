@@ -26,6 +26,7 @@
         android:ems="10"
         android:id="@+id/emailEditText"
         android:drawableLeft="@drawable/ic_perm_identity_black_24dp"
+        android:drawablePadding="5dp"
         android:hint="E-Mail"
         android:background="@drawable/rect_text_edit"
         android:layout_gravity="center_horizontal"
@@ -45,6 +46,7 @@
         android:ems="10"
         android:id="@+id/passwordEditText"
         android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+        android:drawablePadding="5dp"
         android:hint="Password"
         android:background="@drawable/rect_text_edit"
         android:layout_gravity="center_horizontal"
@@ -65,6 +67,5 @@
         android:textColor="@color/title_text"
         android:background="@color/primary_dark"
         android:layout_gravity="center_horizontal" />
-
 
 </LinearLayout>
