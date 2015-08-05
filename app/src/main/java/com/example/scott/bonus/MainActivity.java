@@ -80,9 +80,9 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     //fragment
     private FragmentManager fragmentManager;
-    private InvoiceFragment invoiceFragment;
-    private CouponFragment couponFragment;
-    private UserFragment userFragment;
+    private Fragment invoiceFragment;
+    private Fragment couponFragment;
+    private Fragment userFragment;
 
     private ClickEventHandler clickEventHandler;
 
@@ -99,7 +99,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return fragmentManager;
     }
 
-    public CouponFragment getCouponFragment() {
+    public Fragment getCouponFragment() {
         return couponFragment;
     }
 
@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return couponFragmentControl;
     }
 
-    public InvoiceFragment getInvoiceFragment() {
+    public Fragment getInvoiceFragment() {
         return invoiceFragment;
     }
 
@@ -134,11 +134,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         title = (TextView) findViewById(R.id.tool_bar_title);
 
         buildSQLite();
-
-        invoiceFragment = new InvoiceFragment();
-        couponFragment = new CouponFragment();
-        invoiceFragmentControl = new InvoiceFragmentControl(this);
-        couponFragmentControl = new CouponFragmentControl(this);
 
         initUI();
 
@@ -199,6 +194,11 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     }
 
     private void initUI() {
+
+        invoiceFragment = new InvoiceFragment();
+        couponFragment = new CouponFragment();
+        invoiceFragmentControl = new InvoiceFragmentControl(this);
+        couponFragmentControl = new CouponFragmentControl(this);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -447,20 +447,20 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             switch (v.getId()) {
                 case R.id.invoice_menu_btn:
                     invoiceFragment = new InvoiceFragment();
-
                     nextFragment(invoiceFragment);
                     title.setText("發票匣");
                     toolbar.setElevation(0);
                     System.out.println("Click invoice menu");
                     break;
+
                 case R.id.coupon_menu_btn:
                     couponFragment  = new CouponFragment();
-
                     nextFragment(couponFragment);
                     title.setText("優惠卷列表");
                     toolbar.setElevation(8);
                     System.out.println("Click coupon menu");
                     break;
+
                 case R.id.my_coupon_menu_btn:
                     //userFragment = new UserFragment();
                     //nextFragment(userFragment);
@@ -470,6 +470,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     Drawer.closeDrawers();
                     System.out.println("Click my coupon menu");
                     break;
+
                 case R.id.my_acount_menu_btn:
                     //userFragment = new UserFragment();
                     //nextFragment(userFragment);
@@ -487,6 +488,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                         Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     }
                     break;
+
                 case R.id.loginClick:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {

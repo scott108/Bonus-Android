@@ -29,9 +29,12 @@ public class LoginActivity extends Activity{
     private EditText passwordEditText;
     private Button loginBtn;
     private TextView signUpLink;
+
     private ClickEventHandler clickEventHandler;
+
     private RestAdapter restAdapter;
     private final String serverURL = "http://140.120.15.80:8080/iBonus-server";
+
     private Intent intent;
 
     @Override
@@ -71,7 +74,8 @@ public class LoginActivity extends Activity{
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.loginBtn:
-                    new LoginTask().execute();
+                    new LoginTask().execute(emailEditText.getText().toString(),
+                                            passwordEditText.getText().toString());
                     break;
                 case R.id.signUpLinkTextView:
                     startActivity(intent);
@@ -85,16 +89,17 @@ public class LoginActivity extends Activity{
     private class LoginTask extends AsyncTask<String, Integer, String> {
         @Override
         protected void onPreExecute() {
-            loginProgress.setMessage("登入中請稍候");
+            loginProgress.setMessage("登入中請稍候...");
             loginProgress.show();
         }
         @Override
         protected String doInBackground(String... params) {
             Login login = restAdapter.create(Login.class);
             String result = "";
-            if(!emailEditText.getText().toString().equals("") && !passwordEditText.getText().toString().equals("")) {
 
-                result = login.userLogin(emailEditText.getText().toString(), passwordEditText.getText().toString());
+            if(!params[0].equals("") && !params[1].equals("")) {
+
+                result = login.userLogin(params[0], params[1]);
             }
             return result;
         }
