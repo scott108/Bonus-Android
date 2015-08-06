@@ -109,11 +109,12 @@ public abstract class InvoiceAdapter extends BaseAdapter {
 
         for (Invoice invoice : invoices) {
             if (position == 0) {
-                return getTitleView(invoice.getTitle(), invoiceIndex,convertView, parent);
+                return getTitleView(invoice.getTitle(), invoiceIndex, convertView, parent);
             }
             int size = invoice.getAdapter().getCount()+1;
             if (position < size) {
-                return invoice.getAdapter().getView(position - 1, convertView, parent);
+                return getItemView(invoice.getAdapter().getItem(position - 1).toString(), invoiceIndex, convertView, parent);
+                //return invoice.getAdapter().getView(position - 1, convertView, parent);
             }
             position -= size;
 
@@ -124,5 +125,5 @@ public abstract class InvoiceAdapter extends BaseAdapter {
     }
 
     protected abstract View getTitleView(String caption,int index,View convertView,ViewGroup parent);
-
+    protected abstract View getItemView(String caption,int index,View convertView,ViewGroup parent);
 }

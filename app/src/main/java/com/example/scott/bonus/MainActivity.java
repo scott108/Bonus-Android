@@ -42,6 +42,7 @@ import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 import com.example.scott.bonus.sqlite.MyDBHelper;
 import com.example.scott.bonus.user.User;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
+import com.example.scott.bonus.utility.BackgroundLogoutTask;
 import com.example.scott.bonus.utility.utility;
 
 import org.json.JSONException;
@@ -68,6 +69,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private LinearLayout couponMenuBtn;
     private LinearLayout myCouponMenuBtn;
     private LinearLayout settingMenuBtn;
+    private LinearLayout logoutMenuBtn;
 
     //Sqlite dao
     private InvoiceDAO invoiceDAO;
@@ -79,9 +81,9 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     //fragment
     private FragmentManager fragmentManager;
-    private InvoiceFragment invoiceFragment;
-    private CouponFragment couponFragment;
-    private UserFragment userFragment;
+    private Fragment invoiceFragment;
+    private Fragment couponFragment;
+    private Fragment userFragment;
 
     private ClickEventHandler clickEventHandler;
 
@@ -98,7 +100,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return fragmentManager;
     }
 
-    public CouponFragment getCouponFragment() {
+    public Fragment getCouponFragment() {
         return couponFragment;
     }
 
@@ -106,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return couponFragmentControl;
     }
 
-    public InvoiceFragment getInvoiceFragment() {
+    public Fragment getInvoiceFragment() {
         return invoiceFragment;
     }
 
@@ -122,6 +124,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return invoiceGoodsDAO;
     }
 
+    public static void setUser(String userName) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,34 +138,15 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         initDrawer(toolbar);
         title = (TextView) findViewById(R.id.tool_bar_title);
 
-        fragmentManager = getSupportFragmentManager();
-
-        clickEventHandler = new ClickEventHandler();
-
         buildSQLite();
 
-        invoiceFragment = new InvoiceFragment();
-        couponFragment = new CouponFragment();
-
-        invoiceFragmentControl = new InvoiceFragmentControl(this);
-
-        couponFragmentControl = new CouponFragmentControl(this);
-
-        initDialog();
-
-        initNFCAdapter();
-
-        initFragment(invoiceFragment);
-
-        setOnDrawerMenuClickListener();
+        initUI();
 
         origIntent = getIntent();
 
-        loginActivityIntent = new Intent(this, LoginActivity.class);
-        loginClick = (LinearLayout) findViewById(R.id.loginClick);
-        loginClick.setOnClickListener(clickEventHandler);
-
         loginCheck();
+
+        Context.setMainActivity(this);
     }
 
     @Override
@@ -213,6 +200,30 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         ndefMessage = null;
     }
 
+    private void initUI() {
+
+        invoiceFragment = new InvoiceFragment();
+        couponFragment = new CouponFragment();
+        invoiceFragmentControl = new InvoiceFragmentControl(this);
+        couponFragmentControl = new CouponFragmentControl(this);
+
+        fragmentManager = getSupportFragmentManager();
+
+        clickEventHandler = new ClickEventHandler();
+
+        initDialog();
+
+        initNFCAdapter();
+
+        initFragment(invoiceFragment);
+
+        setOnDrawerMenuClickListener();
+
+        loginActivityIntent = new Intent(this, LoginActivity.class);
+        loginClick = (LinearLayout) findViewById(R.id.loginClick);
+        loginClick.setOnClickListener(clickEventHandler);
+    }
+
     private void initDrawer(Toolbar toolbar) {
 
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
@@ -253,11 +264,13 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         couponMenuBtn = (LinearLayout) findViewById(R.id.coupon_menu_btn);
         myCouponMenuBtn = (LinearLayout) findViewById(R.id.my_coupon_menu_btn);
         settingMenuBtn = (LinearLayout) findViewById(R.id.my_acount_menu_btn);
+        logoutMenuBtn = (LinearLayout) findViewById(R.id.logout_menu_btn);
 
         invoiceMenuBtn.setOnClickListener(clickEventHandler);
         couponMenuBtn.setOnClickListener(clickEventHandler);
         myCouponMenuBtn.setOnClickListener(clickEventHandler);
         settingMenuBtn.setOnClickListener(clickEventHandler);
+        logoutMenuBtn.setOnClickListener(clickEventHandler);
     }
 
     private void initDialog() {
@@ -441,38 +454,53 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             switch (v.getId()) {
                 case R.id.invoice_menu_btn:
                     invoiceFragment = new InvoiceFragment();
-
                     nextFragment(invoiceFragment);
                     title.setText("發票匣");
                     toolbar.setElevation(0);
                     System.out.println("Click invoice menu");
                     break;
+
                 case R.id.coupon_menu_btn:
                     couponFragment  = new CouponFragment();
-
                     nextFragment(couponFragment);
                     title.setText("優惠卷列表");
                     toolbar.setElevation(8);
                     System.out.println("Click coupon menu");
                     break;
+
                 case R.id.my_coupon_menu_btn:
-                    //userFragment = new UserFragment();
-                    //nextFragment(userFragment);
-                    //title.setText("我的優惠卷");
-                    //toolbar.setElevation(8);
-                    Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     Drawer.closeDrawers();
-                    System.out.println("Click my coupon menu");
+                    if(SessionManager.hasAttribute()) {
+                        userFragment = new UserFragment();
+                        nextFragment(userFragment);
+                        title.setText("我的優惠卷");
+                        toolbar.setElevation(8);
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
                     break;
+
                 case R.id.my_acount_menu_btn:
-                    //userFragment = new UserFragment();
-                    //nextFragment(userFragment);
-                    //title.setText("帳戶設定");
-                    //toolbar.setElevation(8);
-                    Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     Drawer.closeDrawers();
-                    System.out.println("Click my account menu");
+                    if(SessionManager.hasAttribute()) {
+                        userFragment = new UserFragment();
+                        nextFragment(userFragment);
+                        title.setText("帳戶設定");
+                        toolbar.setElevation(8);
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
                     break;
+                case R.id.logout_menu_btn:
+                    Drawer.closeDrawers();
+                    if(SessionManager.hasAttribute()) {
+
+                        new BackgroundLogoutTask().execute();
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+
                 case R.id.loginClick:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {
@@ -481,6 +509,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                         startActivity(loginActivityIntent);
                     }
                     break;
+
                 default:
                     break;
             }

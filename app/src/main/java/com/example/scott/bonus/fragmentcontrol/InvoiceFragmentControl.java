@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.scott.bonus.MainActivity;
@@ -65,6 +67,22 @@ public class InvoiceFragmentControl {
             titleView.setText(title);
 
             return titleView;
+        }
+
+        @Override
+        protected View getItemView(String caption, int index, View convertView, ViewGroup parent) {
+            LinearLayout listItem;
+
+            if (convertView == null) {
+                listItem = (LinearLayout) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_view_item, null);
+            } else {
+                listItem = (LinearLayout) convertView;
+            }
+            TextView invoiceItemTitle = (TextView) listItem.findViewById(R.id.invoice_item_title);
+            invoiceItemTitle.setText(caption);
+            ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
+            invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
+            return listItem;
         }
     };
 
