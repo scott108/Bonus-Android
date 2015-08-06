@@ -42,6 +42,7 @@ import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 import com.example.scott.bonus.sqlite.MyDBHelper;
 import com.example.scott.bonus.user.User;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
+import com.example.scott.bonus.utility.BackgroundLogoutTask;
 import com.example.scott.bonus.utility.utility;
 
 import org.json.JSONException;
@@ -123,6 +124,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return invoiceGoodsDAO;
     }
 
+    public static void setUser(String userName) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +145,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         origIntent = getIntent();
 
         loginCheck();
+
+        Context.setMainActivity(this);
     }
 
     @Override
@@ -462,28 +469,33 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     break;
 
                 case R.id.my_coupon_menu_btn:
-                    //userFragment = new UserFragment();
-                    //nextFragment(userFragment);
-                    //title.setText("我的優惠卷");
-                    //toolbar.setElevation(8);
-                    Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     Drawer.closeDrawers();
-                    System.out.println("Click my coupon menu");
+                    if(SessionManager.hasAttribute()) {
+                        userFragment = new UserFragment();
+                        nextFragment(userFragment);
+                        title.setText("我的優惠卷");
+                        toolbar.setElevation(8);
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
                     break;
 
                 case R.id.my_acount_menu_btn:
-                    //userFragment = new UserFragment();
-                    //nextFragment(userFragment);
-                    //title.setText("帳戶設定");
-                    //toolbar.setElevation(8);
-                    Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     Drawer.closeDrawers();
-                    System.out.println("Click my account menu");
+                    if(SessionManager.hasAttribute()) {
+                        userFragment = new UserFragment();
+                        nextFragment(userFragment);
+                        title.setText("帳戶設定");
+                        toolbar.setElevation(8);
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case R.id.logout_menu_btn:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {
 
+                        new BackgroundLogoutTask().execute();
                     } else {
                         Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     }

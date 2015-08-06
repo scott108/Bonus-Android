@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.scott.bonus.interfaces.SignUp;
 
 import retrofit.RestAdapter;
 
@@ -92,12 +88,11 @@ public class SignUpActivity extends Activity{
         }
         @Override
         protected String doInBackground(String... params) {
-            SignUp signUp = restAdapter.create(SignUp.class);
             String result = "";
             System.out.println("doInBackground...");
 
             if(!params[0].equals("") && !params[1].equals("") && !params[2].equals("") && !params[3].equals("")) {
-                result = signUp.userAdd(params[0], params[1], params[2], params[3]);
+                result = HttpSetting.getInstance().getHttp().userAdd(params[0], params[1], params[2], params[3]);
             }
             return result;
         }

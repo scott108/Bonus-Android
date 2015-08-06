@@ -12,11 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.scott.bonus.interfaces.Login;
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sharepreference.LoginSharePreference;
+import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 /**
@@ -32,9 +38,6 @@ public class LoginActivity extends Activity{
 
     private ClickEventHandler clickEventHandler;
 
-    private RestAdapter restAdapter;
-    private final String serverURL = "http://140.120.15.80:8080/iBonus-server";
-
     private Intent intent;
 
     @Override
@@ -42,7 +45,8 @@ public class LoginActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initUI();
-        restAdapter = new RestAdapter.Builder().setEndpoint(serverURL).build();
+
+        Context.setLoginActivity(this);
     }
 
     @Override
@@ -61,6 +65,9 @@ public class LoginActivity extends Activity{
         passwordEditText = (EditText)findViewById(R.id.passwordEditText);
         loginBtn = (Button) findViewById(R.id.loginBtn);
         signUpLink = (TextView) findViewById(R.id.signUpLinkTextView);
+
+        emailEditText.setText("scott@gmail.com");
+        passwordEditText.setText("asdf123");
 
         loginProgress = new ProgressDialog(this);
         loginBtn.setOnClickListener(clickEventHandler);
@@ -86,41 +93,51 @@ public class LoginActivity extends Activity{
         }
     }
 
-    private class LoginTask extends AsyncTask<String, Integer, String> {
+    public void loginResult(JsonObject jsonObject) {
+        String result = jsonObject.toString();
+        if(!result.equals("false")) {
+            SessionManager.setAttribute(true);
+            sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
+
+            LoginSharePreference.getInstance().setLoginData(sharePreference,
+                    emailEditText.getText().toString(),
+                    passwordEditText.getText().toString());
+
+            TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
+            welcom.setText("Hello, " + jsonObject.get("name").getAsString());
+            TextView loginPage = (TextView) Context.getMainActivity().findViewById(R.id.gotoLoginPage);
+            loginPage.setText("歡迎使用iBonus");
+            LoginActivity.this.finish();
+
+        } else {
+            Toast.makeText(LoginActivity.this, "帳號密碼組合錯誤", Toast.LENGTH_LONG).show();
+        }
+        loginProgress.dismiss();
+    }
+
+    private class LoginTask extends AsyncTask<String, Integer, Void> {
         @Override
         protected void onPreExecute() {
             loginProgress.setMessage("登入中請稍候...");
             loginProgress.show();
         }
         @Override
-        protected String doInBackground(String... params) {
-            Login login = restAdapter.create(Login.class);
-            String result = "";
-
+        protected Void doInBackground(String... params) {
             if(!params[0].equals("") && !params[1].equals("")) {
+                HttpSetting.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
+                    @Override
+                    public void success(JsonObject jsonObject, Response response) {
+                        loginResult(jsonObject);
+                    }
 
-                result = login.userLogin(params[0], params[1]);
-            }
-            return result;
-        }
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
+                    @Override
+                    public void failure(RetrofitError error) {
 
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            System.out.println(result);
-            if(result.equals("true")) {
-                SessionManager.setAttribute(true);
-                sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
-                LoginSharePreference.getInstance().setLoginData(sharePreference,
-                        emailEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-                LoginActivity.this.finish();
-            } else {
-                Toast.makeText(LoginActivity.this, "帳號密碼組合錯誤", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
-            loginProgress.dismiss();
+            return null;
         }
+
     }
 }

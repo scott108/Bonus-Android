@@ -1,32 +1,51 @@
 package com.example.scott.bonus.utility;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.example.scott.bonus.interfaces.Login;
+import com.example.scott.bonus.Context;
+import com.example.scott.bonus.HttpSetting;
+import com.example.scott.bonus.R;
 import com.example.scott.bonus.session.SessionManager;
-import com.example.scott.bonus.sharepreference.LoginSharePreference;
+import com.google.gson.JsonObject;
 
-import retrofit.RestAdapter;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Scott on 15/7/30.
  */
 public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
-    private final String serverURL = "http://140.120.15.80:8080/iBonus-server";
-    private RestAdapter restAdapter;
 
-    public BackgroundLoginTask() {
-        restAdapter = new RestAdapter.Builder().setEndpoint(serverURL).build();
-    }
+    String result = "false";
 
     @Override
     protected String doInBackground(String... params) {
-        Login login = restAdapter.create(Login.class);
-        String result = "";
+
         if(!params[0].equals("") && !params[1].equals("")) {
 
-            result = login.userLogin(params[0], params[1]);
+            HttpSetting.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
+               @Override
+               public void success(JsonObject jsonObject, Response response) {
+                   result = jsonObject.toString();
+                   System.out.println(result);
+                   if (!result.equals("false")) {
+                       SessionManager.setAttribute(true);
+                       TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
+                       welcom.setText("Hello, " + jsonObject.get("name").getAsString());
+                       TextView loginPage = (TextView) Context.getMainActivity().findViewById(R.id.gotoLoginPage);
+                       loginPage.setText("歡迎使用iBonus");
+                   } else {
+                       SessionManager.setAttribute(false);
+                   }
+               }
+
+               @Override
+               public void failure(RetrofitError error) {
+
+               }
+           });
         }
         return result;
     }
@@ -38,11 +57,6 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        System.out.println(result);
-        if(result.equals("true")) {
-            SessionManager.setAttribute(true);
-        } else {
-            SessionManager.setAttribute(false);
-        }
+
     }
 }
