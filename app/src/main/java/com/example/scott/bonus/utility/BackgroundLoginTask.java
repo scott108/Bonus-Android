@@ -32,6 +32,9 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
                    System.out.println(result);
                    if (!result.equals("false")) {
                        SessionManager.setAttribute(true);
+
+                       SessionManager.setSessionID("JSESSIONID=" + jsonObject.get("sessionID").getAsString());
+
                        TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
                        welcom.setText("Hello, " + jsonObject.get("name").getAsString());
                        TextView loginPage = (TextView) Context.getMainActivity().findViewById(R.id.gotoLoginPage);

@@ -23,7 +23,8 @@ public class BackgroundLogoutTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String result = HttpSetting.getInstance().getHttp().userLogout();
+        System.out.println(SessionManager.getSessionID());
+        String result = HttpSetting.getInstance().getHttp().userLogout(SessionManager.getSessionID());
         return result;
     }
 

@@ -10,6 +10,7 @@ import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.POST;
 
 /**
@@ -21,7 +22,7 @@ public interface Http {
     void userLogin(@Field("email") String email, @Field("password") String password, Callback<JsonObject> response);
 
     @GET("/user/logout")
-    String userLogout();
+    String userLogout(@Header("Cookie") String token);
 
     @FormUrlEncoded
     @POST("/user/add")

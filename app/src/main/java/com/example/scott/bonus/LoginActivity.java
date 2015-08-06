@@ -93,10 +93,14 @@ public class LoginActivity extends Activity{
         }
     }
 
+
     public void loginResult(JsonObject jsonObject) {
         String result = jsonObject.toString();
         if(!result.equals("false")) {
             SessionManager.setAttribute(true);
+
+            SessionManager.setSessionID("JSESSIONID=" + jsonObject.get("sessionID").getAsString());
+
             sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
 
             LoginSharePreference.getInstance().setLoginData(sharePreference,
@@ -127,6 +131,7 @@ public class LoginActivity extends Activity{
                 HttpSetting.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
+                        System.out.println(response.getHeaders());
                         loginResult(jsonObject);
                     }
 
@@ -138,6 +143,5 @@ public class LoginActivity extends Activity{
             }
             return null;
         }
-
     }
 }
