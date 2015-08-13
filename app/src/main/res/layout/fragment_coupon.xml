@@ -18,9 +18,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10000"
             android:textColor="@color/theme_accent"
-            android:id="@+id/myBonusTextView" />
+            android:id="@+id/userBonusTextView" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

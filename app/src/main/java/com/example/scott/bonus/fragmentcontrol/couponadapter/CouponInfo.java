@@ -20,49 +20,67 @@ import java.util.Locale;
  * Created by Scott on 15/5/7.
  */
 public class CouponInfo {
-    private String name;
-    private String number;
-    private String deadline;
-    private String content;
-    private Bitmap icon;
+    private String couponID;
+    private String storeName;
+    private String couponName;
+    private String couponContent;
+    private String startTime;
+    private String endTime;
+    private String imageUrl;
 
-    public Bitmap getIcon() {
-        return icon;
+    public String getCouponID() {
+        return couponID;
     }
 
-    public void setIcon(Bitmap icon) {
-        this.icon = icon;
+    public void setCouponID(String couponID) {
+        this.couponID = couponID;
     }
 
-    public String getName() {
-        return name;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
-    public String getNumber() {
-        return number;
+    public String getCouponName() {
+        return couponName;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 
-    public String getDeadline() {
-        return deadline;
+    public String getCouponContent() {
+        return couponContent;
     }
 
-    public void setDeadline(String deadline) {
-        this.deadline = deadline;
+    public void setCouponContent(String couponContent) {
+        this.couponContent = couponContent;
     }
 
-    public String getContent() {
-        return content;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

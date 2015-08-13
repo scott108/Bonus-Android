@@ -3,7 +3,7 @@ package com.example.scott.bonus.user;
 /**
  * Created by Scott on 15/7/30.
  */
-public class User {
+public class UserAccount {
     private String email = "";
     private String password = "";
 

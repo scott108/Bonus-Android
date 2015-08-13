@@ -1,7 +1,9 @@
 package com.example.scott.bonus;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -40,7 +42,7 @@ import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
 import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 import com.example.scott.bonus.sqlite.MyDBHelper;
-import com.example.scott.bonus.user.User;
+import com.example.scott.bonus.user.UserAccount;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.example.scott.bonus.utility.BackgroundLogoutTask;
 import com.example.scott.bonus.utility.utility;
@@ -49,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends ActionBarActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
     private static Intent origIntent;
@@ -84,6 +87,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private Fragment invoiceFragment;
     private Fragment couponFragment;
     private Fragment userFragment;
+    private Fragment currentFragment;
 
     private ClickEventHandler clickEventHandler;
 
@@ -442,10 +446,45 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     private void loginCheck() {
         sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
-        User user = LoginSharePreference.getInstance().getLoginData(sharePreference);
-        if(!user.getEmail().equals("") && !user.getPassword().equals("")) {
-            new BackgroundLoginTask().execute(user.getEmail(), user.getPassword());
+        UserAccount userAccount = LoginSharePreference.getInstance().getLoginData(sharePreference);
+        if(!userAccount.getEmail().equals("") && !userAccount.getPassword().equals("")) {
+            new BackgroundLoginTask().execute(userAccount.getEmail(), userAccount.getPassword());
         }
+    }
+
+    private void showLogoutDialog()
+    {
+        AlertDialog.Builder MyAlertDialog = new AlertDialog.Builder(this);
+        MyAlertDialog.setTitle("登出");
+        MyAlertDialog.setMessage("確定要登出?");
+        DialogInterface.OnClickListener cancelClick = new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        };
+
+        DialogInterface.OnClickListener oKClick = new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    String islogout = new BackgroundLogoutTask().execute().get();
+                    if(islogout.equals("true")) {
+                        invoiceFragment = new InvoiceFragment();
+                        nextFragment(invoiceFragment);
+                        toolbar.setElevation(0);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
+                LoginSharePreference.getInstance().clearLoginData(sharePreference);
+            }
+        };
+        MyAlertDialog.setPositiveButton("確定", oKClick );
+        MyAlertDialog.setNegativeButton("取消", cancelClick);
+        MyAlertDialog.show();
     }
 
     class ClickEventHandler implements View.OnClickListener {
@@ -494,8 +533,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                 case R.id.logout_menu_btn:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {
-
-                        new BackgroundLogoutTask().execute();
+                        showLogoutDialog();
                     } else {
                         Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                     }

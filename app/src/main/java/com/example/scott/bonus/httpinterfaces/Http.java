@@ -1,5 +1,6 @@
 package com.example.scott.bonus.httpinterfaces;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -30,4 +31,7 @@ public interface Http {
                    @Field("email") String email,
                    @Field("password") String password,
                    @Field("passwordConfirm") String passwordConfirm);
+
+    @GET("/coupon/all")
+    void getAllCoupon(Callback<JsonArray> response);
 }

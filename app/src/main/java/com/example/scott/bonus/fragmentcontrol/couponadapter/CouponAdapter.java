@@ -30,7 +30,6 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
         this.mAct = act;
     }
 
-
     public void clearApplications() {
         int size = this.coupons.size();
         if (size > 0) {
@@ -57,10 +56,11 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
         final CouponInfo couponInfo = coupons.get(i);
 
-        viewHolder.name.setText(couponInfo.getName());
-        viewHolder.number.setText(couponInfo.getNumber());
+        viewHolder.storeName.setText("店家：" + couponInfo.getStoreName());
+        viewHolder.couponName.setText("優惠卷名稱：" + couponInfo.getCouponName());
+        viewHolder.couponBonus.setText("紅利：" + couponInfo.getCouponName());
 
-        viewHolder.image.setImageBitmap(couponInfo.getIcon());
+        //viewHolder.image.setImageBitmap();
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,14 +76,16 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, number, deadline, content;
+        public TextView storeName, couponName, deadline, couponBonus;
         public ImageView image;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.name);
-            number = (TextView) itemView.findViewById(R.id.number);
-            image = (ImageView) itemView.findViewById(R.id.countryImage);
+            storeName = (TextView) itemView.findViewById(R.id.storeName);
+            couponName = (TextView) itemView.findViewById(R.id.couponName);
+            couponBonus = (TextView) itemView.findViewById(R.id.couponBonus);
+
+            //image = (ImageView) itemView.findViewById(R.id.countryImage);
         }
 
     }

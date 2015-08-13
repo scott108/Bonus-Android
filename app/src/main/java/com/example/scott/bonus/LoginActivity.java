@@ -16,14 +16,9 @@ import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sharepreference.LoginSharePreference;
 import com.google.gson.JsonObject;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
 
 /**
  * Created by Scott on 15/5/7.
@@ -96,7 +91,7 @@ public class LoginActivity extends Activity{
 
     public void loginResult(JsonObject jsonObject) {
         String result = jsonObject.toString();
-        if(!result.equals("false")) {
+        if(!jsonObject.has("loginfail")) {
             SessionManager.setAttribute(true);
 
             SessionManager.setSessionID("JSESSIONID=" + jsonObject.get("sessionID").getAsString());
@@ -106,6 +101,10 @@ public class LoginActivity extends Activity{
             LoginSharePreference.getInstance().setLoginData(sharePreference,
                     emailEditText.getText().toString(),
                     passwordEditText.getText().toString());
+
+            UserInfoManager.setUserName(jsonObject.get("name").getAsString());
+            UserInfoManager.setEmail(jsonObject.get("email").getAsString());
+            UserInfoManager.setBonus(jsonObject.get("bonus").getAsInt());
 
             TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
             welcom.setText("Hello, " + jsonObject.get("name").getAsString());
@@ -133,6 +132,7 @@ public class LoginActivity extends Activity{
                     public void success(JsonObject jsonObject, Response response) {
                         System.out.println(response.getHeaders());
                         loginResult(jsonObject);
+
                     }
 
                     @Override

@@ -2,6 +2,7 @@ package com.example.scott.bonus.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.LauncherApps;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,26 +15,36 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.scott.bonus.HttpSetting;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
+import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponAdapter;
 import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponInfo;
 import com.example.scott.bonus.itemanimator.CustomItemAnimator;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Scott on 15/4/20.
  */
 public class CouponFragment extends Fragment{
 
-    MainActivity mainActivity;
+    private MainActivity mainActivity;
     private RecyclerView mRecyclerView;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private List<CouponInfo> applicationList = new ArrayList<CouponInfo>();
     private CouponAdapter mAdapter;
+    private TextView userBonusTextView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -51,6 +62,9 @@ public class CouponFragment extends Fragment{
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
+
+        userBonusTextView = (TextView) layout.findViewById(R.id.userBonusTextView);
+        userBonusTextView.setText(UserInfoManager.getBonus()+"");
 
         new InitializeApplicationsTask().execute();
 
@@ -85,10 +99,42 @@ public class CouponFragment extends Fragment{
         @Override
         protected Void doInBackground(Void... params) {
             applicationList.clear();
+            HttpSetting.getInstance().getHttp().getAllCoupon(new Callback<JsonArray>() {
+                @Override
+                public void success(JsonArray jsonElements, Response response) {
+
+                    for (int i = 0; i < jsonElements.size(); i++) {
+                        System.out.println(jsonElements.get(i));
+                        JsonObject jsonObject = (JsonObject)jsonElements.get(i);
+                        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        CouponInfo couponInfo = new CouponInfo();
+                        couponInfo.setCouponID(jsonObject.get("couponID").getAsString());
+                        couponInfo.setStoreName(jsonObject.get("storeName").getAsString());
+                        couponInfo.setCouponName(jsonObject.get("couponName").getAsString());
+                        couponInfo.setCouponContent(jsonObject.get("couponContent").getAsString());
+                        couponInfo.setImageUrl(jsonObject.get("couponImgUrl").getAsString());
+                        couponInfo.setImageUrl(jsonObject.get("couponBonus").getAsString());
+                        couponInfo.setImageUrl(jsonObject.get("startTime").getAsString());
+                        couponInfo.setImageUrl(jsonObject.get("endTime").getAsString());
+
+                        applicationList.add(couponInfo);
+
+                    }
+                    //set data for list
+                    mAdapter.addApplications(applicationList);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
 
             //Query the applications
-            final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            /*
 
             for (int i = 0; i < 10; i++) {
                 CouponInfo couponInfo = new CouponInfo();
@@ -105,20 +151,9 @@ public class CouponFragment extends Fragment{
                 Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, oldwidth,oldheight, matrix, true);
                 couponInfo.setIcon(resizedBitmap);
                 applicationList.add(couponInfo);
-            }
+            }*/
 
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //handle visibility
-
-            //set data for list
-            mAdapter.addApplications(applicationList);
-            swipeRefreshLayout.setRefreshing(false);
-
-            super.onPostExecute(result);
         }
     }
 
