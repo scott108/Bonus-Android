@@ -107,12 +107,8 @@ public class LoginActivity extends Activity{
             UserInfoManager.getInstance().setEmail(jsonObject.get("email").getAsString());
             UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
 
+            EventBus.getDefault().post(UserInfoManager.getInstance());
 
-
-            TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
-            welcom.setText("Hello, " + jsonObject.get("name").getAsString());
-            TextView loginPage = (TextView) Context.getMainActivity().findViewById(R.id.gotoLoginPage);
-            loginPage.setText("歡迎使用iBonus");
             LoginActivity.this.finish();
 
         } else {
