@@ -8,10 +8,10 @@ public class UserInfoManager {
     private static String email = "";
     private static String userName = "";
     private static int bonus = 0;
-    private static UserInfoManager userInfoManager;
+    private static UserInfoManager userInfoManager = new UserInfoManager();
 
     private UserInfoManager() {
-        userInfoManager = new UserInfoManager();
+
     }
 
     public static UserInfoManager getInstance() {

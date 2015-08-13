@@ -6,9 +6,11 @@ import android.widget.TextView;
 import com.example.scott.bonus.Context;
 import com.example.scott.bonus.HttpSetting;
 import com.example.scott.bonus.R;
+import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
 import com.google.gson.JsonObject;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -35,10 +37,11 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
 
                        SessionManager.setSessionID("JSESSIONID=" + jsonObject.get("sessionID").getAsString());
 
-                       TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
-                       welcom.setText("Hello, " + jsonObject.get("name").getAsString());
-                       TextView loginPage = (TextView) Context.getMainActivity().findViewById(R.id.gotoLoginPage);
-                       loginPage.setText("歡迎使用iBonus");
+                       UserInfoManager.getInstance().setUserName(jsonObject.get("name").getAsString());
+                       UserInfoManager.getInstance().setEmail(jsonObject.get("email").getAsString());
+                       UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
+
+                       EventBus.getDefault().post(UserInfoManager.getInstance());
                    } else {
                        SessionManager.setAttribute(false);
                    }

@@ -8,7 +8,10 @@ import android.widget.Toast;
 import com.example.scott.bonus.Context;
 import com.example.scott.bonus.HttpSetting;
 import com.example.scott.bonus.R;
+import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Scott on 15/8/6.
@@ -32,10 +35,12 @@ public class BackgroundLogoutTask extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String result) {
         if(result.equals("true")) {
             SessionManager.setAttribute(false);
-            TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
-            welcom.setText("遊客");
-            TextView loginPage = (TextView) Context.getMainActivity().findViewById(R.id.gotoLoginPage);
-            loginPage.setText("按此登入");
+
+            UserInfoManager.getInstance().setUserName("");
+            UserInfoManager.getInstance().setEmail("");
+            UserInfoManager.getInstance().setBonus(0);
+
+            EventBus.getDefault().post(UserInfoManager.getInstance());
             Toast.makeText(Context.getMainActivity(), "登出成功", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(Context.getMainActivity(), "登出失敗", Toast.LENGTH_LONG).show();

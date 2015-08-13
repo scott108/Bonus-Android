@@ -30,6 +30,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -64,28 +65,39 @@ public class CouponFragment extends Fragment{
         mRecyclerView.setAdapter(mAdapter);
 
         userBonusTextView = (TextView) layout.findViewById(R.id.userBonusTextView);
-        userBonusTextView.setText(UserInfoManager.getBonus()+"");
+        userBonusTextView.setText(UserInfoManager.getInstance().getBonus() + "");
 
         new InitializeApplicationsTask().execute();
 
         swipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setColorSchemeColors(mainActivity.getResources().getColor(R.color.primary));
         swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 new InitializeApplicationsTask().execute();
             }
         });
 
         return layout;
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        EventBus.getDefault().register(this);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEvent(UserInfoManager userInfoManager) {
+        System.out.println("onEvent");
+        userBonusTextView.setText(userInfoManager.getBonus()+"");
     }
 
     private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> {
