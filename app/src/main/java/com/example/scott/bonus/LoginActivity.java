@@ -16,6 +16,7 @@ import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sharepreference.LoginSharePreference;
 import com.google.gson.JsonObject;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -102,9 +103,11 @@ public class LoginActivity extends Activity{
                     emailEditText.getText().toString(),
                     passwordEditText.getText().toString());
 
-            UserInfoManager.setUserName(jsonObject.get("name").getAsString());
-            UserInfoManager.setEmail(jsonObject.get("email").getAsString());
-            UserInfoManager.setBonus(jsonObject.get("bonus").getAsInt());
+            UserInfoManager.getInstance().setUserName(jsonObject.get("name").getAsString());
+            UserInfoManager.getInstance().setEmail(jsonObject.get("email").getAsString());
+            UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
+
+
 
             TextView welcom = (TextView) Context.getMainActivity().findViewById(R.id.name);
             welcom.setText("Hello, " + jsonObject.get("name").getAsString());

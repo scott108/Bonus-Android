@@ -8,28 +8,37 @@ public class UserInfoManager {
     private static String email = "";
     private static String userName = "";
     private static int bonus = 0;
+    private static UserInfoManager userInfoManager;
 
-    public static String getEmail() {
+    private UserInfoManager() {
+        userInfoManager = new UserInfoManager();
+    }
+
+    public static UserInfoManager getInstance() {
+        return userInfoManager;
+    }
+
+    public String getEmail() {
         return email;
     }
 
-    public static void setEmail(String email) {
+    public void setEmail(String email) {
         UserInfoManager.email = email;
     }
 
-    public static String getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public static void setUserName(String userName) {
+    public void setUserName(String userName) {
         UserInfoManager.userName = userName;
     }
 
-    public static int getBonus() {
+    public int getBonus() {
         return bonus;
     }
 
-    public static void setBonus(int bonus) {
+    public void setBonus(int bonus) {
         UserInfoManager.bonus = bonus;
     }
 }
