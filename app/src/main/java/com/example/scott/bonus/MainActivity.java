@@ -224,6 +224,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         invoiceFragment = new InvoiceFragment();
         couponFragment = new CouponFragment();
+        userFragment = new UserFragment();
         invoiceFragmentControl = new InvoiceFragmentControl(this);
         couponFragmentControl = new CouponFragmentControl(this);
 
