@@ -24,7 +24,7 @@ public class InvoiceFragment extends Fragment {
     SlidingTabLayout tabs;
     CharSequence Titles[]={"未兌換","已兌換"};
     int Numboftabs =2;
-
+    private View main;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -36,13 +36,15 @@ public class InvoiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.fragment_invoice, container, false);
+        main = inflater.inflate(R.layout.fragment_invoice, container, false);
+        initInvoiceSlidingTab();
+        return main;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initInvoiceSlidingTab();
+
     }
 
     @Override
@@ -58,11 +60,12 @@ public class InvoiceFragment extends Fragment {
     private void initInvoiceSlidingTab() {
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getChildFragmentManager(), Titles, Numboftabs);
+
         // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) getActivity().findViewById(R.id.pager);
+        pager = (ViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(adapter);
         // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
+        tabs = (SlidingTabLayout) main.findViewById(R.id.tabs);
 
         // Setting Custom Color for the Scroll bar indicator of the Tab View
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {

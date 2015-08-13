@@ -65,7 +65,7 @@ public class CouponFragment extends Fragment{
         mRecyclerView.setAdapter(mAdapter);
 
         userBonusTextView = (TextView) layout.findViewById(R.id.userBonusTextView);
-        userBonusTextView.setText(UserInfoManager.getInstance().getBonus()+"");
+        userBonusTextView.setText(UserInfoManager.getInstance().getBonus() + "");
 
         new InitializeApplicationsTask().execute();
 
