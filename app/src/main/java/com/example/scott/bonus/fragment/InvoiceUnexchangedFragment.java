@@ -68,6 +68,7 @@ public class InvoiceUnexchangedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         categoryList.setAdapter(invoiceAdapter);
+        //invoiceAdapter.notifyDataSetChanged();
 
         if(invoiceAdapter.getCount() == 0 ){
             invoiceUnexchangedTextView.setVisibility(View.VISIBLE);

@@ -235,9 +235,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         initNFCAdapter();
 
-        currentFragment = invoiceFragment;
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_content, invoiceFragment).commit();
+        switchFragment(invoiceFragment);
         title.setText("發票匣");
 
         setOnDrawerMenuClickListener();
@@ -272,16 +270,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     }
 
     private void switchFragment(Fragment nextFragment) {
-        if (nextFragment != currentFragment) {
-            if (!nextFragment.isAdded()) {
-                getSupportFragmentManager().beginTransaction().hide(currentFragment)
-                        .add(R.id.frame_content, nextFragment).commit();
-            } else {
-                getSupportFragmentManager().beginTransaction().hide(currentFragment)
-                        .show(nextFragment).commit();
-            }
-            currentFragment = nextFragment;
-        }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, nextFragment).commit();
 
         Drawer.closeDrawers();
     }

@@ -2,6 +2,7 @@ package com.example.scott.bonus.fragmentcontrol.viewpageradapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.scott.bonus.fragment.InvoiceExchangedFragment;
@@ -10,7 +11,7 @@ import com.example.scott.bonus.fragment.InvoiceUnexchangedFragment;
 /**
  * Created by Scott on 15/7/22.
  */
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created

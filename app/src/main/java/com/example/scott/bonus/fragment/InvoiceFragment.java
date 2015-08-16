@@ -64,6 +64,9 @@ public class InvoiceFragment extends Fragment {
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) main.findViewById(R.id.tabs);
 
