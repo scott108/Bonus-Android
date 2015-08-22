@@ -30,6 +30,7 @@ public class InvoiceDAO {
     public static final String TOTALMOMEY_COLUMN = "total_money";
     public static final String PAYDETAIL_COLUMN = "pay_detail";
     public static final String SIGNATURE_COLUMN = "signature";
+    public static final String ISEXCHANGED_COLUMN = "is_exchanged";
 
     // 使用上面宣告的變數建立表格的SQL指令
     public static final String CREATE_TABLE =
@@ -42,7 +43,8 @@ public class InvoiceDAO {
                     STOREPHONE_COLUMN + " TEXT NOT NULL, " +
                     TOTALMOMEY_COLUMN + " TEXT NOT NULL, " +
                     PAYDETAIL_COLUMN + " TEXT NOT NULL," +
-                    SIGNATURE_COLUMN + "  TEXT NOT NULL)";
+                    SIGNATURE_COLUMN + "  TEXT NOT NULL," +
+                    ISEXCHANGED_COLUMN + "  INTEGER DEFAULT 0)";
 
     // 資料庫物件
     private SQLiteDatabase db;

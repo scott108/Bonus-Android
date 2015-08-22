@@ -17,7 +17,7 @@ import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
 /**
  * Created by Scott on 15/7/22.
  */
-public class InvoiceUnexchangedFragment extends Fragment {
+public class InvoiceUnExchangedFragment extends Fragment {
     ListView categoryList;
     MainActivity mainActivity;
     LayoutInflater inflater;
