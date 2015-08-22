@@ -22,7 +22,7 @@ public class InvoiceUnExchangedFragment extends Fragment {
     MainActivity mainActivity;
     LayoutInflater inflater;
     InvoiceAdapter invoiceAdapter;
-    TextView invoiceUnexchangedTextView;
+    TextView invoiceUnExchangedTextView;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -40,15 +40,15 @@ public class InvoiceUnExchangedFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        invoiceAdapter = mainActivity.getInvoiceFragmentControl().getInvoiceAdapter();
-        invoiceUnexchangedTextView = (TextView) this.getView().findViewById(R.id.invoiceUnexchangedTextView);
+        invoiceAdapter = mainActivity.getInvoiceFragmentControl().getIsNotExchangedInvoiceAdapter();
+        invoiceUnExchangedTextView = (TextView) this.getView().findViewById(R.id.invoiceUnexchangedTextView);
         categoryList = (ListView) this.getView().findViewById(R.id.invoiceUnexchangedList);
         categoryList.setAdapter(invoiceAdapter);
 
         if(categoryList.getCount() == 0 ){
-            invoiceUnexchangedTextView.setVisibility(View.VISIBLE);
+            invoiceUnExchangedTextView.setVisibility(View.VISIBLE);
         } else {
-            invoiceUnexchangedTextView.setVisibility(View.GONE);
+            invoiceUnExchangedTextView.setVisibility(View.GONE);
         }
 
         categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,9 +71,9 @@ public class InvoiceUnExchangedFragment extends Fragment {
         //invoiceAdapter.notifyDataSetChanged();
 
         if(invoiceAdapter.getCount() == 0 ){
-            invoiceUnexchangedTextView.setVisibility(View.VISIBLE);
+            invoiceUnExchangedTextView.setVisibility(View.VISIBLE);
         } else {
-            invoiceUnexchangedTextView.setVisibility(View.GONE);
+            invoiceUnExchangedTextView.setVisibility(View.GONE);
         }
     }
 }

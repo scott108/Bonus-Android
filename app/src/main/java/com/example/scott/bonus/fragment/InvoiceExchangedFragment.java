@@ -34,12 +34,30 @@ public class InvoiceExchangedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.fragment_invoice_unexchanged, container, false);
+        return inflater.inflate(R.layout.fragment_invoice_exchanged, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        invoiceAdapter = mainActivity.getInvoiceFragmentControl().getIsExchangedInvoiceAdapter();
+        invoiceExchangedTextView = (TextView) this.getView().findViewById(R.id.invoiceExchangedTextView);
+        categoryList = (ListView) this.getView().findViewById(R.id.invoiceExchangedList);
+        categoryList.setAdapter(invoiceAdapter);
+
+        if(categoryList.getCount() == 0 ){
+            invoiceExchangedTextView.setVisibility(View.VISIBLE);
+        } else {
+            invoiceExchangedTextView.setVisibility(View.GONE);
+        }
+
+        categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> av, View view, int i, long l) {
+                //Toast.makeText(mainActivity, "myPos " + i, Toast.LENGTH_LONG).show();
+                mainActivity.getInvoiceFragmentControl().showInvoiceDetailDialog(invoiceAdapter.getInvoiceNum(i));
+            }
+        });
 
     }
 
@@ -52,6 +70,13 @@ public class InvoiceExchangedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        categoryList.setAdapter(invoiceAdapter);
+        //invoiceAdapter.notifyDataSetChanged();
 
+        if(invoiceAdapter.getCount() == 0 ){
+            invoiceExchangedTextView.setVisibility(View.VISIBLE);
+        } else {
+            invoiceExchangedTextView.setVisibility(View.GONE);
+        }
     }
 }

@@ -7,19 +7,19 @@ import retrofit.RestAdapter;
 /**
  * Created by Scott on 15/8/6.
  */
-public class HttpSetting {
+public class API {
     private static final String serverURL = "http://140.120.15.80:8080/iBonus-server";
     private static RestAdapter restAdapter;
-    private static HttpSetting httpSetting = new HttpSetting();
+    private static API api = new API();
     private static Http http;
 
-    private HttpSetting() {
+    private API() {
         restAdapter = new RestAdapter.Builder().setEndpoint(serverURL).build();
         http = restAdapter.create(Http.class);
     }
 
-    public static HttpSetting getInstance() {
-        return httpSetting;
+    public static API getInstance() {
+        return api;
     }
 
     public Http getHttp() {

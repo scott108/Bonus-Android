@@ -2,12 +2,10 @@ package com.example.scott.bonus.utility;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.scott.bonus.Context;
-import com.example.scott.bonus.HttpSetting;
-import com.example.scott.bonus.R;
+import com.example.scott.bonus.API;
 import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
 
@@ -27,7 +25,7 @@ public class BackgroundLogoutTask extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(String... params) {
         System.out.println(SessionManager.getSessionID());
-        String result = HttpSetting.getInstance().getHttp().userLogout(SessionManager.getSessionID());
+        String result = API.getInstance().getHttp().userLogout(SessionManager.getSessionID());
         return result;
     }
 

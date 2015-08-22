@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.scott.bonus.HttpSetting;
+import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
@@ -111,7 +111,7 @@ public class CouponFragment extends Fragment{
         @Override
         protected Void doInBackground(Void... params) {
             applicationList.clear();
-            HttpSetting.getInstance().getHttp().getAllCoupon(new Callback<JsonArray>() {
+            API.getInstance().getHttp().getAllCoupon(new Callback<JsonArray>() {
                 @Override
                 public void success(JsonArray jsonElements, Response response) {
 

@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 
 import com.example.scott.bonus.Context;
-import com.example.scott.bonus.HttpSetting;
+import com.example.scott.bonus.API;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
@@ -27,7 +27,7 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
 
         if(!params[0].equals("") && !params[1].equals("")) {
 
-            HttpSetting.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
+            API.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
                @Override
                public void success(JsonObject jsonObject, Response response) {
                    result = jsonObject.toString();
