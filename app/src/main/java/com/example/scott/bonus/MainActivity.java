@@ -463,7 +463,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         ndefMessage = new NdefMessage(new NdefRecord[]{NdefRecord.createExternal(domain, type, mimeData)});
     }
 
-    private void loginCheck() {
+    public void loginCheck() {
         sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
         UserAccount userAccount = LoginSharePreference.getInstance().getLoginData(sharePreference);
         if(!userAccount.getEmail().equals("") && !userAccount.getPassword().equals("")) {

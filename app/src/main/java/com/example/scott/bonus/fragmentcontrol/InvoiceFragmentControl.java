@@ -22,6 +22,7 @@ import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
 import com.example.scott.bonus.sqlite.entity.InvoiceItem;
+import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -230,6 +231,7 @@ public class InvoiceFragmentControl {
 
         @Override
         protected String doInBackground(String... params) {
+            final String param = params[0];
             API.getInstance().getHttp().getBonus(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
@@ -238,7 +240,15 @@ public class InvoiceFragmentControl {
                         UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
 
                         EventBus.getDefault().post(UserInfoManager.getInstance());
+                        invoiceDetailDialog.dismiss();
                         Toast.makeText(mainActivity, "兌換成功", Toast.LENGTH_LONG).show();
+                    } else {
+                        mainActivity.loginCheck();
+                        if(SessionManager.hasAttribute()) {
+                            new GetBonusTask().execute(param);
+                        } else {
+                            Toast.makeText(mainActivity, "尚未登入", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                 }
