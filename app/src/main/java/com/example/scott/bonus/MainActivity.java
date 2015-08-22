@@ -159,6 +159,12 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         Context.setMainActivity(this);
 
+        try {
+            insertTestInvoiceToSQLite();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -573,4 +579,53 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             }
         }
     }
+
+    private void insertTestInvoiceToSQLite() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("StoreName", "麥當勞");
+        jsonObject.put("Dateline", "12月");
+        jsonObject.put("InvoiceNum", Math.random() * 1000000 + 1);
+        jsonObject.put("CurrentTime", "10:10:10");
+        jsonObject.put("StoreNum", "123");
+        jsonObject.put("StorePhone", "321");
+        jsonObject.put("TotalMoney", "109");
+        jsonObject.put("PayDetail", "test");
+        jsonObject.put("Signature", "test");
+        jsonObject.put("Goods0", "麥香雞,109,1,109");
+
+
+
+        InvoiceItem invoiceItem = new InvoiceItem();
+        try {
+            invoiceItem.setStoreName(jsonObject.getString("StoreName"));
+            invoiceItem.setDateline(jsonObject.getString("Dateline"));
+            invoiceItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
+            invoiceItem.setCurrentTime(jsonObject.getString("CurrentTime"));
+            invoiceItem.setStoreNum(jsonObject.getString("StoreNum"));
+            invoiceItem.setStorePhone(jsonObject.getString("StorePhone"));
+            invoiceItem.setTotalMoney(jsonObject.getString("TotalMoney"));
+            invoiceItem.setPayDetail(jsonObject.getString("PayDetail"));
+            invoiceItem.setSignature(jsonObject.getString("Signature"));
+            for(int i = 0;; i++) {
+                if(!jsonObject.has("Goods" + i)) {
+                    break;
+                }
+                InvoiceGoodsItem invoiceGoodsItem = new InvoiceGoodsItem();
+                String[] token = jsonObject.getString("Goods" + i).split(",");
+                invoiceGoodsItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
+                invoiceGoodsItem.setGoodsName(token[0]);
+                invoiceGoodsItem.setGoodsPrice(token[1]);
+                invoiceGoodsItem.setGoodsQuantity(token[2]);
+                invoiceGoodsItem.setGoodsTotalPrice(token[3]);
+                invoiceGoodsDAO.insert(invoiceGoodsItem);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        invoiceDAO.insert(invoiceItem);
+
+        invoiceFragmentControl.addNewInvoiceIntoAdapter(invoiceItem);
+    }
+
 }
