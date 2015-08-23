@@ -75,6 +75,7 @@ public class InvoiceDAO {
         cv.put(TOTALMOMEY_COLUMN, invoiceItem.getTotalMoney());
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
         cv.put(SIGNATURE_COLUMN, invoiceItem.getSignature());
+        cv.put(ISEXCHANGED_COLUMN, invoiceItem.getIsExchanged());
 
         // 第一個參數是表格名稱
         // 第二個參數是沒有指定欄位值的預設值
@@ -86,9 +87,11 @@ public class InvoiceDAO {
     }
 
     // 修改參數指定的物件
-    /*public boolean update(InvoiceItem invoiceItem) {
+    public boolean update(InvoiceItem invoiceItem) {
         // 建立準備修改資料的ContentValues物件
         ContentValues cv = new ContentValues();
+
+        System.out.println(invoiceItem.getIsExchanged());
 
         // 加入ContentValues物件包裝的修改資料
         // 第一個參數是欄位名稱， 第二個參數是欄位的資料
@@ -99,6 +102,7 @@ public class InvoiceDAO {
         cv.put(STOREPHONE_COLUMN, invoiceItem.getStorePhone());
         cv.put(TOTALMOMEY_COLUMN, invoiceItem.getTotalMoney());
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
+        cv.put(ISEXCHANGED_COLUMN, invoiceItem.getIsExchanged());
 
         // 設定修改資料的條件為編號
         // 格式為「欄位名稱＝資料」
@@ -106,7 +110,7 @@ public class InvoiceDAO {
 
         // 執行修改資料並回傳修改的資料數量是否成功
         return db.update(TABLE_NAME, cv, where, null) > 0;
-    }*/
+    }
 
     // 刪除參數指定編號的資料
     public boolean delete(long id){
@@ -166,6 +170,7 @@ public class InvoiceDAO {
         result.setTotalMoney(cursor.getString(6));
         result.setPayDetail(cursor.getString(7));
         result.setSignature(cursor.getString(8));
+        result.setIsExchanged(cursor.getInt(9));
 
         // 回傳結果
         return result;

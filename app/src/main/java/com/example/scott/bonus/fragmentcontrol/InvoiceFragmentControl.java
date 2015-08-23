@@ -26,6 +26,9 @@ import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +73,18 @@ public class InvoiceFragmentControl {
                 listItem = (LinearLayout) convertView;
             }
             TextView invoiceItemTitle = (TextView) listItem.findViewById(R.id.invoice_item_title);
-            invoiceItemTitle.setText(caption);
+            JSONObject jsonObject = null;
+            String itemTitle = "";
+            try {
+                jsonObject = new JSONObject(caption);
+                itemTitle = "\n發票統編:" + jsonObject.getString("發票統編") + "\n" +
+                            "店名:" + jsonObject.getString("店名") + "\n" +
+                            "消費時間:" + jsonObject.get("消費時間") + "\n";
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            invoiceItemTitle.setText(itemTitle);
             ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
             invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
             return listItem;
@@ -102,7 +116,18 @@ public class InvoiceFragmentControl {
                 listItem = (LinearLayout) convertView;
             }
             TextView invoiceItemTitle = (TextView) listItem.findViewById(R.id.invoice_item_title);
-            invoiceItemTitle.setText(caption);
+            JSONObject jsonObject = null;
+            String itemTitle = "";
+            try {
+                jsonObject = new JSONObject(caption);
+                itemTitle = "\n發票統編:" + jsonObject.getString("發票統編") + "\n" +
+                        "店名:" + jsonObject.getString("店名") + "\n" +
+                        "消費時間:" + jsonObject.get("消費時間") + "\n";
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            invoiceItemTitle.setText(itemTitle);
             ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
             invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
             return listItem;
@@ -130,43 +155,89 @@ public class InvoiceFragmentControl {
 
         //get invoice data to add into listView
         List<InvoiceItem> invoiceItems =  mainActivity.getInvoiceDAO().getAll();
+        JSONObject jsonObject = new JSONObject();
         for(int i = 0; i < invoiceItems.size(); i++) {
-            String listContentTitle = "\n發票統編：" + invoiceItems.get(i).getInvoiceNum() + "\n店名：" + invoiceItems.get(i).getStoreName()  + "\n消費時間："+ invoiceItems.get(i).getCurrentTime() + "\n";
-            if(!isNotExchangedInvoiceAdapter.getGroupNames().contains(invoiceItems.get(i).getStoreName())
-                    || !isExchangedInvoiceAdapter.getGroupNames().contains(invoiceItems.get(i).getStoreName())) {
-                tempInvoiceList = new ArrayList<String>();
-                tempInvoiceList.add(listContentTitle);
-                if(invoiceItems.get(i).getIsExchanged() == 0) {
-                    isNotExchangedInvoiceAdapter.addInvoice(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
-                } else {
-                    isExchangedInvoiceAdapter.addInvoice(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
-                }
-            } else {
-                if(invoiceItems.get(i).getIsExchanged() == 0) {
-                    isNotExchangedInvoiceAdapter.addInvoiceInExistGroup(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), listContentTitle);
-                } else {
-                    isExchangedInvoiceAdapter.addInvoiceInExistGroup(invoiceItems.get(i).getStoreName(), invoiceItems.get(i).getInvoiceNum(), listContentTitle);
-                }
+            try {
+                jsonObject.put("發票統編", invoiceItems.get(i).getInvoiceNum());
+                jsonObject.put("店名", invoiceItems.get(i).getStoreName());
+                jsonObject.put("消費時間", invoiceItems.get(i).getCurrentTime());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            String listContentTitle = jsonObject.toString();
+            if(invoiceItems.get(i).getIsExchanged() == 0) {
+                if(!isNotExchangedInvoiceAdapter.getGroupNames().contains(invoiceItems.get(i).getStoreName())) {
+                    tempInvoiceList = new ArrayList<String>();
+                    tempInvoiceList.add(listContentTitle);
+                    isNotExchangedInvoiceAdapter.addInvoice(invoiceItems.get(i).getStoreName(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+                } else {
+                    isNotExchangedInvoiceAdapter.addInvoiceInExistGroup(invoiceItems.get(i).getStoreName(), listContentTitle);
+                }
+                isNotExchangedInvoiceAdapter.notifyDataSetChanged();
+                String trigger = "";
+                EventBus.getDefault().post(trigger);
+            } else {
+                if(!isExchangedInvoiceAdapter.getGroupNames().contains(invoiceItems.get(i).getStoreName())) {
+                    tempInvoiceList = new ArrayList<String>();
+                    tempInvoiceList.add(listContentTitle);
+                    isExchangedInvoiceAdapter.addInvoice(invoiceItems.get(i).getStoreName(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+                } else {
+                    isExchangedInvoiceAdapter.addInvoiceInExistGroup(invoiceItems.get(i).getStoreName(), listContentTitle);
+                }
+                isExchangedInvoiceAdapter.notifyDataSetChanged();
+                String trigger = "";
+                EventBus.getDefault().post(trigger);
+            }
+
+        }
+    }
+
+    private void addIntoIsExchangedList(String inoviceTitle) {
+        try {
+            JSONObject jsonObject = new JSONObject(inoviceTitle);
+
+            if(!isExchangedInvoiceAdapter.getGroupNames().contains(jsonObject.getString("店名"))) {
+                tempInvoiceList = new ArrayList<String>();
+                tempInvoiceList.add(inoviceTitle);
+                isExchangedInvoiceAdapter.addInvoice(jsonObject.getString("店名"), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+            } else {
+                isExchangedInvoiceAdapter.addInvoiceInExistGroup(jsonObject.getString("店名"), inoviceTitle);
+            }
+            isExchangedInvoiceAdapter.notifyDataSetChanged();
+            String trigger = "";
+            EventBus.getDefault().post(trigger);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
 
     public void addNewInvoiceIntoAdapter(InvoiceItem invoiceItem) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("發票統編", invoiceItem.getInvoiceNum());
+            jsonObject.put("店名", invoiceItem.getStoreName());
+            jsonObject.put("消費時間", invoiceItem.getCurrentTime());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String listContentTitle = jsonObject.toString();
 
-        //get invoice data to add into listView
-        String listContentTitle = "\n發票統編：" + invoiceItem.getInvoiceNum() + "\n店名：" + invoiceItem.getStoreName()  + "\n消費時間："+ invoiceItem.getCurrentTime() + "\n";
         if(!isNotExchangedInvoiceAdapter.getGroupNames().contains(invoiceItem.getStoreName())) {
             tempInvoiceList = new ArrayList<String>();
             tempInvoiceList.add(listContentTitle);
-            isNotExchangedInvoiceAdapter.addInvoice(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+            isNotExchangedInvoiceAdapter.addInvoice(invoiceItem.getStoreName(), new ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1, tempInvoiceList));
+
         } else {
-            isNotExchangedInvoiceAdapter.addInvoiceInExistGroup(invoiceItem.getStoreName(), invoiceItem.getInvoiceNum(), listContentTitle);
+            isNotExchangedInvoiceAdapter.addInvoiceInExistGroup(invoiceItem.getStoreName(), listContentTitle);
         }
+        isNotExchangedInvoiceAdapter.notifyDataSetChanged();
+        String trigger = "";
+        EventBus.getDefault().post(trigger);
     }
 
-    public void showInvoiceDetailDialog(String invoiceNum) {
-        InvoiceItem invoiceItem = mainActivity.getInvoiceDAO().get(invoiceNum);
+    public void showInvoiceDetailDialog(String invoiceNum, final int position) {
+        final InvoiceItem invoiceItem = mainActivity.getInvoiceDAO().get(invoiceNum);
         if (invoiceItem != null) {
             List<InvoiceGoodsItem> invoiceGoodsItems = mainActivity.getInvoiceGoodsDAO().get(invoiceNum);
             invoiceDetailDialog.setContentView(R.layout.invoice_detail);
@@ -210,18 +281,19 @@ public class InvoiceFragmentControl {
             invoiceDetailDialog.getWindow().setAttributes(params);
 
             Button send = (Button) invoiceDetailDialog.findViewById(R.id.invoice_exchange_button);
-            send.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Gson gson = new Gson();
-                    InvoiceInfo invoiceInfo = new InvoiceInfo();
-                    invoiceInfo.setTestString("TEST");
-                    invoiceInfo.setTestSignature("1234567890");
-                    String json = gson.toJson(invoiceInfo);
-                    System.out.println("Print local value : " + json);
-                    new GetBonusTask().execute(json);
-                }
-            });
+            if(invoiceItem.getIsExchanged() == 1) {
+                send.setVisibility(View.INVISIBLE);
+            } else {
+                send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Gson gson = new Gson();
+                        String json = gson.toJson(invoiceItem);
+                        System.out.println("Print local value : " + json);
+                        new GetBonusTask().execute(json, String.valueOf(position));
+                    }
+                });
+            }
 
             // Toast.makeText(mainActivity, "簽章：" + invoiceItem.getSignature(), Toast.LENGTH_LONG).show();
         }
@@ -232,6 +304,7 @@ public class InvoiceFragmentControl {
         @Override
         protected String doInBackground(String... params) {
             final String param = params[0];
+            final int position = Integer.valueOf(params[1]);
             API.getInstance().getHttp().getBonus(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
@@ -240,6 +313,16 @@ public class InvoiceFragmentControl {
                         UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
 
                         EventBus.getDefault().post(UserInfoManager.getInstance());
+                        Gson gson = new Gson();
+                        InvoiceItem invoiceItem  = gson.fromJson(param, InvoiceItem.class);
+                        invoiceItem.setIsExchanged(1);
+                        boolean result = mainActivity.getInvoiceDAO().update(invoiceItem);
+
+                        String isExchangedInvoice = isNotExchangedInvoiceAdapter.removeInvoice(position);
+                        isNotExchangedInvoiceAdapter.notifyDataSetChanged();
+
+                        addIntoIsExchangedList(isExchangedInvoice);
+
                         invoiceDetailDialog.dismiss();
                         Toast.makeText(mainActivity, "兌換成功", Toast.LENGTH_LONG).show();
                     } else {
@@ -250,7 +333,6 @@ public class InvoiceFragmentControl {
                             Toast.makeText(mainActivity, "尚未登入", Toast.LENGTH_LONG).show();
                         }
                     }
-
                 }
 
                 @Override

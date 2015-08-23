@@ -13,7 +13,7 @@ public class InvoiceItem {
     private String totalMoney;
     private String payDetail;
     private String signature;
-    private int isExchanged;
+    private int isExchanged = 0;
 
     public String getStoreName() {
         return storeName;

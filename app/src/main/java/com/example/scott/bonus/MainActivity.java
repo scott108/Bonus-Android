@@ -151,6 +151,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         buildSQLite();
 
+
         initUI();
 
         origIntent = getIntent();
@@ -159,11 +160,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         Context.setMainActivity(this);
 
-        try {
-            insertTestInvoiceToSQLite();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
 
 
     }
@@ -228,11 +225,19 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private void initUI() {
         fragmentManager = getSupportFragmentManager();
 
+        invoiceFragmentControl = new InvoiceFragmentControl(this);
+        couponFragmentControl = new CouponFragmentControl(this);
+
+        try {
+            insertTestInvoiceToSQLite();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         invoiceFragment = new InvoiceFragment();
         couponFragment = new CouponFragment();
         userFragment = new UserFragment();
-        invoiceFragmentControl = new InvoiceFragmentControl(this);
-        couponFragmentControl = new CouponFragmentControl(this);
+
 
 
         clickEventHandler = new ClickEventHandler();
@@ -584,7 +589,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("StoreName", "麥當勞");
         jsonObject.put("Dateline", "12月");
-        jsonObject.put("InvoiceNum", Math.random() * 1000000 + 1);
+        jsonObject.put("InvoiceNum", Math.round(Math.random() * 1000000 + 1));
         jsonObject.put("CurrentTime", "10:10:10");
         jsonObject.put("StoreNum", "123");
         jsonObject.put("StorePhone", "321");
