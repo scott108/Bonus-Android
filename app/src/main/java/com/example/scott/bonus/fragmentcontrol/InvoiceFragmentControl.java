@@ -17,6 +17,7 @@ import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
+import com.example.scott.bonus.customcheckbox.TouchCheckBox;
 import com.example.scott.bonus.fragmentcontrol.entities.InvoiceInfo;
 import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
 import com.example.scott.bonus.session.SessionManager;
@@ -87,6 +88,12 @@ public class InvoiceFragmentControl {
             invoiceItemTitle.setText(itemTitle);
             ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
             invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
+
+            TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
+            touchCheckBox.setCircleColor(mainActivity.getResources().getColor(R.color.primary));
+
+            System.out.println(touchCheckBox.isChecked());
+
             return listItem;
         }
     };
@@ -130,6 +137,9 @@ public class InvoiceFragmentControl {
             invoiceItemTitle.setText(itemTitle);
             ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
             invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
+            TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
+            touchCheckBox.setVisibility(View.INVISIBLE);
+
             return listItem;
         }
     };
