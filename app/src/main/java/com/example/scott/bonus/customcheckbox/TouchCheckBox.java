@@ -131,8 +131,8 @@ public class TouchCheckBox extends View {
         mCirclePaint.setColor(evaluate(f,unCheckColor,circleColor));
         canvas.drawCircle(cx, cy, radius, mCirclePaint);
 
-        if(correctProgress>0) {
-            if(correctProgress<1/3f) {
+        if(correctProgress > 0) {
+            if(correctProgress < 1/3f) {
                 float x = points[0] + (points[2] - points[0]) * correctProgress;
                 float y = points[1] + (points[3] - points[1]) * correctProgress;
                 canvas.drawLine(points[0], points[1], x, y, mCorrectPaint);
@@ -140,7 +140,7 @@ public class TouchCheckBox extends View {
                 float x = points[2] + (points[4] - points[2]) * correctProgress;
                 float y = points[3] + (points[5] - points[3]) * correctProgress;
                 canvas.drawLine(points[0], points[1], points[2], points[3], mCorrectPaint);
-                canvas.drawLine(points[2], points[3], x,y, mCorrectPaint);
+                canvas.drawLine(points[2] - 3f, points[3], x, y, mCorrectPaint);
             }
         }
     }
