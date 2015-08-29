@@ -54,11 +54,8 @@ public class InvoiceFragmentControl {
         protected View getTitleView(String title, int index, View convertView, ViewGroup parent) {
             TextView titleView;
 
-            if (convertView == null) {
-                titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
-            } else {
-                titleView = (TextView)convertView;
-            }
+            titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
+
             titleView.setText(title);
 
             return titleView;
@@ -68,11 +65,8 @@ public class InvoiceFragmentControl {
         protected View getItemView(String caption, int index, View convertView, ViewGroup parent) {
             LinearLayout listItem;
 
-            if (convertView == null) {
-                listItem = (LinearLayout) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_view_item, null);
-            } else {
-                listItem = (LinearLayout) convertView;
-            }
+            listItem = (LinearLayout) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_view_item, null);
+
             TextView invoiceItemTitle = (TextView) listItem.findViewById(R.id.invoice_item_title);
             JSONObject jsonObject = null;
             String itemTitle = "";
@@ -103,11 +97,8 @@ public class InvoiceFragmentControl {
         protected View getTitleView(String title, int index, View convertView, ViewGroup parent) {
             TextView titleView;
 
-            if (convertView == null) {
-                titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
-            } else {
-                titleView = (TextView)convertView;
-            }
+            titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
+
             titleView.setText(title);
 
             return titleView;
@@ -117,11 +108,8 @@ public class InvoiceFragmentControl {
         protected View getItemView(String caption, int index, View convertView, ViewGroup parent) {
             LinearLayout listItem;
 
-            if (convertView == null) {
-                listItem = (LinearLayout) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_view_item, null);
-            } else {
-                listItem = (LinearLayout) convertView;
-            }
+            listItem = (LinearLayout) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_view_item, null);
+
             TextView invoiceItemTitle = (TextView) listItem.findViewById(R.id.invoice_item_title);
             JSONObject jsonObject = null;
             String itemTitle = "";
