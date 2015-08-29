@@ -265,7 +265,7 @@ public class InvoiceFragmentControl {
             datelineTextView.setText(invoiceItem.getDateline());
             invoiceNumTextView.setText(invoiceItem.getInvoiceNum());
             currentTimeTextView.setText(invoiceItem.getCurrentTime());
-            storeNumTextView.setText(invoiceItem.getStoreNum());
+            storeNumTextView.setText("賣方"+ invoiceItem.getStoreNum());
             storePhoneTextView.setText(invoiceItem.getStorePhone());
             goodsDetailTextView.setText("");
             for(int i = 0; i < invoiceGoodsItems.size(); i++) {
@@ -277,8 +277,8 @@ public class InvoiceFragmentControl {
                     goodsDetailTextView.setText(goodsDetailTextView.getText() + "\n" + goods);
                 }
             }
-            totalMoneyTextView.setText(invoiceItem.getTotalMoney());
-            payDetailTextView.setText(invoiceItem.getPayDetail());
+            totalMoneyTextView.setText(invoiceItem.getGoodsQuantity() + "項    合計" + invoiceItem.getTotalMoney());
+            payDetailTextView.setText("現金    " + "$" + invoiceItem.getPayDetail() + "找零    " + "$" + invoiceItem.getPayBack());
 
             //query SQLite to add to dialog
 

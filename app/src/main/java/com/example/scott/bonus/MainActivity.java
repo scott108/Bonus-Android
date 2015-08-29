@@ -373,10 +373,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         try {
             invoiceStore.setText(jsonObject.getString("StoreName"));
-            invoiceDateline.setText(jsonObject.getString("Dateline"));
+            invoiceDateline.setText(jsonObject.getString("Deadline"));
             invoiceNum.setText(jsonObject.getString("InvoiceNum"));
             invoiceCurrentTime.setText(jsonObject.getString("CurrentTime"));
-            invoiceStoreNum.setText(jsonObject.getString("StoreNum"));
+            invoiceStoreNum.setText("賣方" + jsonObject.getString("StoreNum"));
             invoiceStorePhone.setText(jsonObject.getString("StorePhone"));
             invoiceGoodsList.setText("");
             for(int i = 0;; i++) {
@@ -394,8 +394,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                                                                         + token[2] + "    " + token[3] + "T");
                 }
             }
-            invoiceTotalMoney.setText(jsonObject.getString("TotalMoney"));
-            invoicePayDetail.setText(jsonObject.getString("PayDetail"));
+            invoiceTotalMoney.setText(jsonObject.getString("GoodsQuantity") + "項    合計" + jsonObject.getString("TotalMoney"));
+            invoicePayDetail.setText("現金    " + "$" + jsonObject.getString("PayDetail") + "找零    " + "$" + jsonObject.getString("PayBack"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -414,13 +414,15 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         InvoiceItem invoiceItem = new InvoiceItem();
         try {
             invoiceItem.setStoreName(jsonObject.getString("StoreName"));
-            invoiceItem.setDateline(jsonObject.getString("Dateline"));
+            invoiceItem.setDateline(jsonObject.getString("Deadline"));
             invoiceItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
             invoiceItem.setCurrentTime(jsonObject.getString("CurrentTime"));
             invoiceItem.setStoreNum(jsonObject.getString("StoreNum"));
             invoiceItem.setStorePhone(jsonObject.getString("StorePhone"));
+            invoiceItem.setGoodsQuantity(jsonObject.getString("GoodsQuantity"));
             invoiceItem.setTotalMoney(jsonObject.getString("TotalMoney"));
             invoiceItem.setPayDetail(jsonObject.getString("PayDetail"));
+            invoiceItem.setPayBack(jsonObject.getString("PayBack"));
             invoiceItem.setSignature(jsonObject.getString("Signature"));
             for(int i = 0;; i++) {
                 if(!jsonObject.has("Goods" + i)) {

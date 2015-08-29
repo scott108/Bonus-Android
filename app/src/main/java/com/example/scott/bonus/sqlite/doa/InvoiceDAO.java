@@ -27,8 +27,10 @@ public class InvoiceDAO {
     public static final String CURRENTTIME_COLUMN = "current_time";
     public static final String STORENUM_COLUMN = "store_num";
     public static final String STOREPHONE_COLUMN = "store_phone";
+    public static final String GOODSQUANTITY_COLUMN = "goods_quantity";
     public static final String TOTALMOMEY_COLUMN = "total_money";
     public static final String PAYDETAIL_COLUMN = "pay_detail";
+    public static final String PAYBACK_COLUMN = "pay_back";
     public static final String SIGNATURE_COLUMN = "signature";
     public static final String ISEXCHANGED_COLUMN = "is_exchanged";
 
@@ -41,8 +43,10 @@ public class InvoiceDAO {
                     CURRENTTIME_COLUMN + " TEXT NOT NULL, " +
                     STORENUM_COLUMN + " TEXT NOT NULL, " +
                     STOREPHONE_COLUMN + " TEXT NOT NULL, " +
+                    GOODSQUANTITY_COLUMN + " TEXT NOT NULL, " +
                     TOTALMOMEY_COLUMN + " TEXT NOT NULL, " +
                     PAYDETAIL_COLUMN + " TEXT NOT NULL," +
+                    PAYBACK_COLUMN + " TEXT NOT NULL, " +
                     SIGNATURE_COLUMN + "  TEXT NOT NULL," +
                     ISEXCHANGED_COLUMN + "  INTEGER DEFAULT 0)";
 
@@ -72,8 +76,10 @@ public class InvoiceDAO {
         cv.put(CURRENTTIME_COLUMN, invoiceItem.getCurrentTime());
         cv.put(STORENUM_COLUMN, invoiceItem.getStoreNum());
         cv.put(STOREPHONE_COLUMN, invoiceItem.getStorePhone());
+        cv.put(GOODSQUANTITY_COLUMN, invoiceItem.getGoodsQuantity());
         cv.put(TOTALMOMEY_COLUMN, invoiceItem.getTotalMoney());
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
+        cv.put(PAYBACK_COLUMN, invoiceItem.getPayBack());
         cv.put(SIGNATURE_COLUMN, invoiceItem.getSignature());
         cv.put(ISEXCHANGED_COLUMN, invoiceItem.getIsExchanged());
 
@@ -167,10 +173,12 @@ public class InvoiceDAO {
         result.setCurrentTime(cursor.getString(3));
         result.setStoreNum(cursor.getString(4));
         result.setStorePhone(cursor.getString(5));
-        result.setTotalMoney(cursor.getString(6));
-        result.setPayDetail(cursor.getString(7));
-        result.setSignature(cursor.getString(8));
-        result.setIsExchanged(cursor.getInt(9));
+        result.setGoodsQuantity(cursor.getString(6));
+        result.setTotalMoney(cursor.getString(7));
+        result.setPayDetail(cursor.getString(8));
+        result.setPayBack(cursor.getString(9));
+        result.setSignature(cursor.getString(10));
+        result.setIsExchanged(cursor.getInt(11));
 
         // 回傳結果
         return result;

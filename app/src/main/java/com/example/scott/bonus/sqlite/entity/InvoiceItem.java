@@ -10,8 +10,10 @@ public class InvoiceItem {
     private String currentTime;
     private String storeNum;
     private String storePhone;
+    private String goodsQuantity;
     private String totalMoney;
     private String payDetail;
+    private String payBack;
     private String signature;
     private int isExchanged = 0;
 
@@ -95,6 +97,22 @@ public class InvoiceItem {
         this.isExchanged = isExchanged;
     }
 
+    public String getGoodsQuantity() {
+        return goodsQuantity;
+    }
+
+    public void setGoodsQuantity(String goodsQuantity) {
+        this.goodsQuantity = goodsQuantity;
+    }
+
+    public String getPayBack() {
+        return payBack;
+    }
+
+    public void setPayBack(String payBack) {
+        this.payBack = payBack;
+    }
+
     public InvoiceItem()
     {
 
@@ -102,7 +120,8 @@ public class InvoiceItem {
 
     public InvoiceItem(String storeName, String dateline, String invoiceNum,
                        String currentTime, String storeNum, String storePhone,
-                       String totalMoney, String payDetail, String signature, int isExchanged)
+                       String goodsQuantity, String totalMoney, String payDetail,
+                       String payBack, String signature, int isExchanged)
     {
         this.storeName = storeName;
         this.dateline = dateline;
@@ -110,8 +129,10 @@ public class InvoiceItem {
         this.currentTime = currentTime;
         this.storeNum = storeNum;
         this.storePhone = storePhone;
+        this.goodsQuantity = goodsQuantity;
         this.totalMoney = totalMoney;
         this.payDetail = payDetail;
+        this.payBack = payBack;
         this.signature = signature;
         this.isExchanged = isExchanged;
     }
