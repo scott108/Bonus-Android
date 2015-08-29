@@ -32,11 +32,9 @@ public class BackgroundLogoutTask extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         if(result.equals("true")) {
-            SessionManager.setAttribute(false);
+            SessionManager.clearAttribute();
 
-            UserInfoManager.getInstance().setUserName("");
-            UserInfoManager.getInstance().setEmail("");
-            UserInfoManager.getInstance().setBonus(0);
+            UserInfoManager.getInstance().clearUserInfo();
 
             EventBus.getDefault().post(UserInfoManager.getInstance());
             Toast.makeText(Context.getMainActivity(), "登出成功", Toast.LENGTH_LONG).show();

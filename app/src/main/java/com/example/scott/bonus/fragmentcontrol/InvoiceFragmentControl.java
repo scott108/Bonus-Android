@@ -327,6 +327,9 @@ public class InvoiceFragmentControl {
                         invoiceDetailDialog.dismiss();
                         Toast.makeText(mainActivity, "兌換失敗", Toast.LENGTH_LONG).show();
                     } else {
+                        SessionManager.clearAttribute();
+                        UserInfoManager.getInstance().clearUserInfo();
+                        EventBus.getDefault().post(UserInfoManager.getInstance());
                         mainActivity.loginCheck();
                         if(SessionManager.hasAttribute()) {
                             new GetBonusTask().execute(param);

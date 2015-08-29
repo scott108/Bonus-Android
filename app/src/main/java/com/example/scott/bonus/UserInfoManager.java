@@ -14,6 +14,12 @@ public class UserInfoManager {
 
     }
 
+    public void clearUserInfo() {
+        email = "";
+        userName = "";
+        bonus = 0;
+    }
+
     public static UserInfoManager getInstance() {
         return userInfoManager;
     }

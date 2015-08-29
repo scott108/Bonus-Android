@@ -23,4 +23,9 @@ public class SessionManager {
     public static void setSessionID(String sessionID) {
         SessionManager.sessionID = sessionID;
     }
+
+    public static void clearAttribute() {
+        sessionID = "";
+        attribute = false;
+    }
 }
