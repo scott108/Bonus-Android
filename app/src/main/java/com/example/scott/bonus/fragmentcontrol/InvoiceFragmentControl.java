@@ -262,7 +262,7 @@ public class InvoiceFragmentControl {
             TextView payDetailTextView = (TextView)invoiceDetailDialog.findViewById(R.id.payDetailTextView);
 
             storeNameTextView.setText(invoiceItem.getStoreName());
-            datelineTextView.setText(invoiceItem.getDateline());
+            datelineTextView.setText(invoiceItem.getDeadline());
             invoiceNumTextView.setText(invoiceItem.getInvoiceNum());
             currentTimeTextView.setText(invoiceItem.getCurrentTime());
             storeNumTextView.setText("賣方"+ invoiceItem.getStoreNum());
@@ -335,6 +335,9 @@ public class InvoiceFragmentControl {
 
                         invoiceDetailDialog.dismiss();
                         Toast.makeText(mainActivity, "兌換成功", Toast.LENGTH_LONG).show();
+                    } else if(jsonObject.get("response").getAsString().equals("fail")){
+                        invoiceDetailDialog.dismiss();
+                        Toast.makeText(mainActivity, "兌換失敗", Toast.LENGTH_LONG).show();
                     } else {
                         mainActivity.loginCheck();
                         if(SessionManager.hasAttribute()) {

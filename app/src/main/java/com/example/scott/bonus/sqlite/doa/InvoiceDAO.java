@@ -32,6 +32,7 @@ public class InvoiceDAO {
     public static final String PAYDETAIL_COLUMN = "pay_detail";
     public static final String PAYBACK_COLUMN = "pay_back";
     public static final String SIGNATURE_COLUMN = "signature";
+    public static final String GOODSHASH_COLUMN = "goods_Hash";
     public static final String ISEXCHANGED_COLUMN = "is_exchanged";
 
     // 使用上面宣告的變數建立表格的SQL指令
@@ -45,9 +46,10 @@ public class InvoiceDAO {
                     STOREPHONE_COLUMN + " TEXT NOT NULL, " +
                     GOODSQUANTITY_COLUMN + " TEXT NOT NULL, " +
                     TOTALMOMEY_COLUMN + " TEXT NOT NULL, " +
-                    PAYDETAIL_COLUMN + " TEXT NOT NULL," +
+                    PAYDETAIL_COLUMN + " TEXT NOT NULL, " +
                     PAYBACK_COLUMN + " TEXT NOT NULL, " +
-                    SIGNATURE_COLUMN + "  TEXT NOT NULL," +
+                    SIGNATURE_COLUMN + "  TEXT NOT NULL, " +
+                    GOODSHASH_COLUMN + " TEXT NOT NULL, " +
                     ISEXCHANGED_COLUMN + "  INTEGER DEFAULT 0)";
 
     // 資料庫物件
@@ -71,7 +73,7 @@ public class InvoiceDAO {
         // 加入ContentValues物件包裝的新增資料
         // 第一個參數是欄位名稱， 第二個參數是欄位的資料
         cv.put(STORENAME_COLUMN, invoiceItem.getStoreName());
-        cv.put(DATELINE_COLUMN, invoiceItem.getDateline());
+        cv.put(DATELINE_COLUMN, invoiceItem.getDeadline());
         cv.put(INVOICENUM_COLUMN, invoiceItem.getInvoiceNum());
         cv.put(CURRENTTIME_COLUMN, invoiceItem.getCurrentTime());
         cv.put(STORENUM_COLUMN, invoiceItem.getStoreNum());
@@ -81,6 +83,7 @@ public class InvoiceDAO {
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
         cv.put(PAYBACK_COLUMN, invoiceItem.getPayBack());
         cv.put(SIGNATURE_COLUMN, invoiceItem.getSignature());
+        cv.put(GOODSHASH_COLUMN, invoiceItem.getGoodsHash());
         cv.put(ISEXCHANGED_COLUMN, invoiceItem.getIsExchanged());
 
         // 第一個參數是表格名稱
@@ -102,7 +105,7 @@ public class InvoiceDAO {
         // 加入ContentValues物件包裝的修改資料
         // 第一個參數是欄位名稱， 第二個參數是欄位的資料
         cv.put(STORENAME_COLUMN, invoiceItem.getStoreName());
-        cv.put(DATELINE_COLUMN, invoiceItem.getDateline());
+        cv.put(DATELINE_COLUMN, invoiceItem.getDeadline());
         cv.put(CURRENTTIME_COLUMN, invoiceItem.getCurrentTime());
         cv.put(STORENUM_COLUMN, invoiceItem.getStoreNum());
         cv.put(STOREPHONE_COLUMN, invoiceItem.getStorePhone());
@@ -168,7 +171,7 @@ public class InvoiceDAO {
         InvoiceItem result = new InvoiceItem();
 
         result.setStoreName(cursor.getString(0));
-        result.setDateline(cursor.getString(1));
+        result.setDeadline(cursor.getString(1));
         result.setInvoiceNum(cursor.getString(2));
         result.setCurrentTime(cursor.getString(3));
         result.setStoreNum(cursor.getString(4));
@@ -178,7 +181,8 @@ public class InvoiceDAO {
         result.setPayDetail(cursor.getString(8));
         result.setPayBack(cursor.getString(9));
         result.setSignature(cursor.getString(10));
-        result.setIsExchanged(cursor.getInt(11));
+        result.setGoodsHash(cursor.getString(11));
+        result.setIsExchanged(cursor.getInt(12));
 
         // 回傳結果
         return result;

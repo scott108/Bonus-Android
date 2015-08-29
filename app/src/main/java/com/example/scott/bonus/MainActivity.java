@@ -414,7 +414,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         InvoiceItem invoiceItem = new InvoiceItem();
         try {
             invoiceItem.setStoreName(jsonObject.getString("StoreName"));
-            invoiceItem.setDateline(jsonObject.getString("Deadline"));
+            invoiceItem.setDeadline(jsonObject.getString("Deadline"));
             invoiceItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
             invoiceItem.setCurrentTime(jsonObject.getString("CurrentTime"));
             invoiceItem.setStoreNum(jsonObject.getString("StoreNum"));
@@ -424,6 +424,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             invoiceItem.setPayDetail(jsonObject.getString("PayDetail"));
             invoiceItem.setPayBack(jsonObject.getString("PayBack"));
             invoiceItem.setSignature(jsonObject.getString("Signature"));
+            invoiceItem.setGoodsHash(jsonObject.getString("GoodsHash"));
+
             for(int i = 0;; i++) {
                 if(!jsonObject.has("Goods" + i)) {
                     break;
@@ -582,6 +584,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         }
     }
 
+    //Test
     private void insertTestInvoiceToSQLite() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("StoreName", "麥當勞");
@@ -595,12 +598,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         jsonObject.put("Signature", "test");
         jsonObject.put("Goods0", "麥香雞,109,1,109");
 
-
-
         InvoiceItem invoiceItem = new InvoiceItem();
         try {
             invoiceItem.setStoreName(jsonObject.getString("StoreName"));
-            invoiceItem.setDateline(jsonObject.getString("Dateline"));
+            invoiceItem.setDeadline(jsonObject.getString("Dateline"));
             invoiceItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
             invoiceItem.setCurrentTime(jsonObject.getString("CurrentTime"));
             invoiceItem.setStoreNum(jsonObject.getString("StoreNum"));
