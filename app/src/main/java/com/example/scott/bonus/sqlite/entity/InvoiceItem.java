@@ -5,14 +5,18 @@ package com.example.scott.bonus.sqlite.entity;
  */
 public class InvoiceItem {
     private String storeName;
-    private String dateline;
+    private String deadline;
     private String invoiceNum;
     private String currentTime;
     private String storeNum;
     private String storePhone;
+    private String goodsQuantity;
     private String totalMoney;
     private String payDetail;
+    private String payBack;
     private String signature;
+    private String goodsHash;
+    private int isExchanged = 0;
 
     public String getStoreName() {
         return storeName;
@@ -22,12 +26,12 @@ public class InvoiceItem {
         this.storeName = storeName;
     }
 
-    public String getDateline() {
-        return dateline;
+    public String getDeadline() {
+        return deadline;
     }
 
-    public void setDateline(String dateline) {
-        this.dateline = dateline;
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
     }
 
     public String getInvoiceNum() {
@@ -86,23 +90,60 @@ public class InvoiceItem {
         this.signature = signature;
     }
 
+    public int getIsExchanged() {
+        return isExchanged;
+    }
+
+    public void setIsExchanged(int isExchanged) {
+        this.isExchanged = isExchanged;
+    }
+
+    public String getGoodsQuantity() {
+        return goodsQuantity;
+    }
+
+    public void setGoodsQuantity(String goodsQuantity) {
+        this.goodsQuantity = goodsQuantity;
+    }
+
+    public String getPayBack() {
+        return payBack;
+    }
+
+    public void setPayBack(String payBack) {
+        this.payBack = payBack;
+    }
+
+    public String getGoodsHash() {
+        return goodsHash;
+    }
+
+    public void setGoodsHash(String goodsHash) {
+        this.goodsHash = goodsHash;
+    }
+
     public InvoiceItem()
     {
 
     }
 
-    public InvoiceItem(String storeName, String dateline, String invoiceNum,
+    public InvoiceItem(String storeName, String deadline, String invoiceNum,
                        String currentTime, String storeNum, String storePhone,
-                       String totalMoney, String payDetail, String signature)
+                       String goodsQuantity, String totalMoney, String payDetail,
+                       String payBack, String signature, String goodsHash, int isExchanged)
     {
         this.storeName = storeName;
-        this.dateline = dateline;
+        this.deadline = deadline;
         this.invoiceNum = invoiceNum;
         this.currentTime = currentTime;
         this.storeNum = storeNum;
         this.storePhone = storePhone;
+        this.goodsQuantity = goodsQuantity;
         this.totalMoney = totalMoney;
         this.payDetail = payDetail;
+        this.payBack = payBack;
         this.signature = signature;
+        this.goodsHash = goodsHash;
+        this.isExchanged = isExchanged;
     }
 }

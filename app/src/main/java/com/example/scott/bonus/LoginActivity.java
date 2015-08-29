@@ -126,7 +126,7 @@ public class LoginActivity extends Activity{
         @Override
         protected Void doInBackground(String... params) {
             if(!params[0].equals("") && !params[1].equals("")) {
-                HttpSetting.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
+                API.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         System.out.println(response.getHeaders());

@@ -9,8 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import retrofit.RestAdapter;
-
 /**
  * Created by Scott on 15/7/30.
  */
@@ -23,18 +21,13 @@ public class SignUpActivity extends Activity{
 
     private ProgressDialog signUpProgress;
 
-    private RestAdapter restAdapter;
-    private final String serverURL = "http://140.120.15.80:8080/iBonus-server";
-
     private ClickEventHandler clickEventHandler;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         initUI();
-        restAdapter = new RestAdapter.Builder().setEndpoint(serverURL).build();
     }
 
     @Override
@@ -92,7 +85,7 @@ public class SignUpActivity extends Activity{
             System.out.println("doInBackground...");
 
             if(!params[0].equals("") && !params[1].equals("") && !params[2].equals("") && !params[3].equals("")) {
-                result = HttpSetting.getInstance().getHttp().userAdd(params[0], params[1], params[2], params[3]);
+                result = API.getInstance().getHttp().userAdd(params[0], params[1], params[2], params[3]);
             }
             return result;
         }

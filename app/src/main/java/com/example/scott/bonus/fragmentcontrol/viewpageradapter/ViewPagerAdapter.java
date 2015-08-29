@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.scott.bonus.fragment.InvoiceExchangedFragment;
-import com.example.scott.bonus.fragment.InvoiceUnexchangedFragment;
+import com.example.scott.bonus.fragment.InvoiceUnExchangedFragment;
 
 /**
  * Created by Scott on 15/7/22.
@@ -31,8 +31,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         if(position == 0)
         {
-            InvoiceUnexchangedFragment invoiceUnexchangedFragment = new InvoiceUnexchangedFragment();
-            return invoiceUnexchangedFragment;
+            InvoiceUnExchangedFragment invoiceUnExchangedFragment = new InvoiceUnExchangedFragment();
+            return invoiceUnExchangedFragment;
         }
         else
         {

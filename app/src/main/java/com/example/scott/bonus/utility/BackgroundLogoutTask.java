@@ -2,12 +2,10 @@ package com.example.scott.bonus.utility;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.scott.bonus.Context;
-import com.example.scott.bonus.HttpSetting;
-import com.example.scott.bonus.R;
+import com.example.scott.bonus.API;
 import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
 
@@ -27,18 +25,16 @@ public class BackgroundLogoutTask extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(String... params) {
         System.out.println(SessionManager.getSessionID());
-        String result = HttpSetting.getInstance().getHttp().userLogout(SessionManager.getSessionID());
+        String result = API.getInstance().getHttp().userLogout(SessionManager.getSessionID());
         return result;
     }
 
     @Override
     protected void onPostExecute(String result) {
         if(result.equals("true")) {
-            SessionManager.setAttribute(false);
+            SessionManager.clearAttribute();
 
-            UserInfoManager.getInstance().setUserName("");
-            UserInfoManager.getInstance().setEmail("");
-            UserInfoManager.getInstance().setBonus(0);
+            UserInfoManager.getInstance().clearUserInfo();
 
             EventBus.getDefault().post(UserInfoManager.getInstance());
             Toast.makeText(Context.getMainActivity(), "登出成功", Toast.LENGTH_LONG).show();

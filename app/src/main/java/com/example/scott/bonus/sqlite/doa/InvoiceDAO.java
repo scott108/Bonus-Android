@@ -27,9 +27,13 @@ public class InvoiceDAO {
     public static final String CURRENTTIME_COLUMN = "current_time";
     public static final String STORENUM_COLUMN = "store_num";
     public static final String STOREPHONE_COLUMN = "store_phone";
+    public static final String GOODSQUANTITY_COLUMN = "goods_quantity";
     public static final String TOTALMOMEY_COLUMN = "total_money";
     public static final String PAYDETAIL_COLUMN = "pay_detail";
+    public static final String PAYBACK_COLUMN = "pay_back";
     public static final String SIGNATURE_COLUMN = "signature";
+    public static final String GOODSHASH_COLUMN = "goods_Hash";
+    public static final String ISEXCHANGED_COLUMN = "is_exchanged";
 
     // 使用上面宣告的變數建立表格的SQL指令
     public static final String CREATE_TABLE =
@@ -40,9 +44,13 @@ public class InvoiceDAO {
                     CURRENTTIME_COLUMN + " TEXT NOT NULL, " +
                     STORENUM_COLUMN + " TEXT NOT NULL, " +
                     STOREPHONE_COLUMN + " TEXT NOT NULL, " +
+                    GOODSQUANTITY_COLUMN + " TEXT NOT NULL, " +
                     TOTALMOMEY_COLUMN + " TEXT NOT NULL, " +
-                    PAYDETAIL_COLUMN + " TEXT NOT NULL," +
-                    SIGNATURE_COLUMN + "  TEXT NOT NULL)";
+                    PAYDETAIL_COLUMN + " TEXT NOT NULL, " +
+                    PAYBACK_COLUMN + " TEXT NOT NULL, " +
+                    SIGNATURE_COLUMN + "  TEXT NOT NULL, " +
+                    GOODSHASH_COLUMN + " TEXT NOT NULL, " +
+                    ISEXCHANGED_COLUMN + "  INTEGER DEFAULT 0)";
 
     // 資料庫物件
     private SQLiteDatabase db;
@@ -65,14 +73,18 @@ public class InvoiceDAO {
         // 加入ContentValues物件包裝的新增資料
         // 第一個參數是欄位名稱， 第二個參數是欄位的資料
         cv.put(STORENAME_COLUMN, invoiceItem.getStoreName());
-        cv.put(DATELINE_COLUMN, invoiceItem.getDateline());
+        cv.put(DATELINE_COLUMN, invoiceItem.getDeadline());
         cv.put(INVOICENUM_COLUMN, invoiceItem.getInvoiceNum());
         cv.put(CURRENTTIME_COLUMN, invoiceItem.getCurrentTime());
         cv.put(STORENUM_COLUMN, invoiceItem.getStoreNum());
         cv.put(STOREPHONE_COLUMN, invoiceItem.getStorePhone());
+        cv.put(GOODSQUANTITY_COLUMN, invoiceItem.getGoodsQuantity());
         cv.put(TOTALMOMEY_COLUMN, invoiceItem.getTotalMoney());
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
+        cv.put(PAYBACK_COLUMN, invoiceItem.getPayBack());
         cv.put(SIGNATURE_COLUMN, invoiceItem.getSignature());
+        cv.put(GOODSHASH_COLUMN, invoiceItem.getGoodsHash());
+        cv.put(ISEXCHANGED_COLUMN, invoiceItem.getIsExchanged());
 
         // 第一個參數是表格名稱
         // 第二個參數是沒有指定欄位值的預設值
@@ -84,27 +96,30 @@ public class InvoiceDAO {
     }
 
     // 修改參數指定的物件
-    /*public boolean update(InvoiceItem invoiceItem) {
+    public boolean update(InvoiceItem invoiceItem) {
         // 建立準備修改資料的ContentValues物件
         ContentValues cv = new ContentValues();
+
+        System.out.println(invoiceItem.getIsExchanged());
 
         // 加入ContentValues物件包裝的修改資料
         // 第一個參數是欄位名稱， 第二個參數是欄位的資料
         cv.put(STORENAME_COLUMN, invoiceItem.getStoreName());
-        cv.put(DATELINE_COLUMN, invoiceItem.getDateline());
+        cv.put(DATELINE_COLUMN, invoiceItem.getDeadline());
         cv.put(CURRENTTIME_COLUMN, invoiceItem.getCurrentTime());
         cv.put(STORENUM_COLUMN, invoiceItem.getStoreNum());
         cv.put(STOREPHONE_COLUMN, invoiceItem.getStorePhone());
         cv.put(TOTALMOMEY_COLUMN, invoiceItem.getTotalMoney());
         cv.put(PAYDETAIL_COLUMN, invoiceItem.getPayDetail());
+        cv.put(ISEXCHANGED_COLUMN, invoiceItem.getIsExchanged());
 
         // 設定修改資料的條件為編號
         // 格式為「欄位名稱＝資料」
-        String where = INVOICENUM_COLUMN + "=" + invoiceItem.getInvoiceNum();
+        String where = INVOICENUM_COLUMN + "=" + "'" + invoiceItem.getInvoiceNum() + "'" ;
 
         // 執行修改資料並回傳修改的資料數量是否成功
         return db.update(TABLE_NAME, cv, where, null) > 0;
-    }*/
+    }
 
     // 刪除參數指定編號的資料
     public boolean delete(long id){
@@ -156,14 +171,18 @@ public class InvoiceDAO {
         InvoiceItem result = new InvoiceItem();
 
         result.setStoreName(cursor.getString(0));
-        result.setDateline(cursor.getString(1));
+        result.setDeadline(cursor.getString(1));
         result.setInvoiceNum(cursor.getString(2));
         result.setCurrentTime(cursor.getString(3));
         result.setStoreNum(cursor.getString(4));
         result.setStorePhone(cursor.getString(5));
-        result.setTotalMoney(cursor.getString(6));
-        result.setPayDetail(cursor.getString(7));
-        result.setSignature(cursor.getString(8));
+        result.setGoodsQuantity(cursor.getString(6));
+        result.setTotalMoney(cursor.getString(7));
+        result.setPayDetail(cursor.getString(8));
+        result.setPayBack(cursor.getString(9));
+        result.setSignature(cursor.getString(10));
+        result.setGoodsHash(cursor.getString(11));
+        result.setIsExchanged(cursor.getInt(12));
 
         // 回傳結果
         return result;

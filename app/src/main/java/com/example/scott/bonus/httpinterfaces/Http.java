@@ -34,4 +34,8 @@ public interface Http {
 
     @GET("/coupon/all")
     void getAllCoupon(Callback<JsonArray> response);
+
+    @FormUrlEncoded
+    @POST("/user/bonus/exchange")
+    void getBonus(@Header("Cookie") String token, @Field("invoice") String invoice, Callback<JsonObject> response);
 }
