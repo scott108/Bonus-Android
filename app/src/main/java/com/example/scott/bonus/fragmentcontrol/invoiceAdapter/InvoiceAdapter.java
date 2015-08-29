@@ -41,7 +41,6 @@ public abstract class InvoiceAdapter extends BaseAdapter {
                     try {
                         JSONObject jsonObject = new JSONObject(invoiceTitle);
                         String groupName = jsonObject.getString("店名");
-                        System.out.println(groupName);
                         classHashMap.remove(groupName);
                         groupNames.remove(groupName);
                         for(int i = 0;;i++) {
