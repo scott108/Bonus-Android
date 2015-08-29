@@ -228,11 +228,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         invoiceFragmentControl = new InvoiceFragmentControl(this);
         couponFragmentControl = new CouponFragmentControl(this);
 
-        try {
-            insertTestInvoiceToSQLite();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         invoiceFragment = new InvoiceFragment();
         couponFragment = new CouponFragment();

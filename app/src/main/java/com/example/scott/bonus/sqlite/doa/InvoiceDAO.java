@@ -106,7 +106,7 @@ public class InvoiceDAO {
 
         // 設定修改資料的條件為編號
         // 格式為「欄位名稱＝資料」
-        String where = INVOICENUM_COLUMN + "=" + invoiceItem.getInvoiceNum();
+        String where = INVOICENUM_COLUMN + "=" + "'" + invoiceItem.getInvoiceNum() + "'" ;
 
         // 執行修改資料並回傳修改的資料數量是否成功
         return db.update(TABLE_NAME, cv, where, null) > 0;
