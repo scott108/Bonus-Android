@@ -21,4 +21,11 @@
     <color name="list_background_normal">#FCFCFC</color>
     <!-- secondary colors for drawer -->
     <color name="list_background_secondary_normal">#F2F2F2</color>
+
+    <color name="blue">#00FFCC</color>
+    <color name="green">#00DD00</color>
+    <color name="dark_green">#227700</color>
+    <color name="orange">#FF7744</color>
+    <color name="red">#FF3333</color>
+
 </resources>

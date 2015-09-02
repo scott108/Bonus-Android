@@ -27,6 +27,7 @@ public class CouponInfo {
     private String startTime;
     private String endTime;
     private String imageUrl;
+    private int couponBonus;
 
     public String getCouponID() {
         return couponID;
@@ -82,5 +83,13 @@ public class CouponInfo {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getCouponBonus() {
+        return couponBonus;
+    }
+
+    public void setCouponBonus(int couponBonus) {
+        this.couponBonus = couponBonus;
     }
 }

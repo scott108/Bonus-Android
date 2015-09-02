@@ -59,6 +59,7 @@ public class CouponFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_coupon, container, false);
         mAdapter = new CouponAdapter(new ArrayList<CouponInfo>(), R.layout.coupon_cardview_item, mainActivity);
+
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
@@ -97,7 +98,9 @@ public class CouponFragment extends Fragment{
 
     public void onEvent(UserInfoManager userInfoManager) {
         System.out.println("onEvent");
-        userBonusTextView.setText(userInfoManager.getBonus()+"");
+        userBonusTextView.setText(userInfoManager.getBonus() + "");
+        mAdapter.onEvent(userInfoManager.getBonus());
+        mAdapter.notifyDataSetChanged();
     }
 
     private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> {
@@ -126,9 +129,9 @@ public class CouponFragment extends Fragment{
                         couponInfo.setCouponName(jsonObject.get("couponName").getAsString());
                         couponInfo.setCouponContent(jsonObject.get("couponContent").getAsString());
                         couponInfo.setImageUrl(jsonObject.get("couponImgUrl").getAsString());
-                        couponInfo.setImageUrl(jsonObject.get("couponBonus").getAsString());
-                        couponInfo.setImageUrl(jsonObject.get("startTime").getAsString());
-                        couponInfo.setImageUrl(jsonObject.get("endTime").getAsString());
+                        couponInfo.setCouponBonus(jsonObject.get("couponBonus").getAsInt());
+                        couponInfo.setStartTime(jsonObject.get("startTime").getAsString());
+                        couponInfo.setEndTime(jsonObject.get("endTime").getAsString());
 
                         applicationList.add(couponInfo);
 
@@ -136,6 +139,7 @@ public class CouponFragment extends Fragment{
                     //set data for list
                     mAdapter.addApplications(applicationList);
                     swipeRefreshLayout.setRefreshing(false);
+                    mAdapter.onEvent(UserInfoManager.getInstance().getBonus());
                 }
 
                 @Override
@@ -143,27 +147,6 @@ public class CouponFragment extends Fragment{
 
                 }
             });
-
-
-            //Query the applications
-            /*
-
-            for (int i = 0; i < 10; i++) {
-                CouponInfo couponInfo = new CouponInfo();
-                couponInfo.setName("店名：7-ELEVEN");
-                couponInfo.setNumber("優惠項目：飲料買一送一");
-                Bitmap bitmap = ((BitmapDrawable)mainActivity.getResources().getDrawable( R.drawable.icon )).getBitmap();
-                int oldwidth = bitmap.getWidth();
-                int oldheight = bitmap.getHeight();
-                float scaleWidth = 200 / (float)oldwidth;
-                float scaleHeight = 200 / (float)oldheight;
-                Matrix matrix = new Matrix();
-                matrix.postScale(scaleWidth, scaleHeight);
-                // create the new Bitmap object
-                Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, oldwidth,oldheight, matrix, true);
-                couponInfo.setIcon(resizedBitmap);
-                applicationList.add(couponInfo);
-            }*/
 
             return null;
         }
