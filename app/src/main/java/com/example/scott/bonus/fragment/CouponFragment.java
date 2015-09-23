@@ -60,7 +60,7 @@ public class CouponFragment extends Fragment{
         View layout = inflater.inflate(R.layout.fragment_coupon, container, false);
         mAdapter = new CouponAdapter(new ArrayList<CouponInfo>(), R.layout.coupon_cardview_item, mainActivity);
 
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.list);
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycleList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
@@ -79,6 +79,7 @@ public class CouponFragment extends Fragment{
                 new InitializeApplicationsTask().execute();
             }
         });
+
 
         return layout;
     }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -96,13 +97,6 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
         viewHolder.bnp.setProgress(progress);
 
-
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     @Override
@@ -137,7 +131,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
             return bnp;
         }
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             storeName = (TextView) itemView.findViewById(R.id.storeName);
             couponName = (TextView) itemView.findViewById(R.id.couponName);
@@ -145,6 +139,16 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
             bnp = (NumberProgressBar) itemView.findViewById(R.id.number_progress_bar);
 
             //image = (ImageView) itemView.findViewById(R.id.countryImage);
+
+            LinearLayout cardViewItemLayout = (LinearLayout) itemView.findViewById(R.id.cardViewItemLayout);
+
+
+            cardViewItemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 }
