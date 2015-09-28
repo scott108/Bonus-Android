@@ -1,6 +1,10 @@
 package com.example.scott.bonus.fragmentcontrol;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -75,18 +79,28 @@ public class InvoiceFragmentControl {
                 itemTitle = "\n發票統編:" + jsonObject.getString("發票統編") + "\n" +
                             "店名:" + jsonObject.getString("店名") + "\n" +
                             "消費時間:" + jsonObject.get("消費時間") + "\n";
+
+
+                invoiceItemTitle.setText(itemTitle);
+                ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
+
+                if(jsonObject.getString("店名").equals("7-ELEVEN")) {
+                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.seven)));
+                } else if(jsonObject.getString("店名").equals("全聯福利中心")) {
+                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.px)));
+                } else if(jsonObject.getString("店名").equals("FamilyMart")) {
+                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.family)));
+                }
+
+
+                TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
+                touchCheckBox.setCircleColor(mainActivity.getResources().getColor(R.color.primary));
+
+                System.out.println(touchCheckBox.isChecked());
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            invoiceItemTitle.setText(itemTitle);
-            ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
-            invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
-
-            TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
-            touchCheckBox.setCircleColor(mainActivity.getResources().getColor(R.color.primary));
-
-            System.out.println(touchCheckBox.isChecked());
 
             return listItem;
         }
@@ -118,19 +132,35 @@ public class InvoiceFragmentControl {
                 itemTitle = "\n發票統編:" + jsonObject.getString("發票統編") + "\n" +
                         "店名:" + jsonObject.getString("店名") + "\n" +
                         "消費時間:" + jsonObject.get("消費時間") + "\n";
+
+
+                invoiceItemTitle.setText(itemTitle);
+                ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
+
+                if(jsonObject.getString("店名").equals("7-ELEVEN")) {
+                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.seven)));
+                } else if(jsonObject.getString("店名").equals("全聯福利中心")) {
+                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.px)));
+                } else if(jsonObject.getString("店名").equals("FamilyMart")) {
+                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.family)));
+                }
+
+                TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
+                touchCheckBox.setVisibility(View.INVISIBLE);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            invoiceItemTitle.setText(itemTitle);
-            ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
-            invoiceIcon.setImageDrawable(mainActivity.getDrawable(R.drawable.ic_launcher));
-            TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
-            touchCheckBox.setVisibility(View.INVISIBLE);
-
             return listItem;
         }
     };
+
+    private Drawable resize(Drawable image) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 150, 150, false);
+        return new BitmapDrawable(mainActivity.getResources(), bitmapResized);
+    }
 
     public InvoiceAdapter getIsNotExchangedInvoiceAdapter() {
         return isNotExchangedInvoiceAdapter;

@@ -72,9 +72,8 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
         final CouponInfo couponInfo = coupons.get(i);
 
-        viewHolder.getStoreName().setText("店家：" + couponInfo.getStoreName());
-        viewHolder.getCouponName().setText("優惠卷名稱：" + couponInfo.getCouponName());
-        viewHolder.getCouponBonus().setText("紅利：" + couponInfo.getCouponBonus() + " 點");
+        viewHolder.getCouponName().setText(couponInfo.getStoreName() + "\n" + couponInfo.getCouponName());
+        viewHolder.getCouponBonus().setText(couponInfo.getCouponBonus() + " 點");
 
         int progress = 0;
 
@@ -111,13 +110,9 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView storeName, couponName, deadline, couponBonus;
+        private TextView couponName, deadline, couponBonus;
         private ImageView image;
         private NumberProgressBar bnp;
-
-        public TextView getStoreName() {
-            return storeName;
-        }
 
         public TextView getCouponName() {
             return couponName;
@@ -133,8 +128,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            storeName = (TextView) itemView.findViewById(R.id.storeName);
-            couponName = (TextView) itemView.findViewById(R.id.couponName);
+            couponName = (TextView) itemView.findViewById(R.id.coupon_name);
             couponBonus = (TextView) itemView.findViewById(R.id.couponBonus);
             bnp = (NumberProgressBar) itemView.findViewById(R.id.number_progress_bar);
 

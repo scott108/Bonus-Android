@@ -80,7 +80,6 @@ public class CouponFragment extends Fragment{
             }
         });
 
-
         return layout;
     }
 
