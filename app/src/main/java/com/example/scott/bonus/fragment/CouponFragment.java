@@ -89,9 +89,7 @@ public class CouponFragment extends Fragment{
                 viewHolder.getCardViewItemLayout().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        System.out.println("Click coupon!!");
-                        System.out.println(couponInfo.getCouponID());
-
+                        mainActivity.getCouponFragmentControl().showCouponDetail(couponInfo);
                     }
                 });
             }
