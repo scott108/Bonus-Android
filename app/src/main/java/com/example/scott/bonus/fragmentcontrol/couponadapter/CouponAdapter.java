@@ -24,23 +24,19 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Scott on 15/5/7.
  */
-public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder>{
+public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder>{
 
     private List<CouponInfo> coupons;
     private int rowLayout;
-    private MainActivity mAct;
-
-    private int currentBonus = 0;
 
 
-    public void onEvent(int currentBonus) {
-        this.currentBonus = currentBonus;
+    public List<CouponInfo> getCoupons() {
+        return coupons;
     }
 
-    public CouponAdapter(List<CouponInfo> coupons, int rowLayout, MainActivity act) {
+    public CouponAdapter(List<CouponInfo> coupons, int rowLayout) {
         this.coupons = coupons;
         this.rowLayout = rowLayout;
-        this.mAct = act;
     }
 
     public void clearApplications() {
@@ -70,32 +66,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
-        final CouponInfo couponInfo = coupons.get(i);
-
-        viewHolder.getCouponName().setText(couponInfo.getStoreName() + "\n" + couponInfo.getCouponName());
-        viewHolder.getCouponBonus().setText(couponInfo.getCouponBonus() + " 點");
-
-        int progress = 0;
-
-        if(currentBonus >= couponInfo.getCouponBonus()) {
-            progress = 100;
-        } else {
-            progress = ((currentBonus * 100 )/ couponInfo.getCouponBonus());
-        }
-        if(progress < 20) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.blue));
-        } else if(progress > 20 && progress <= 50) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.green));
-        } else if(progress > 50 && progress <= 80) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.dark_green));
-        } else if(progress > 80 && progress <= 99) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.orange));
-        } else {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.red));
-        }
-
-        viewHolder.bnp.setProgress(progress);
-
+        onViewHolder(viewHolder, i);
     }
 
     @Override
@@ -103,16 +74,18 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
         return coupons == null ? 0 : coupons.size();
     }
 
-    private void setProgressBarColor(NumberProgressBar numberProgressBar, int color) {
-        numberProgressBar.setProgressTextColor(color);
-        numberProgressBar.setReachedBarColor(color);
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView couponName, deadline, couponBonus;
         private ImageView image;
         private NumberProgressBar bnp;
+
+        LinearLayout cardViewItemLayout;
+
+        public LinearLayout getCardViewItemLayout() {
+            return cardViewItemLayout;
+        }
 
         public TextView getCouponName() {
             return couponName;
@@ -134,15 +107,9 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
             //image = (ImageView) itemView.findViewById(R.id.countryImage);
 
-            LinearLayout cardViewItemLayout = (LinearLayout) itemView.findViewById(R.id.cardViewItemLayout);
-
-
-            cardViewItemLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            cardViewItemLayout = (LinearLayout) itemView.findViewById(R.id.cardViewItemLayout);
         }
     }
+
+    protected abstract void onViewHolder(final ViewHolder viewHolder, int i);
 }
