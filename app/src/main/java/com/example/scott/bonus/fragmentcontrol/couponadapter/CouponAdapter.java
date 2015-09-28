@@ -83,6 +83,10 @@ public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.V
 
         LinearLayout cardViewItemLayout;
 
+        public ImageView getImage() {
+            return image;
+        }
+
         public LinearLayout getCardViewItemLayout() {
             return cardViewItemLayout;
         }
@@ -105,7 +109,7 @@ public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.V
             couponBonus = (TextView) itemView.findViewById(R.id.couponBonus);
             bnp = (NumberProgressBar) itemView.findViewById(R.id.number_progress_bar);
 
-            //image = (ImageView) itemView.findViewById(R.id.countryImage);
+            image = (ImageView) itemView.findViewById(R.id.countryImage);
 
             cardViewItemLayout = (LinearLayout) itemView.findViewById(R.id.cardViewItemLayout);
         }

@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.scott.bonus.fragment.CouponFragment;
 import com.example.scott.bonus.fragment.InvoiceFragment;
+import com.example.scott.bonus.fragment.MyCouponFragment;
 import com.example.scott.bonus.fragment.UserFragment;
 import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
@@ -89,6 +90,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private Fragment invoiceFragment;
     private Fragment couponFragment;
     private Fragment userFragment;
+    private Fragment myCouponFragment;
     private Fragment currentFragment;
 
     private ClickEventHandler clickEventHandler;
@@ -232,6 +234,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         invoiceFragment = new InvoiceFragment();
         couponFragment = new CouponFragment();
         userFragment = new UserFragment();
+        myCouponFragment = new MyCouponFragment();
 
 
 
@@ -542,7 +545,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                 case R.id.my_coupon_menu_btn:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {
-                        switchFragment(userFragment);
+                        switchFragment(myCouponFragment);
                         title.setText("我的優惠卷");
                         toolbar.setElevation(8);
                     } else {

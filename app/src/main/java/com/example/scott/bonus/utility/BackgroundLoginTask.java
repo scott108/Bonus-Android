@@ -8,6 +8,7 @@ import com.example.scott.bonus.API;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
+import com.example.scott.bonus.sharepreference.LoginSharePreference;
 import com.google.gson.JsonObject;
 
 import de.greenrobot.event.EventBus;
@@ -18,21 +19,20 @@ import retrofit.client.Response;
 /**
  * Created by Scott on 15/7/30.
  */
-public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
+public class BackgroundLoginTask extends AsyncTask<String, Integer, Boolean> {
 
-    String result = "false";
+    boolean result = false;
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Boolean doInBackground(String... params) {
 
         if(!params[0].equals("") && !params[1].equals("")) {
 
             API.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
                @Override
                public void success(JsonObject jsonObject, Response response) {
-                   result = jsonObject.toString();
-                   System.out.println(result);
-                   if (!result.equals("false")) {
+                   result = jsonObject.get("response").getAsBoolean();
+                   if (result) {
                        SessionManager.setAttribute(true);
 
                        SessionManager.setSessionID("JSESSIONID=" + jsonObject.get("sessionID").getAsString());
@@ -45,6 +45,7 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
                    } else {
                        SessionManager.setAttribute(false);
                    }
+                   EventBus.getDefault().post(jsonObject);
                }
 
                @Override
@@ -62,7 +63,7 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(Boolean result) {
 
     }
 }
