@@ -1,25 +1,9 @@
-package com.example.scott.bonus.fragmentcontrol.couponadapter;
-
-import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.util.DisplayMetrics;
-
-import java.util.Locale;
+package com.example.scott.bonus.sqlite.entity;
 
 /**
- * Created by Scott on 15/5/7.
+ * Created by Scott on 15/9/28.
  */
-public class CouponInfo {
+public class CouponItem {
     private String couponID;
     private String storeName;
     private String couponName;
@@ -28,6 +12,7 @@ public class CouponInfo {
     private String endTime;
     private String imageUrl;
     private int couponBonus;
+    private int isUsed = 0;
 
     public String getCouponID() {
         return couponID;
@@ -91,5 +76,13 @@ public class CouponInfo {
 
     public void setCouponBonus(int couponBonus) {
         this.couponBonus = couponBonus;
+    }
+
+    public int getIsUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(int isUsed) {
+        this.isUsed = isUsed;
     }
 }

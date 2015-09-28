@@ -15,6 +15,7 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
+import com.example.scott.bonus.sqlite.entity.CouponItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +27,15 @@ import de.greenrobot.event.EventBus;
  */
 public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder>{
 
-    private List<CouponInfo> coupons;
+    private List<CouponItem> coupons;
     private int rowLayout;
 
 
-    public List<CouponInfo> getCoupons() {
+    public List<CouponItem> getCoupons() {
         return coupons;
     }
 
-    public CouponAdapter(List<CouponInfo> coupons, int rowLayout) {
+    public CouponAdapter(List<CouponItem> coupons, int rowLayout) {
         this.coupons = coupons;
         this.rowLayout = rowLayout;
     }
@@ -50,11 +51,9 @@ public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.V
         }
     }
 
-    public void addApplications(List<CouponInfo> applications) {
+    public void addApplications(List<CouponItem> applications) {
         this.coupons.addAll(applications);
         this.notifyItemRangeInserted(0, applications.size() - 1);
-
-
     }
 
     @Override

@@ -19,8 +19,8 @@ import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponAdapter;
-import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponInfo;
 import com.example.scott.bonus.itemanimator.CustomItemAnimator;
+import com.example.scott.bonus.sqlite.entity.CouponItem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -40,7 +40,7 @@ public class CouponFragment extends Fragment{
     private MainActivity mainActivity;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private List<CouponInfo> applicationList = new ArrayList<CouponInfo>();
+    private List<CouponItem> applicationList = new ArrayList<CouponItem>();
     private CouponAdapter mAdapter;
     private TextView userBonusTextView;
 
@@ -57,20 +57,20 @@ public class CouponFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_coupon, container, false);
-        mAdapter = new CouponAdapter(new ArrayList<CouponInfo>(), R.layout.coupon_cardview_item) {
+        mAdapter = new CouponAdapter(new ArrayList<CouponItem>(), R.layout.coupon_cardview_item) {
             @Override
             protected void onViewHolder(ViewHolder viewHolder, int i) {
-                final CouponInfo couponInfo = getCoupons().get(i);
+                final CouponItem couponItem = getCoupons().get(i);
 
-                viewHolder.getCouponName().setText(couponInfo.getStoreName() + "\n" + couponInfo.getCouponName());
-                viewHolder.getCouponBonus().setText(couponInfo.getCouponBonus() + " 點");
+                viewHolder.getCouponName().setText(couponItem.getStoreName() + "\n" + couponItem.getCouponName());
+                viewHolder.getCouponBonus().setText(couponItem.getCouponBonus() + " 點");
 
                 int progress = 0;
 
-                if(currentBonus >= couponInfo.getCouponBonus()) {
+                if(currentBonus >= couponItem.getCouponBonus()) {
                     progress = 100;
                 } else {
-                    progress = ((currentBonus * 100 )/ couponInfo.getCouponBonus());
+                    progress = ((currentBonus * 100 )/ couponItem.getCouponBonus());
                 }
                 if(progress < 20) {
                     setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.blue));
@@ -91,7 +91,7 @@ public class CouponFragment extends Fragment{
                 viewHolder.getCardViewItemLayout().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mainActivity.getCouponFragmentControl().showCouponDetail(couponInfo);
+                        mainActivity.getCouponFragmentControl().showCouponDetail(couponItem);
                     }
                 });
             }
@@ -170,17 +170,17 @@ public class CouponFragment extends Fragment{
                         JsonObject jsonObject = (JsonObject)jsonElements.get(i);
                         final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                        CouponInfo couponInfo = new CouponInfo();
-                        couponInfo.setCouponID(jsonObject.get("couponID").getAsString());
-                        couponInfo.setStoreName(jsonObject.get("storeName").getAsString());
-                        couponInfo.setCouponName(jsonObject.get("couponName").getAsString());
-                        couponInfo.setCouponContent(jsonObject.get("couponContent").getAsString());
-                        couponInfo.setImageUrl(jsonObject.get("couponImgUrl").getAsString());
-                        couponInfo.setCouponBonus(jsonObject.get("couponBonus").getAsInt());
-                        couponInfo.setStartTime(jsonObject.get("startTime").getAsString());
-                        couponInfo.setEndTime(jsonObject.get("endTime").getAsString());
+                        CouponItem couponItem = new CouponItem();
+                        couponItem.setCouponID(jsonObject.get("couponID").getAsString());
+                        couponItem.setStoreName(jsonObject.get("storeName").getAsString());
+                        couponItem.setCouponName(jsonObject.get("couponName").getAsString());
+                        couponItem.setCouponContent(jsonObject.get("couponContent").getAsString());
+                        couponItem.setImageUrl(jsonObject.get("couponImgUrl").getAsString());
+                        couponItem.setCouponBonus(jsonObject.get("couponBonus").getAsInt());
+                        couponItem.setStartTime(jsonObject.get("startTime").getAsString());
+                        couponItem.setEndTime(jsonObject.get("endTime").getAsString());
 
-                        applicationList.add(couponInfo);
+                        applicationList.add(couponItem);
 
                     }
                     //set data for list

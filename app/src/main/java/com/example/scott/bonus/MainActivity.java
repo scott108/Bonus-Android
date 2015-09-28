@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,6 +37,7 @@ import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sharepreference.LoginSharePreference;
+import com.example.scott.bonus.sqlite.doa.CouponDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
@@ -80,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     //Sqlite dao
     private InvoiceDAO invoiceDAO;
     private InvoiceGoodsDAO invoiceGoodsDAO;
+    private CouponDAO couponDAO;
 
     //Fragment controller
     private InvoiceFragmentControl invoiceFragmentControl;
@@ -129,6 +130,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     public InvoiceDAO getInvoiceDAO() {
         return invoiceDAO;
+    }
+
+    public CouponDAO getCouponDAO() {
+        return couponDAO;
     }
 
     public InvoiceGoodsDAO getInvoiceGoodsDAO() {
@@ -341,6 +346,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         // 建立資料庫物件
         invoiceDAO = new InvoiceDAO(getApplicationContext());
         invoiceGoodsDAO = new InvoiceGoodsDAO(getApplicationContext());
+        couponDAO = new CouponDAO(getApplicationContext());
 
         // 取得所有記事資料
         List<InvoiceItem> items = invoiceDAO.getAll();
@@ -585,53 +591,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     break;
             }
         }
-    }
-
-    //Test
-    private void insertTestInvoiceToSQLite() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("StoreName", "麥當勞");
-        jsonObject.put("Dateline", "12月");
-        jsonObject.put("InvoiceNum", Math.round(Math.random() * 1000000 + 1));
-        jsonObject.put("CurrentTime", "10:10:10");
-        jsonObject.put("StoreNum", "123");
-        jsonObject.put("StorePhone", "321");
-        jsonObject.put("TotalMoney", "109");
-        jsonObject.put("PayDetail", "test");
-        jsonObject.put("Signature", "test");
-        jsonObject.put("Goods0", "麥香雞,109,1,109");
-
-        InvoiceItem invoiceItem = new InvoiceItem();
-        try {
-            invoiceItem.setStoreName(jsonObject.getString("StoreName"));
-            invoiceItem.setDeadline(jsonObject.getString("Dateline"));
-            invoiceItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
-            invoiceItem.setCurrentTime(jsonObject.getString("CurrentTime"));
-            invoiceItem.setStoreNum(jsonObject.getString("StoreNum"));
-            invoiceItem.setStorePhone(jsonObject.getString("StorePhone"));
-            invoiceItem.setTotalMoney(jsonObject.getString("TotalMoney"));
-            invoiceItem.setPayDetail(jsonObject.getString("PayDetail"));
-            invoiceItem.setSignature(jsonObject.getString("Signature"));
-            for(int i = 0;; i++) {
-                if(!jsonObject.has("Goods" + i)) {
-                    break;
-                }
-                InvoiceGoodsItem invoiceGoodsItem = new InvoiceGoodsItem();
-                String[] token = jsonObject.getString("Goods" + i).split(",");
-                invoiceGoodsItem.setInvoiceNum(jsonObject.getString("InvoiceNum"));
-                invoiceGoodsItem.setGoodsName(token[0]);
-                invoiceGoodsItem.setGoodsPrice(token[1]);
-                invoiceGoodsItem.setGoodsQuantity(token[2]);
-                invoiceGoodsItem.setGoodsTotalPrice(token[3]);
-                invoiceGoodsDAO.insert(invoiceGoodsItem);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        invoiceDAO.insert(invoiceItem);
-
-        invoiceFragmentControl.addNewInvoiceIntoAdapter(invoiceItem);
     }
 
 }
