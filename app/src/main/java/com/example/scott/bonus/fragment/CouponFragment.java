@@ -2,10 +2,6 @@ package com.example.scott.bonus.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.LauncherApps;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
@@ -47,6 +44,8 @@ public class CouponFragment extends Fragment{
     private CouponAdapter mAdapter;
     private TextView userBonusTextView;
 
+    private int currentBonus = 0;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -58,9 +57,45 @@ public class CouponFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_coupon, container, false);
-        mAdapter = new CouponAdapter(new ArrayList<CouponInfo>(), R.layout.coupon_cardview_item, mainActivity);
+        mAdapter = new CouponAdapter(new ArrayList<CouponInfo>(), R.layout.coupon_cardview_item) {
+            @Override
+            protected void onViewHolder(ViewHolder viewHolder, int i) {
+                final CouponInfo couponInfo = getCoupons().get(i);
 
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.list);
+                viewHolder.getCouponName().setText(couponInfo.getStoreName() + "\n" + couponInfo.getCouponName());
+                viewHolder.getCouponBonus().setText(couponInfo.getCouponBonus() + " 點");
+
+                int progress = 0;
+
+                if(currentBonus >= couponInfo.getCouponBonus()) {
+                    progress = 100;
+                } else {
+                    progress = ((currentBonus * 100 )/ couponInfo.getCouponBonus());
+                }
+                if(progress < 20) {
+                    setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.blue));
+                } else if(progress > 20 && progress <= 50) {
+                    setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.green));
+                } else if(progress > 50 && progress <= 80) {
+                    setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.dark_green));
+                } else if(progress > 80 && progress <= 99) {
+                    setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.orange));
+                } else {
+                    setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.red));
+                }
+
+                viewHolder.getBnp().setProgress(progress);
+
+                viewHolder.getCardViewItemLayout().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mainActivity.getCouponFragmentControl().showCouponDetail(couponInfo);
+                    }
+                });
+            }
+        };
+
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycleList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
@@ -96,12 +131,22 @@ public class CouponFragment extends Fragment{
         EventBus.getDefault().unregister(this);
     }
 
+    private void setProgressBarColor(NumberProgressBar numberProgressBar, int color) {
+        numberProgressBar.setProgressTextColor(color);
+        numberProgressBar.setReachedBarColor(color);
+    }
+
     public void onEvent(UserInfoManager userInfoManager) {
         System.out.println("onEvent");
         userBonusTextView.setText(userInfoManager.getBonus() + "");
-        mAdapter.onEvent(userInfoManager.getBonus());
+        setCurrentBonus(userInfoManager.getBonus());
         mAdapter.notifyDataSetChanged();
     }
+
+    public void setCurrentBonus(int currentBonus) {
+        this.currentBonus = currentBonus;
+    }
+
 
     private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> {
 
@@ -139,7 +184,7 @@ public class CouponFragment extends Fragment{
                     //set data for list
                     mAdapter.addApplications(applicationList);
                     swipeRefreshLayout.setRefreshing(false);
-                    mAdapter.onEvent(UserInfoManager.getInstance().getBonus());
+                    setCurrentBonus(UserInfoManager.getInstance().getBonus());
                 }
 
                 @Override

@@ -25,6 +25,4 @@ public class API {
     public Http getHttp() {
         return http;
     }
-
-
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -23,23 +24,19 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Scott on 15/5/7.
  */
-public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder>{
+public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder>{
 
     private List<CouponInfo> coupons;
     private int rowLayout;
-    private MainActivity mAct;
-
-    private int currentBonus = 0;
 
 
-    public void onEvent(int currentBonus) {
-        this.currentBonus = currentBonus;
+    public List<CouponInfo> getCoupons() {
+        return coupons;
     }
 
-    public CouponAdapter(List<CouponInfo> coupons, int rowLayout, MainActivity act) {
+    public CouponAdapter(List<CouponInfo> coupons, int rowLayout) {
         this.coupons = coupons;
         this.rowLayout = rowLayout;
-        this.mAct = act;
     }
 
     public void clearApplications() {
@@ -69,40 +66,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
-        final CouponInfo couponInfo = coupons.get(i);
-
-        viewHolder.getStoreName().setText("店家：" + couponInfo.getStoreName());
-        viewHolder.getCouponName().setText("優惠卷名稱：" + couponInfo.getCouponName());
-        viewHolder.getCouponBonus().setText("紅利：" + couponInfo.getCouponBonus() + " 點");
-
-        int progress = 0;
-
-        if(currentBonus >= couponInfo.getCouponBonus()) {
-            progress = 100;
-        } else {
-            progress = ((currentBonus * 100 )/ couponInfo.getCouponBonus());
-        }
-        if(progress < 20) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.blue));
-        } else if(progress > 20 && progress <= 50) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.green));
-        } else if(progress > 50 && progress <= 80) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.dark_green));
-        } else if(progress > 80 && progress <= 99) {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.orange));
-        } else {
-            setProgressBarColor(viewHolder.bnp, mAct.getResources().getColor(R.color.red));
-        }
-
-        viewHolder.bnp.setProgress(progress);
-
-
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        onViewHolder(viewHolder, i);
     }
 
     @Override
@@ -110,19 +74,17 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
         return coupons == null ? 0 : coupons.size();
     }
 
-    private void setProgressBarColor(NumberProgressBar numberProgressBar, int color) {
-        numberProgressBar.setProgressTextColor(color);
-        numberProgressBar.setReachedBarColor(color);
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView storeName, couponName, deadline, couponBonus;
+        private TextView couponName, deadline, couponBonus;
         private ImageView image;
         private NumberProgressBar bnp;
 
-        public TextView getStoreName() {
-            return storeName;
+        LinearLayout cardViewItemLayout;
+
+        public LinearLayout getCardViewItemLayout() {
+            return cardViewItemLayout;
         }
 
         public TextView getCouponName() {
@@ -137,14 +99,17 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
             return bnp;
         }
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
-            storeName = (TextView) itemView.findViewById(R.id.storeName);
-            couponName = (TextView) itemView.findViewById(R.id.couponName);
+            couponName = (TextView) itemView.findViewById(R.id.coupon_name);
             couponBonus = (TextView) itemView.findViewById(R.id.couponBonus);
             bnp = (NumberProgressBar) itemView.findViewById(R.id.number_progress_bar);
 
             //image = (ImageView) itemView.findViewById(R.id.countryImage);
+
+            cardViewItemLayout = (LinearLayout) itemView.findViewById(R.id.cardViewItemLayout);
         }
     }
+
+    protected abstract void onViewHolder(final ViewHolder viewHolder, int i);
 }
