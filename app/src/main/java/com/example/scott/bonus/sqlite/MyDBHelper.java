@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
+import com.example.scott.bonus.sqlite.doa.CouponDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceDAO;
 import com.example.scott.bonus.sqlite.doa.InvoiceGoodsDAO;
 
@@ -43,6 +44,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         System.out.println("create a Database");
         db.execSQL(InvoiceDAO.CREATE_TABLE);
         db.execSQL(InvoiceGoodsDAO.CREATE_TABLE);
+        db.execSQL(CouponDAO.CREATE_TABLE);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // 刪除原有的表格
         db.execSQL("DROP TABLE IF EXISTS " + InvoiceDAO.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + InvoiceGoodsDAO.CREATE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CouponDAO.CREATE_TABLE);
 
         // 呼叫onCreate建立新版的表格
         onCreate(db);

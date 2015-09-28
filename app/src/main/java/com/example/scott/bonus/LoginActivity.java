@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sharepreference.LoginSharePreference;
+import com.example.scott.bonus.utility.ApiType;
+import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.google.gson.JsonObject;
 
 import de.greenrobot.event.EventBus;
@@ -40,6 +42,7 @@ public class LoginActivity extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        EventBus.getDefault().register(this);
         initUI();
 
         Context.setLoginActivity(this);
@@ -53,6 +56,12 @@ public class LoginActivity extends Activity{
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initUI() {
@@ -77,7 +86,9 @@ public class LoginActivity extends Activity{
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.loginBtn:
-                    new LoginTask().execute(emailEditText.getText().toString(),
+                    loginProgress.setMessage("登入中請稍候...");
+                    loginProgress.show();
+                    new BackgroundLoginTask().execute(emailEditText.getText().toString(),
                                             passwordEditText.getText().toString());
                     break;
                 case R.id.signUpLinkTextView:
@@ -89,58 +100,21 @@ public class LoginActivity extends Activity{
         }
     }
 
-
-    public void loginResult(JsonObject jsonObject) {
-        String result = jsonObject.toString();
-        if(!jsonObject.has("loginfail")) {
-            SessionManager.setAttribute(true);
-
-            SessionManager.setSessionID("JSESSIONID=" + jsonObject.get("sessionID").getAsString());
-
-            sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
-
-            LoginSharePreference.getInstance().setLoginData(sharePreference,
-                    emailEditText.getText().toString(),
-                    passwordEditText.getText().toString());
-
-            UserInfoManager.getInstance().setUserName(jsonObject.get("name").getAsString());
-            UserInfoManager.getInstance().setEmail(jsonObject.get("email").getAsString());
-            UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
-
-            EventBus.getDefault().post(UserInfoManager.getInstance());
-
-            LoginActivity.this.finish();
-
-        } else {
-            Toast.makeText(LoginActivity.this, "帳號密碼組合錯誤", Toast.LENGTH_LONG).show();
-        }
-        loginProgress.dismiss();
-    }
-
-    private class LoginTask extends AsyncTask<String, Integer, Void> {
-        @Override
-        protected void onPreExecute() {
-            loginProgress.setMessage("登入中請稍候...");
-            loginProgress.show();
-        }
-        @Override
-        protected Void doInBackground(String... params) {
-            if(!params[0].equals("") && !params[1].equals("")) {
-                API.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
-                    @Override
-                    public void success(JsonObject jsonObject, Response response) {
-                        System.out.println(response.getHeaders());
-                        loginResult(jsonObject);
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
+    public void onEvent(JsonObject jsonObject) {
+        int type = jsonObject.get("type").getAsInt();
+        if(type == ApiType.LOGIN) {
+            String result = jsonObject.get("response").getAsString();
+            System.out.println("Login!!!");
+            if(result.equals("true")) {
+                sharePreference = getSharedPreferences(LoginSharePreference.LOGIN_DATA, 0);
+                LoginSharePreference.getInstance().setLoginData(sharePreference,
+                                                                jsonObject.get("email").getAsString(),
+                                                                jsonObject.get("password").getAsString());
+                LoginActivity.this.finish();
+            } else {
+                Toast.makeText(LoginActivity.this, "帳號密碼組合錯誤", Toast.LENGTH_LONG).show();
             }
-            return null;
+            loginProgress.dismiss();
         }
     }
 }

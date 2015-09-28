@@ -1,14 +1,7 @@
 package com.example.scott.bonus.fragmentcontrol;
 
 import android.app.Dialog;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,16 +12,14 @@ import android.widget.Toast;
 import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
-import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponAdapter;
-import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponInfo;
+import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.session.SessionManager;
+import com.example.scott.bonus.sqlite.entity.CouponItem;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -42,6 +33,7 @@ public class CouponFragmentControl {
     private Dialog couponDetailDialog;
     int width;
     int height;
+    Gson gson = new Gson();
 
     public CouponFragmentControl(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -55,7 +47,7 @@ public class CouponFragmentControl {
         couponDetailDialog = new Dialog(mainActivity);
     }
 
-    public void showCouponDetail(final CouponInfo couponInfo) {
+    public void showCouponDetail(final CouponItem couponItem) {
         couponDetailDialog.setContentView(R.layout.coupon_detail);
         TextView couponName = (TextView) couponDetailDialog.findViewById(R.id.couponNameTextView);
         TextView couponID = (TextView) couponDetailDialog.findViewById(R.id.couponIDTextView);
@@ -65,22 +57,56 @@ public class CouponFragmentControl {
         TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
         Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
 
-        couponName.setText(couponInfo.getStoreName() + " " + couponInfo.getCouponName());
-        couponID.setText("品號 : " + "coupon_" + couponInfo.getCouponID());
-        couponContent.setText("商品內容 : " + couponInfo.getCouponContent());
-        couponBonus.setText("優惠卷扣點 : " + couponInfo.getCouponBonus());
-        startTime.setText("起始時間 : " + couponInfo.getStartTime());
-        endTime.setText("結束時間 : " + couponInfo.getEndTime());
+        couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
+        couponID.setText("品號 : " + "coupon_" + couponItem.getCouponID());
+        couponContent.setText("商品內容 : " + couponItem.getCouponContent());
+        couponBonus.setText("優惠卷扣點 : " + couponItem.getCouponBonus());
+        startTime.setText("起始時間 : " + couponItem.getStartTime());
+        endTime.setText("結束時間 : " + couponItem.getEndTime());
 
         couponExchangeBbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (SessionManager.hasAttribute()) {
                     System.out.println("Exchange!!");
-                    new GetCouponTask().execute(couponInfo.getCouponID());
+                    new GetCouponTask().execute(couponItem.getCouponID());
                 } else {
                     Toast.makeText(mainActivity.getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        couponDetailDialog.show();
+
+        WindowManager.LayoutParams params = couponDetailDialog.getWindow()
+                .getAttributes();
+        params.width = width;
+        params.height = height * 4 / 5;
+        params.windowAnimations = R.style.PauseDialogAnimation;
+        couponDetailDialog.getWindow().setAttributes(params);
+    }
+
+    public void showMyCouponDetail(final CouponItem couponItem) {
+        couponDetailDialog.setContentView(R.layout.coupon_detail);
+        TextView couponName = (TextView) couponDetailDialog.findViewById(R.id.couponNameTextView);
+        TextView couponID = (TextView) couponDetailDialog.findViewById(R.id.couponIDTextView);
+        TextView couponContent = (TextView) couponDetailDialog.findViewById(R.id.couponContentTextView);
+        TextView couponBonus = (TextView) couponDetailDialog.findViewById(R.id.couponBonusTextView);
+        TextView startTime = (TextView) couponDetailDialog.findViewById(R.id.startTimeTextView);
+        TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
+        Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
+
+        couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
+        couponID.setText("品號 : " + "coupon_" + couponItem.getCouponID());
+        couponContent.setText("商品內容 : " + couponItem.getCouponContent());
+        couponBonus.setText("優惠卷扣點 : " + couponItem.getCouponBonus());
+        startTime.setText("起始時間 : " + couponItem.getStartTime());
+        endTime.setText("結束時間 : " + couponItem.getEndTime());
+
+        couponExchangeBbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -102,6 +128,21 @@ public class CouponFragmentControl {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
                     System.out.println(jsonObject);
+                    if(jsonObject.get("exchangedResponse").getAsBoolean()) {
+                        UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
+
+                        CouponItem couponItem = gson.fromJson(jsonObject.get("coupon"), CouponItem.class);
+
+                        mainActivity.getCouponDAO().insert(couponItem);
+
+                        EventBus.getDefault().post(UserInfoManager.getInstance());
+
+                        Toast.makeText(mainActivity.getApplication(), "兌換成功", Toast.LENGTH_LONG).show();
+
+                        couponDetailDialog.dismiss();
+                    } else {
+                        Toast.makeText(mainActivity.getApplication(), "點數不夠", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
@@ -110,11 +151,6 @@ public class CouponFragmentControl {
                 }
             });
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
         }
     }
 }
