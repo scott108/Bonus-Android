@@ -16,16 +16,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponAdapter;
 import com.example.scott.bonus.fragmentcontrol.couponadapter.CouponInfo;
 import com.example.scott.bonus.session.SessionManager;
+import com.google.gson.JsonObject;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Scott on 15/5/7.
@@ -49,7 +55,7 @@ public class CouponFragmentControl {
         couponDetailDialog = new Dialog(mainActivity);
     }
 
-    public void showCouponDetail(CouponInfo couponInfo) {
+    public void showCouponDetail(final CouponInfo couponInfo) {
         couponDetailDialog.setContentView(R.layout.coupon_detail);
         TextView couponName = (TextView) couponDetailDialog.findViewById(R.id.couponNameTextView);
         TextView couponID = (TextView) couponDetailDialog.findViewById(R.id.couponIDTextView);
@@ -71,6 +77,7 @@ public class CouponFragmentControl {
             public void onClick(View v) {
                 if (SessionManager.hasAttribute()) {
                     System.out.println("Exchange!!");
+                    new GetCouponTask().execute(couponInfo.getCouponID());
                 } else {
                     Toast.makeText(mainActivity.getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
                 }
@@ -85,6 +92,29 @@ public class CouponFragmentControl {
         params.height = height * 4 / 5;
         params.windowAnimations = R.style.PauseDialogAnimation;
         couponDetailDialog.getWindow().setAttributes(params);
+    }
 
+    class GetCouponTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            API.getInstance().getHttp().getCoupon(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
+                @Override
+                public void success(JsonObject jsonObject, Response response) {
+                    System.out.println(jsonObject);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
     }
 }

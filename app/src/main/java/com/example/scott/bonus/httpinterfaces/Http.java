@@ -38,4 +38,8 @@ public interface Http {
     @FormUrlEncoded
     @POST("/user/bonus/exchange")
     void getBonus(@Header("Cookie") String token, @Field("invoice") String invoice, Callback<JsonObject> response);
+
+    @FormUrlEncoded
+    @POST("/coupon/exchange")
+    void getCoupon(@Header("Cookie") String token, @Field("couponID") String couponID, Callback<JsonObject> response);
 }
