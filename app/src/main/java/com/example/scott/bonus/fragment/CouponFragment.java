@@ -2,6 +2,9 @@ package com.example.scott.bonus.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -84,7 +87,7 @@ public class CouponFragment extends Fragment{
                     setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.red));
                 }
 
-                viewHolder.getImage().setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.ic_card_giftcard_black_24dp));
+                viewHolder.getImage().setImageDrawable(resize(mainActivity.getResources().getDrawable(R.drawable.gift)));
 
                 viewHolder.getBnp().setProgress(progress);
 
@@ -131,6 +134,12 @@ public class CouponFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private Drawable resize(Drawable image) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 300, 300, false);
+        return new BitmapDrawable(mainActivity.getResources(), bitmapResized);
     }
 
     private void setProgressBarColor(NumberProgressBar numberProgressBar, int color) {

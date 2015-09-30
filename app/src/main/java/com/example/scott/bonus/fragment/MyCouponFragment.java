@@ -50,7 +50,7 @@ public class MyCouponFragment extends Fragment {
 
                 viewHolder.getBnp().setVisibility(View.GONE);
 
-                viewHolder.getImage().setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.ic_card_giftcard_black_24dp));
+                viewHolder.getImage().setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.gift));
 
                 viewHolder.getCardViewItemLayout().setOnClickListener(new View.OnClickListener() {
                     @Override
