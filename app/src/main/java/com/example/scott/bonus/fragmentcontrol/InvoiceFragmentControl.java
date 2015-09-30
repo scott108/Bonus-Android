@@ -58,7 +58,7 @@ public class InvoiceFragmentControl {
         protected View getTitleView(String title, int index, View convertView, ViewGroup parent) {
             TextView titleView;
 
-            titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
+            titleView = (TextView) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
 
             titleView.setText(title);
 

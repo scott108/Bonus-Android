@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.example.scott.bonus.fragment.CouponFragment;
 import com.example.scott.bonus.fragment.InvoiceFragment;
 import com.example.scott.bonus.fragment.MyCouponFragment;
+import com.example.scott.bonus.fragment.NearbyStoreFragment;
 import com.example.scott.bonus.fragment.UserFragment;
 import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
@@ -74,6 +75,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private LinearLayout invoiceMenuBtn;
     private LinearLayout couponMenuBtn;
     private LinearLayout myCouponMenuBtn;
+    private LinearLayout nearbyStoreMenuBtn;
     private LinearLayout settingMenuBtn;
     private LinearLayout logoutMenuBtn;
 
@@ -92,6 +94,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private Fragment couponFragment;
     private Fragment userFragment;
     private Fragment myCouponFragment;
+    private Fragment nearbyStoreFragment;
     private Fragment currentFragment;
 
     private ClickEventHandler clickEventHandler;
@@ -240,6 +243,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         couponFragment = new CouponFragment();
         userFragment = new UserFragment();
         myCouponFragment = new MyCouponFragment();
+        nearbyStoreFragment = new NearbyStoreFragment();
 
 
 
@@ -294,12 +298,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         invoiceMenuBtn = (LinearLayout) findViewById(R.id.invoice_menu_btn);
         couponMenuBtn = (LinearLayout) findViewById(R.id.coupon_menu_btn);
         myCouponMenuBtn = (LinearLayout) findViewById(R.id.my_coupon_menu_btn);
+        nearbyStoreMenuBtn = (LinearLayout) findViewById(R.id.nearby_store_menu_btn);
         settingMenuBtn = (LinearLayout) findViewById(R.id.my_acount_menu_btn);
         logoutMenuBtn = (LinearLayout) findViewById(R.id.logout_menu_btn);
 
         invoiceMenuBtn.setOnClickListener(clickEventHandler);
         couponMenuBtn.setOnClickListener(clickEventHandler);
         myCouponMenuBtn.setOnClickListener(clickEventHandler);
+        nearbyStoreMenuBtn.setOnClickListener(clickEventHandler);
         settingMenuBtn.setOnClickListener(clickEventHandler);
         logoutMenuBtn.setOnClickListener(clickEventHandler);
     }
@@ -553,6 +559,17 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     if(SessionManager.hasAttribute()) {
                         switchFragment(myCouponFragment);
                         title.setText("我的優惠卷");
+                        toolbar.setElevation(8);
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+
+                case R.id.nearby_store_menu_btn:
+                    Drawer.closeDrawers();
+                    if(SessionManager.hasAttribute()) {
+                        switchFragment(nearbyStoreFragment);
+                        title.setText("周邊綠色商店");
                         toolbar.setElevation(8);
                     } else {
                         Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
