@@ -11,6 +11,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -26,9 +27,11 @@ import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.scott.bonus.fragment.CouponFragment;
 import com.example.scott.bonus.fragment.InvoiceFragment;
 import com.example.scott.bonus.fragment.MyCouponFragment;
@@ -101,6 +104,8 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
     private SharedPreferences sharePreference;
 
+    private NumberProgressBar numberProgressBar;
+
     //NFC domain
     final String domain = "com.example.scott.androidbream";
     final String type = "icheedata";
@@ -169,10 +174,6 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         loginCheck();
 
         Context.setMainActivity(this);
-
-
-
-
     }
 
     @Override
@@ -245,7 +246,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         myCouponFragment = new MyCouponFragment();
         nearbyStoreFragment = new NearbyStoreFragment();
 
+        numberProgressBar = (NumberProgressBar) findViewById(R.id.number_progress_bar);
 
+        numberProgressBar.setProgressTextColor(getResources().getColor(R.color.green));
+        numberProgressBar.setReachedBarColor(getResources().getColor(R.color.green));
 
         clickEventHandler = new ClickEventHandler();
 
@@ -494,10 +498,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         if(!userInfoManager.getUserName().equals("")) {
             userName.setText("Hello, " + userInfoManager.getUserName());
-            welcome.setText("歡迎使用iBonus");
+            welcome.setText("歡迎使用iBonus\n" + "你現在是 環保小尖兵 lv. 10\n");
+            numberProgressBar.setVisibility(View.VISIBLE);
+            numberProgressBar.setProgress(userInfoManager.getExperience());
+
         } else {
             userName.setText("遊客");
             welcome.setText("按此登入");
+            numberProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -609,5 +617,4 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             }
         }
     }
-
 }

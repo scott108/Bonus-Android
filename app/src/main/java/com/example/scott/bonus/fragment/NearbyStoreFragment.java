@@ -75,7 +75,6 @@ public class NearbyStoreFragment extends Fragment {
             public void onItemClick(AdapterView<?> av, View view, int i, long l) {
 
 
-
                 Store storeChose = (Store) storeAdapter.getItem(i);
                 String storeObject = gson.toJson(storeChose);
 
@@ -90,15 +89,7 @@ public class NearbyStoreFragment extends Fragment {
         });
 
 
-        for(int i = 0 ; i < 10; i++) {
-            Store store = new Store();
-            store.setName("FamilyMart");
-            store.setAddress("台中市南區國光路250號");
-            store.setPhoneNum("1234567");
-
-            addStore(store);
-        }
-
+        addTestStore();
 
         return layout;
     }
@@ -113,6 +104,20 @@ public class NearbyStoreFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+    }
+
+    String[] name = {"萊爾富國際股份有限公司-台中中大店", "萊爾富國際股份有限公司-台中復興店", "全國電子股份有限公司台中市第六分公司", "全國電子股份有限公司台中市第十分公司", "松青仁和店", "遠百企業股份有限公司台中復興分公司", "7-11興學門市", "7-11興大門市"};
+    String[] address = {"南區興大路300號1樓", "南區復興路二段177之1號", "南區德義里國光路170號", "南區工學里復興路一段415-4號", "南區國光路198號", "南區復興路一段359號", "南區學府路64號", "南區國光路301號"};
+    String[] phone = {"02-66068688#356", "02-66068688#356", "04-23591688#206", "04-23591688#206", "02-26968940", "04-22658686", "02-27478711#3961", "02-27478711#3961"};
+
+    public void addTestStore() {
+        for(int i = 0; i < 8; i++) {
+            Store store = new Store();
+            store.setName(name[i]);
+            store.setAddress(address[i]);
+            store.setPhoneNum(phone[i]);
+            addStore(store);
+        }
     }
 
     public void addStore(Store store) {

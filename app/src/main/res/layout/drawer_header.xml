@@ -11,12 +11,11 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="72dp"
-        android:layout_weight="0.82"></LinearLayout>
+        android:layout_height="52dp"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="100dp"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -44,6 +43,13 @@
             android:text="@string/hyperlink_login"
             android:textSize="14sp"
             android:textStyle="normal"
+            />
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/number_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:paddingRight="8dp"
+            android:visibility="gone"
             />
 
     </LinearLayout>
