@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -59,6 +60,7 @@ public class CouponFragment extends Fragment{
     private List<CouponItem> applicationList = new ArrayList<CouponItem>();
     private CouponAdapter mAdapter;
     private TextView userBonusTextView;
+    private ProgressBar progressBar;
 
     private int currentBonus = 0;
 
@@ -125,7 +127,7 @@ public class CouponFragment extends Fragment{
                 });
             }
         };
-
+        progressBar = (ProgressBar) layout.findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycleList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
@@ -133,8 +135,6 @@ public class CouponFragment extends Fragment{
 
         userBonusTextView = (TextView) layout.findViewById(R.id.userBonusTextView);
         userBonusTextView.setText(UserInfoManager.getInstance().getBonus() + "");
-
-        new InitializeApplicationsTask().execute();
 
         swipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setColorSchemeColors(mainActivity.getResources().getColor(R.color.primary));
@@ -145,6 +145,8 @@ public class CouponFragment extends Fragment{
                 new InitializeApplicationsTask().execute();
             }
         });
+
+        new InitializeApplicationsTask().execute();
 
         return layout;
     }
@@ -220,6 +222,8 @@ public class CouponFragment extends Fragment{
                     }
                     //set data for list
                     mAdapter.addApplications(applicationList);
+                    progressBar.setVisibility(View.GONE);
+
                     swipeRefreshLayout.setRefreshing(false);
                     setCurrentBonus(UserInfoManager.getInstance().getBonus());
                 }
