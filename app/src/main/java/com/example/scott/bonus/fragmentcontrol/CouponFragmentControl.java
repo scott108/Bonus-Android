@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sqlite.entity.CouponItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 import de.greenrobot.event.EventBus;
@@ -56,6 +58,7 @@ public class CouponFragmentControl {
         TextView startTime = (TextView) couponDetailDialog.findViewById(R.id.startTimeTextView);
         TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
         Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
+        ImageView couponImage = (ImageView) couponDetailDialog.findViewById(R.id.coupon_image);
 
         couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
         couponID.setText("品號 : " + "coupon_" + couponItem.getCouponID());
@@ -63,6 +66,18 @@ public class CouponFragmentControl {
         couponBonus.setText("優惠卷扣點 : " + couponItem.getCouponBonus());
         startTime.setText("起始時間 : " + couponItem.getStartTime());
         endTime.setText("結束時間 : " + couponItem.getEndTime());
+
+        if (couponItem.getStoreName().equals("7-11")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.citycafe, couponImage);
+        } else if (couponItem.getStoreName().equals("全家便利商店")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.familymartcoupon, couponImage);
+        } else if (couponItem.getStoreName().equals("萊爾富超商")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.lirfo, couponImage);
+        } else if (couponItem.getStoreName().equals("大買家")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.damija, couponImage);
+        } else if (couponItem.getStoreName().equals("星巴克")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.startbucks, couponImage);
+        }
 
         couponExchangeBbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +110,7 @@ public class CouponFragmentControl {
         TextView startTime = (TextView) couponDetailDialog.findViewById(R.id.startTimeTextView);
         TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
         Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
+        ImageView couponImage = (ImageView) couponDetailDialog.findViewById(R.id.coupon_image);
 
         couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
         couponID.setText("品號 : " + "coupon_" + couponItem.getCouponID());
@@ -102,6 +118,18 @@ public class CouponFragmentControl {
         couponBonus.setText("優惠卷扣點 : " + couponItem.getCouponBonus());
         startTime.setText("起始時間 : " + couponItem.getStartTime());
         endTime.setText("結束時間 : " + couponItem.getEndTime());
+
+        if (couponItem.getStoreName().equals("7-11")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.citycafe, couponImage);
+        } else if (couponItem.getStoreName().equals("全家便利商店")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.familymartcoupon, couponImage);
+        } else if (couponItem.getStoreName().equals("萊爾富超商")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.lirfo, couponImage);
+        } else if (couponItem.getStoreName().equals("大買家")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.damija, couponImage);
+        } else if (couponItem.getStoreName().equals("星巴克")) {
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.startbucks, couponImage);
+        }
 
         couponExchangeBbutton.setOnClickListener(new View.OnClickListener() {
             @Override

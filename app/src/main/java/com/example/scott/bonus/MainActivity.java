@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -51,10 +52,23 @@ import com.example.scott.bonus.user.UserAccount;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.example.scott.bonus.utility.BackgroundLogoutTask;
 import com.example.scott.bonus.utility.utility;
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LimitedAgeMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -174,6 +188,36 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         loginCheck();
 
         Context.setMainActivity(this);
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.loading)
+                .resetViewBeforeLoading(false)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(false)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+                .bitmapConfig(Bitmap.Config.ARGB_8888)
+                .displayer(new SimpleBitmapDisplayer())
+                .build();
+        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .taskExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                .taskExecutorForCachedImages(AsyncTask.THREAD_POOL_EXECUTOR)
+                .threadPoolSize(6)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .tasksProcessingOrder(QueueProcessingType.FIFO)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LimitedAgeMemoryCache(new LruMemoryCache(100 * 1024 * 1024), 15 * 60))
+                .diskCache(new LimitedAgeDiskCache(cacheDir, 15 * 60))
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(100)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .imageDownloader(new BaseImageDownloader(getApplicationContext()))
+                .defaultDisplayImageOptions(options)
+                .writeDebugLogs()
+                .build();
+
+        ImageLoader.getInstance().init(config);
     }
 
     @Override

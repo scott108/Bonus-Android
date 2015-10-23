@@ -35,6 +35,7 @@ import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,13 +92,13 @@ public class InvoiceFragmentControl {
                 invoiceItemTitle.setText(itemTitle);
                 ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
 
-                /*if(jsonObject.getString("店名").equals("7-ELEVEN")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.seven)));
+                if(jsonObject.getString("店名").equals("7-ELEVEN")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.seven, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("全聯福利中心")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.px)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.px, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("FamilyMart")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.family)));
-                }*/
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.family, invoiceIcon);
+                }
 
                 TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
                 touchCheckBox.setCircleColor(mainActivity.getResources().getColor(R.color.primary));
@@ -143,13 +144,13 @@ public class InvoiceFragmentControl {
                 invoiceItemTitle.setText(itemTitle);
                 ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
 
-                /*if(jsonObject.getString("店名").equals("7-ELEVEN")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.seven)));
+                if(jsonObject.getString("店名").equals("7-ELEVEN")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.seven, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("全聯福利中心")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.px)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.px, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("FamilyMart")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.family)));
-                }*/
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.family, invoiceIcon);
+                }
 
                 TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
                 touchCheckBox.setVisibility(View.INVISIBLE);

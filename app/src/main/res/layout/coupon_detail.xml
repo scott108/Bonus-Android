@@ -31,8 +31,8 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:src="@drawable/ic_card_giftcard_black_24dp"/>
+            android:layout_height="250dp"
+            android:id="@+id/coupon_image" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="商品內容 : 飲料第二件五折"
             android:id="@+id/couponContentTextView"
-            android:textSize="25dp" />
+            android:textSize="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="優惠卷扣點 : 1000點"
             android:id="@+id/couponBonusTextView"
-            android:textSize="25dp" />
+            android:textSize="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,14 +56,14 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="起始時間 : 禮拜五"
             android:id="@+id/startTimeTextView"
-            android:textSize="25dp" />
+            android:textSize="20dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="結束時間 : 禮拜一"
             android:id="@+id/endTimeTextView"
-            android:textSize="25dp" />
+            android:textSize="20dp" />
 
         <Button
             android:layout_width="wrap_content"

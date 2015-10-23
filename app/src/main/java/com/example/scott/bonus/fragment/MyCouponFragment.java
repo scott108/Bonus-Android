@@ -21,6 +21,7 @@ import com.example.scott.bonus.itemanimator.CustomItemAnimator;
 import com.example.scott.bonus.sqlite.entity.CouponItem;
 import com.example.scott.bonus.utility.ApiType;
 import com.google.gson.JsonObject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -55,7 +56,17 @@ public class MyCouponFragment extends Fragment {
 
                 viewHolder.getBnp().setVisibility(View.GONE);
 
-                viewHolder.getImage().setImageDrawable(resize(mainActivity.getResources().getDrawable(R.drawable.gift)));
+                if (couponItem.getStoreName().equals("7-11")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.citycafe, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("全家便利商店")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.familymartcoupon, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("萊爾富超商")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.lirfo, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("大買家")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.damija, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("星巴克")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.startbucks, viewHolder.getImage());
+                }
 
                 viewHolder.getCardViewItemLayout().setOnClickListener(new View.OnClickListener() {
                     @Override

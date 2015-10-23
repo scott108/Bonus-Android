@@ -61,9 +61,9 @@ public class NearbyStoreFragment extends Fragment {
                 layout = (LinearLayout) mainActivity.getLayoutInflater().inflate(R.layout.store_list_view_item, null);
                 TextView storeLisViewItem = (TextView) layout.findViewById(R.id.storeTextView);
 
-                storeLisViewItem.setText("店名 : " + store.getName() + "\n" +
+                storeLisViewItem.setText("\n店名 : " + store.getName() + "\n" +
                                         "地址 : " + store.getAddress() + "\n" +
-                                        "電話 : " + store.getPhoneNum());
+                                        "電話 : " + store.getPhoneNum() + "\n");
 
                 return layout;
             }
