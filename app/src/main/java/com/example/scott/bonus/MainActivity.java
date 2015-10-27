@@ -7,10 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -26,12 +28,15 @@ import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.scott.bonus.fragment.CouponFragment;
 import com.example.scott.bonus.fragment.InvoiceFragment;
 import com.example.scott.bonus.fragment.MyCouponFragment;
+import com.example.scott.bonus.fragment.NearbyStoreFragment;
 import com.example.scott.bonus.fragment.UserFragment;
 import com.example.scott.bonus.fragmentcontrol.CouponFragmentControl;
 import com.example.scott.bonus.fragmentcontrol.InvoiceFragmentControl;
@@ -47,10 +52,23 @@ import com.example.scott.bonus.user.UserAccount;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.example.scott.bonus.utility.BackgroundLogoutTask;
 import com.example.scott.bonus.utility.utility;
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LimitedAgeMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -74,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private LinearLayout invoiceMenuBtn;
     private LinearLayout couponMenuBtn;
     private LinearLayout myCouponMenuBtn;
+    private LinearLayout nearbyStoreMenuBtn;
     private LinearLayout settingMenuBtn;
     private LinearLayout logoutMenuBtn;
 
@@ -92,11 +111,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     private Fragment couponFragment;
     private Fragment userFragment;
     private Fragment myCouponFragment;
+    private Fragment nearbyStoreFragment;
     private Fragment currentFragment;
 
     private ClickEventHandler clickEventHandler;
 
     private SharedPreferences sharePreference;
+
+    private NumberProgressBar numberProgressBar;
 
     //NFC domain
     final String domain = "com.example.scott.androidbream";
@@ -167,9 +189,35 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         Context.setMainActivity(this);
 
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.loading)
+                .resetViewBeforeLoading(false)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(false)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+                .bitmapConfig(Bitmap.Config.ARGB_8888)
+                .displayer(new SimpleBitmapDisplayer())
+                .build();
+        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .taskExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                .taskExecutorForCachedImages(AsyncTask.THREAD_POOL_EXECUTOR)
+                .threadPoolSize(6)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .tasksProcessingOrder(QueueProcessingType.FIFO)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LimitedAgeMemoryCache(new LruMemoryCache(100 * 1024 * 1024), 15 * 60))
+                .diskCache(new LimitedAgeDiskCache(cacheDir, 15 * 60))
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(100)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .imageDownloader(new BaseImageDownloader(getApplicationContext()))
+                .defaultDisplayImageOptions(options)
+                .writeDebugLogs()
+                .build();
 
-
-
+        ImageLoader.getInstance().init(config);
     }
 
     @Override
@@ -240,8 +288,12 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         couponFragment = new CouponFragment();
         userFragment = new UserFragment();
         myCouponFragment = new MyCouponFragment();
+        nearbyStoreFragment = new NearbyStoreFragment();
 
+        numberProgressBar = (NumberProgressBar) findViewById(R.id.number_progress_bar);
 
+        numberProgressBar.setProgressTextColor(getResources().getColor(R.color.green));
+        numberProgressBar.setReachedBarColor(getResources().getColor(R.color.green));
 
         clickEventHandler = new ClickEventHandler();
 
@@ -294,12 +346,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         invoiceMenuBtn = (LinearLayout) findViewById(R.id.invoice_menu_btn);
         couponMenuBtn = (LinearLayout) findViewById(R.id.coupon_menu_btn);
         myCouponMenuBtn = (LinearLayout) findViewById(R.id.my_coupon_menu_btn);
+        nearbyStoreMenuBtn = (LinearLayout) findViewById(R.id.nearby_store_menu_btn);
         settingMenuBtn = (LinearLayout) findViewById(R.id.my_acount_menu_btn);
         logoutMenuBtn = (LinearLayout) findViewById(R.id.logout_menu_btn);
 
         invoiceMenuBtn.setOnClickListener(clickEventHandler);
         couponMenuBtn.setOnClickListener(clickEventHandler);
         myCouponMenuBtn.setOnClickListener(clickEventHandler);
+        nearbyStoreMenuBtn.setOnClickListener(clickEventHandler);
         settingMenuBtn.setOnClickListener(clickEventHandler);
         logoutMenuBtn.setOnClickListener(clickEventHandler);
     }
@@ -488,10 +542,14 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
 
         if(!userInfoManager.getUserName().equals("")) {
             userName.setText("Hello, " + userInfoManager.getUserName());
-            welcome.setText("歡迎使用iBonus");
+            welcome.setText("歡迎使用iBonus\n" + "你現在是 環保小尖兵 lv. 10\n");
+            numberProgressBar.setVisibility(View.VISIBLE);
+            numberProgressBar.setProgress(userInfoManager.getExperience());
+
         } else {
             userName.setText("遊客");
             welcome.setText("按此登入");
+            numberProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -559,6 +617,17 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                     }
                     break;
 
+                case R.id.nearby_store_menu_btn:
+                    Drawer.closeDrawers();
+                    if(SessionManager.hasAttribute()) {
+                        switchFragment(nearbyStoreFragment);
+                        title.setText("周邊綠色商店");
+                        toolbar.setElevation(8);
+                    } else {
+                        Toast.makeText(getApplication(), "尚未登入", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+
                 case R.id.my_acount_menu_btn:
                     Drawer.closeDrawers();
                     if(SessionManager.hasAttribute()) {
@@ -592,5 +661,4 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
             }
         }
     }
-
 }

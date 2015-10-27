@@ -36,4 +36,6 @@
 
     <string name="indicator_divider_color">#cfd8dc</string>
 
+    <string name="google_map_api_key">AIzaSyDCTIkEmapzrVjeauUvF3TipGmt5yH6ucs</string>
+
 </resources>

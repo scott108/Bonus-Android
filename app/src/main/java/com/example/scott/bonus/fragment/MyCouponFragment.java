@@ -1,6 +1,9 @@
 package com.example.scott.bonus.fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.scott.bonus.MainActivity;
@@ -17,6 +21,7 @@ import com.example.scott.bonus.itemanimator.CustomItemAnimator;
 import com.example.scott.bonus.sqlite.entity.CouponItem;
 import com.example.scott.bonus.utility.ApiType;
 import com.google.gson.JsonObject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -28,6 +33,7 @@ public class MyCouponFragment extends Fragment {
     private MainActivity mainActivity;
     private RecyclerView mRecyclerView;
     private CouponAdapter mAdapter;
+    private TextView mHintTextView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -50,7 +56,17 @@ public class MyCouponFragment extends Fragment {
 
                 viewHolder.getBnp().setVisibility(View.GONE);
 
-                viewHolder.getImage().setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.gift));
+                if (couponItem.getStoreName().equals("7-11")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.citycafe, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("全家便利商店")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.familymartcoupon, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("萊爾富超商")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.lirfo, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("大買家")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.damija, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("星巴克")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.startbucks, viewHolder.getImage());
+                }
 
                 viewHolder.getCardViewItemLayout().setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -60,6 +76,7 @@ public class MyCouponFragment extends Fragment {
                 });
             }
         };
+        mHintTextView = (TextView) layout.findViewById(R.id.hintTextView);
 
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycleList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
@@ -86,12 +103,23 @@ public class MyCouponFragment extends Fragment {
         numberProgressBar.setReachedBarColor(color);
     }
 
+    private Drawable resize(Drawable image) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 300, 300, false);
+        return new BitmapDrawable(mainActivity.getResources(), bitmapResized);
+    }
+
     private void getAllMyCoupon() {
         mAdapter.getCoupons().clear();
         mAdapter.addApplications(mainActivity.getCouponDAO().getAll());
         mAdapter.notifyDataSetChanged();
+
+        if(mAdapter.getCoupons().size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mHintTextView.setVisibility(View.GONE);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mHintTextView.setVisibility(View.VISIBLE);
+        }
     }
-
-
-
 }

@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -26,7 +27,20 @@ import com.example.scott.bonus.itemanimator.CustomItemAnimator;
 import com.example.scott.bonus.sqlite.entity.CouponItem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LimitedAgeMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +60,11 @@ public class CouponFragment extends Fragment{
     private List<CouponItem> applicationList = new ArrayList<CouponItem>();
     private CouponAdapter mAdapter;
     private TextView userBonusTextView;
+    private ProgressBar progressBar;
 
     private int currentBonus = 0;
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -87,7 +104,18 @@ public class CouponFragment extends Fragment{
                     setProgressBarColor(viewHolder.getBnp(), mainActivity.getResources().getColor(R.color.red));
                 }
 
-                viewHolder.getImage().setImageDrawable(resize(mainActivity.getResources().getDrawable(R.drawable.gift)));
+                if (couponItem.getStoreName().equals("7-11")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.citycafe, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("全家便利商店")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.familymartcoupon, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("萊爾富超商")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.lirfo, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("大買家")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.damija, viewHolder.getImage());
+                } else if (couponItem.getStoreName().equals("星巴克")) {
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.startbucks, viewHolder.getImage());
+                }
+
 
                 viewHolder.getBnp().setProgress(progress);
 
@@ -99,7 +127,7 @@ public class CouponFragment extends Fragment{
                 });
             }
         };
-
+        progressBar = (ProgressBar) layout.findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycleList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
@@ -107,8 +135,6 @@ public class CouponFragment extends Fragment{
 
         userBonusTextView = (TextView) layout.findViewById(R.id.userBonusTextView);
         userBonusTextView.setText(UserInfoManager.getInstance().getBonus() + "");
-
-        new InitializeApplicationsTask().execute();
 
         swipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setColorSchemeColors(mainActivity.getResources().getColor(R.color.primary));
@@ -119,6 +145,8 @@ public class CouponFragment extends Fragment{
                 new InitializeApplicationsTask().execute();
             }
         });
+
+        new InitializeApplicationsTask().execute();
 
         return layout;
     }
@@ -194,6 +222,8 @@ public class CouponFragment extends Fragment{
                     }
                     //set data for list
                     mAdapter.addApplications(applicationList);
+                    progressBar.setVisibility(View.GONE);
+
                     swipeRefreshLayout.setRefreshing(false);
                     setCurrentBonus(UserInfoManager.getInstance().getBonus());
                 }

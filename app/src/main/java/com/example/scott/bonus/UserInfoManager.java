@@ -9,6 +9,7 @@ public class UserInfoManager {
     private static String userName = "";
     private static int bonus = 0;
     private static UserInfoManager userInfoManager = new UserInfoManager();
+    private static int experience = 0;
 
     private UserInfoManager() {
 
@@ -46,5 +47,13 @@ public class UserInfoManager {
 
     public void setBonus(int bonus) {
         UserInfoManager.bonus = bonus;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        UserInfoManager.experience = experience;
     }
 }

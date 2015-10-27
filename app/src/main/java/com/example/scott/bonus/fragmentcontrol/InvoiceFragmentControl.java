@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
@@ -30,6 +35,7 @@ import com.example.scott.bonus.sqlite.entity.InvoiceItem;
 import com.example.scott.bonus.utility.BackgroundLoginTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,15 +56,17 @@ public class InvoiceFragmentControl {
     private MainActivity mainActivity;
     private ArrayList<String> tempInvoiceList;
     private Dialog invoiceDetailDialog;
+
     int width;
     int height;
+    private static final int MESSAGE_RECEIVE = 0;
 
     private InvoiceAdapter isNotExchangedInvoiceAdapter = new InvoiceAdapter() {
         @Override
         protected View getTitleView(String title, int index, View convertView, ViewGroup parent) {
             TextView titleView;
 
-            titleView = (TextView)mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
+            titleView = (TextView) mainActivity.getLayoutInflater().inflate(R.layout.invoice_list_group_item, null);
 
             titleView.setText(title);
 
@@ -85,13 +93,12 @@ public class InvoiceFragmentControl {
                 ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
 
                 if(jsonObject.getString("店名").equals("7-ELEVEN")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.seven)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.seven, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("全聯福利中心")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.px)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.px, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("FamilyMart")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.family)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.family, invoiceIcon);
                 }
-
 
                 TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
                 touchCheckBox.setCircleColor(mainActivity.getResources().getColor(R.color.primary));
@@ -138,11 +145,11 @@ public class InvoiceFragmentControl {
                 ImageView invoiceIcon = (ImageView) listItem.findViewById(R.id.invoice_icon);
 
                 if(jsonObject.getString("店名").equals("7-ELEVEN")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.seven)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.seven, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("全聯福利中心")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.px)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.px, invoiceIcon);
                 } else if(jsonObject.getString("店名").equals("FamilyMart")) {
-                    invoiceIcon.setImageDrawable(resize(mainActivity.getDrawable(R.drawable.family)));
+                    ImageLoader.getInstance().displayImage("drawable://" + R.drawable.family, invoiceIcon);
                 }
 
                 TouchCheckBox touchCheckBox = (TouchCheckBox) listItem.findViewById(R.id.checkbox);
@@ -179,6 +186,7 @@ public class InvoiceFragmentControl {
         width=dm.widthPixels;
         height=dm.heightPixels;
         invoiceDetailDialog = new Dialog(mainActivity);
+
         //invoiceDetailDialog.getWindow().setLayout(width, height);
 
         //get invoice data to add into listView
@@ -327,6 +335,7 @@ public class InvoiceFragmentControl {
         }
     }
 
+
     class GetBonusTask extends AsyncTask<String, Integer, String> {
 
         @Override
@@ -339,6 +348,7 @@ public class InvoiceFragmentControl {
                     System.out.println(jsonObject);
                     if(jsonObject.get("response").getAsString().equals("true")) {
                         UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
+                        UserInfoManager.getInstance().setExperience(UserInfoManager.getInstance().getExperience() + 3);
 
                         EventBus.getDefault().post(UserInfoManager.getInstance());
                         Gson gson = new Gson();
@@ -353,6 +363,7 @@ public class InvoiceFragmentControl {
 
                         invoiceDetailDialog.dismiss();
                         Toast.makeText(mainActivity, "兌換成功", Toast.LENGTH_LONG).show();
+
                     } else if(jsonObject.get("response").getAsString().equals("fail")){
                         invoiceDetailDialog.dismiss();
                         Toast.makeText(mainActivity, "兌換失敗", Toast.LENGTH_LONG).show();
