@@ -337,12 +337,13 @@ public class InvoiceFragmentControl {
 
 
     class GetBonusTask extends AsyncTask<String, Integer, String> {
-
+        String param;
+        int position;
         @Override
         protected String doInBackground(String... params) {
-            final String param = params[0];
-            final int position = Integer.valueOf(params[1]);
-            API.getInstance().getHttp().getBonus(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
+            param = params[0];
+            position = Integer.valueOf(params[1]);
+            /*API.getInstance().getHttp().getBonus(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
                     System.out.println(jsonObject);
@@ -384,8 +385,29 @@ public class InvoiceFragmentControl {
                 public void failure(RetrofitError error) {
 
                 }
-            });
+            });*/
+
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String r) {
+            UserInfoManager.getInstance().setBonus(UserInfoManager.getInstance().getBonus() + 100);
+            UserInfoManager.getInstance().setExperience(UserInfoManager.getInstance().getExperience() + 3);
+
+            EventBus.getDefault().post(UserInfoManager.getInstance());
+            Gson gson = new Gson();
+            InvoiceItem invoiceItem  = gson.fromJson(param, InvoiceItem.class);
+            invoiceItem.setIsExchanged(1);
+            boolean result = mainActivity.getInvoiceDAO().update(invoiceItem);
+
+            String isExchangedInvoice = isNotExchangedInvoiceAdapter.removeInvoice(position);
+            isNotExchangedInvoiceAdapter.notifyDataSetChanged();
+
+            addIntoIsExchangedList(isExchangedInvoice);
+
+            invoiceDetailDialog.dismiss();
+            Toast.makeText(mainActivity, "兌換成功", Toast.LENGTH_LONG).show();
         }
     }
 }

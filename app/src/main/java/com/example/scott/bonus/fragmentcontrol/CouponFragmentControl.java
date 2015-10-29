@@ -152,7 +152,7 @@ public class CouponFragmentControl {
 
         @Override
         protected String doInBackground(String... params) {
-            API.getInstance().getHttp().getCoupon(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
+            /*API.getInstance().getHttp().getCoupon(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
                     System.out.println(jsonObject);
@@ -177,8 +177,31 @@ public class CouponFragmentControl {
                 public void failure(RetrofitError error) {
 
                 }
-            });
+            });*/
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String r) {
+            UserInfoManager.getInstance().setBonus(UserInfoManager.getInstance().getBonus() - 3000);
+
+            CouponItem couponItem = new CouponItem();
+            couponItem.setCouponID(Math.round(Math.random()* 9999) + Math.round(Math.random()* 9999) + "");
+            couponItem.setStoreName("7-11");
+            couponItem.setCouponName("飲料買一送一");
+            couponItem.setCouponContent("來電任意飲料買一送一");
+            couponItem.setImageUrl("");
+            couponItem.setCouponBonus(3000);
+            couponItem.setStartTime("2015/10/01");
+            couponItem.setEndTime("2016/10/01");
+
+            mainActivity.getCouponDAO().insert(couponItem);
+
+            EventBus.getDefault().post(UserInfoManager.getInstance());
+
+            Toast.makeText(mainActivity.getApplication(), "兌換成功", Toast.LENGTH_LONG).show();
+
+            couponDetailDialog.dismiss();
         }
     }
 }

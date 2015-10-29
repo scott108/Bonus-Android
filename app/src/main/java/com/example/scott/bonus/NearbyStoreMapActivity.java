@@ -1,6 +1,8 @@
 package com.example.scott.bonus;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -200,8 +202,13 @@ public class NearbyStoreMapActivity extends FragmentActivity {
 
     // 在地圖加入指定位置與標題的標記
     private void addMarker(LatLng place, String title, String snippet) {
-        BitmapDescriptor icon =
-                BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher);
+        BitmapDescriptor icon;
+        if(title.equals("I am here.")) {
+            icon = BitmapDescriptorFactory.fromBitmap(resizeMapIcons("user", 100, 150));
+        } else {
+            icon = BitmapDescriptorFactory.fromBitmap(resizeMapIcons("shop", 100, 100));
+        }
+
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(place)
@@ -210,6 +217,12 @@ public class NearbyStoreMapActivity extends FragmentActivity {
                 .icon(icon);
 
         mMap.addMarker(markerOptions);
+    }
+
+    public Bitmap resizeMapIcons(String iconName,int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {

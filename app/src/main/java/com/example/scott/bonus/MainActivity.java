@@ -538,7 +538,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         }
     }
 
-    public void onEvent(UserInfoManager userInfoManager) {
+    public void onEventMainThread(UserInfoManager userInfoManager) {
 
         if(!userInfoManager.getUserName().equals("")) {
             userName.setText("Hello, " + userInfoManager.getUserName());

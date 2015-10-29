@@ -40,6 +40,10 @@ import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -164,12 +168,6 @@ public class CouponFragment extends Fragment{
         EventBus.getDefault().unregister(this);
     }
 
-    private Drawable resize(Drawable image) {
-        Bitmap b = ((BitmapDrawable)image).getBitmap();
-        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 300, 300, false);
-        return new BitmapDrawable(mainActivity.getResources(), bitmapResized);
-    }
-
     private void setProgressBarColor(NumberProgressBar numberProgressBar, int color) {
         numberProgressBar.setProgressTextColor(color);
         numberProgressBar.setReachedBarColor(color);
@@ -198,13 +196,13 @@ public class CouponFragment extends Fragment{
         @Override
         protected Void doInBackground(Void... params) {
             applicationList.clear();
-            API.getInstance().getHttp().getAllCoupon(new Callback<JsonArray>() {
+            /*API.getInstance().getHttp().getAllCoupon(new Callback<JsonArray>() {
                 @Override
                 public void success(JsonArray jsonElements, Response response) {
 
                     for (int i = 0; i < jsonElements.size(); i++) {
                         System.out.println(jsonElements.get(i));
-                        JsonObject jsonObject = (JsonObject)jsonElements.get(i);
+                        JsonObject jsonObject = (JsonObject) jsonElements.get(i);
                         final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
                         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                         CouponItem couponItem = new CouponItem();
@@ -232,9 +230,109 @@ public class CouponFragment extends Fragment{
                 public void failure(RetrofitError error) {
 
                 }
-            });
+            });*/
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void r) {
+
+            JSONObject jsonObject1 = new JSONObject();
+            JSONObject jsonObject2 = new JSONObject();
+            JSONObject jsonObject3 = new JSONObject();
+            JSONObject jsonObject4 = new JSONObject();
+            JSONObject jsonObject5 = new JSONObject();
+
+            try {
+                jsonObject1.put("couponID", "1");
+                jsonObject1.put("storeName", "7-11");
+                jsonObject1.put("couponName", "美式咖啡買一送一");
+                jsonObject1.put("couponContent", "美式咖啡買一送一");
+                jsonObject1.put("couponImgUrl", "");
+                jsonObject1.put("couponBonus", "5000");
+                jsonObject1.put("startTime", "2015/10/01");
+                jsonObject1.put("endTime", "2016/10/01");
+
+                jsonObject2.put("couponID", "2");
+                jsonObject2.put("storeName", "全家便利商店");
+                jsonObject2.put("couponName", "咖啡優惠卷");
+                jsonObject2.put("couponContent", "美式咖啡買一送一 OR 任意咖啡第二件五折");
+                jsonObject2.put("couponImgUrl", "");
+                jsonObject2.put("couponBonus", "5000");
+                jsonObject2.put("startTime", "2015/10/01");
+                jsonObject2.put("endTime", "2016/10/01");
+
+                jsonObject3.put("couponID", "3");
+                jsonObject3.put("storeName", "萊爾富超商");
+                jsonObject3.put("couponName", "超商優惠卷");
+                jsonObject3.put("couponContent", "蘋果牛奶買一送一");
+                jsonObject3.put("couponImgUrl", "");
+                jsonObject3.put("couponBonus", "3000");
+                jsonObject3.put("startTime", "2015/10/01");
+                jsonObject3.put("endTime", "2016/10/01");
+
+                jsonObject4.put("couponID", "4");
+                jsonObject4.put("storeName", "大買家");
+                jsonObject4.put("couponName", "各式商品優惠");
+                jsonObject4.put("couponContent", "各式商品優惠");
+                jsonObject4.put("couponImgUrl", "");
+                jsonObject4.put("couponBonus", "7000");
+                jsonObject4.put("startTime", "2015/10/01");
+                jsonObject4.put("endTime", "2016/10/01");
+
+                jsonObject5.put("couponID", "5");
+                jsonObject5.put("storeName", "星巴克");
+                jsonObject5.put("couponName", "星冰樂買一送一");
+                jsonObject5.put("couponContent", "任意口味星冰樂買一送一");
+                jsonObject5.put("couponImgUrl", "");
+                jsonObject5.put("couponBonus", "10000");
+                jsonObject5.put("startTime", "2015/10/01");
+                jsonObject5.put("endTime", "2016/10/01");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(jsonObject1);
+            jsonArray.put(jsonObject2);
+            jsonArray.put(jsonObject3);
+            jsonArray.put(jsonObject4);
+            jsonArray.put(jsonObject5);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = jsonArray.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                CouponItem couponItem = new CouponItem();
+                try {
+                    couponItem.setCouponID(jsonObject.get("couponID").toString());
+                    couponItem.setStoreName(jsonObject.get("storeName").toString());
+                    couponItem.setCouponName(jsonObject.get("couponName").toString());
+                    couponItem.setCouponContent(jsonObject.get("couponContent").toString());
+                    couponItem.setImageUrl(jsonObject.get("couponImgUrl").toString());
+                    couponItem.setCouponBonus(Integer.valueOf(jsonObject.get("couponBonus").toString()));
+                    couponItem.setStartTime(jsonObject.get("startTime").toString());
+                    couponItem.setEndTime(jsonObject.get("endTime").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                applicationList.add(couponItem);
+
+            }
+            //set data for list
+            mAdapter.addApplications(applicationList);
+            progressBar.setVisibility(View.GONE);
+
+            swipeRefreshLayout.setRefreshing(false);
+            setCurrentBonus(UserInfoManager.getInstance().getBonus());
         }
     }
 

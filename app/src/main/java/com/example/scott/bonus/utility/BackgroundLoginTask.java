@@ -27,8 +27,8 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, Boolean> {
     protected Boolean doInBackground(String... params) {
 
         if(!params[0].equals("") && !params[1].equals("")) {
-
-            API.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
+            result = true;
+            /*API.getInstance().getHttp().userLogin(params[0], params[1], new Callback<JsonObject>() {
                @Override
                public void success(JsonObject jsonObject, Response response) {
                    result = jsonObject.get("response").getAsBoolean();
@@ -52,18 +52,34 @@ public class BackgroundLoginTask extends AsyncTask<String, Integer, Boolean> {
                public void failure(RetrofitError error) {
 
                }
-           });
+           });*/
         }
         return result;
     }
 
     @Override
-    protected void onProgressUpdate(Integer... progress) {
-
-    }
-
-    @Override
     protected void onPostExecute(Boolean result) {
 
+        JsonObject jsonObject = new JsonObject();
+
+        if (result) {
+            SessionManager.setAttribute(true);
+
+            jsonObject.addProperty("name", "Scott");
+            jsonObject.addProperty("email", "as2584327@gmail.com");
+            jsonObject.addProperty("password", "asdf123");
+            jsonObject.addProperty("bonus", 10000000);
+            jsonObject.addProperty("type", ApiType.LOGIN);
+            jsonObject.addProperty("response", "true");
+
+            UserInfoManager.getInstance().setUserName(jsonObject.get("name").getAsString());
+            UserInfoManager.getInstance().setEmail(jsonObject.get("email").getAsString());
+            UserInfoManager.getInstance().setBonus(jsonObject.get("bonus").getAsInt());
+
+            EventBus.getDefault().post(UserInfoManager.getInstance());
+        } else {
+            SessionManager.setAttribute(false);
+        }
+        EventBus.getDefault().post(jsonObject);
     }
 }

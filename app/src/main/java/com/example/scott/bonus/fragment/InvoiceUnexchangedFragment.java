@@ -30,8 +30,6 @@ public class InvoiceUnExchangedFragment extends Fragment {
     InvoiceAdapter invoiceAdapter;
     TextView invoiceUnExchangedTextView;
 
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -73,7 +71,6 @@ public class InvoiceUnExchangedFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
