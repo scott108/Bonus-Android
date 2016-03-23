@@ -111,6 +111,7 @@ public class CouponFragmentControl {
         TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
         Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
         ImageView couponImage = (ImageView) couponDetailDialog.findViewById(R.id.coupon_image);
+        couponExchangeBbutton.setText("使用優惠券");
 
         couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
         couponID.setText("品號 : " + "coupon_" + couponItem.getCouponID());
