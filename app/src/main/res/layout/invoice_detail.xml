@@ -119,6 +119,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/invoice_exchange_button"
             android:layout_gravity="center"
-            android:text="兌換"/>
+            android:text="兌換紅利"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/invoice_verify_button"
+            android:layout_gravity="center"
+            android:text="驗證發票"/>
     </LinearLayout>
 </ScrollView>

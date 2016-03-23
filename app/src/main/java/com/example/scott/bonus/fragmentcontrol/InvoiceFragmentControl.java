@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.example.scott.bonus.UserInfoManager;
 import com.example.scott.bonus.customcheckbox.TouchCheckBox;
 import com.example.scott.bonus.fragmentcontrol.entities.InvoiceInfo;
 import com.example.scott.bonus.fragmentcontrol.invoiceAdapter.InvoiceAdapter;
+import com.example.scott.bonus.rsa.RSA;
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sqlite.entity.InvoiceGoodsItem;
 import com.example.scott.bonus.sqlite.entity.InvoiceItem;
@@ -40,6 +42,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -317,8 +321,35 @@ public class InvoiceFragmentControl {
             invoiceDetailDialog.getWindow().setAttributes(params);
 
             Button send = (Button) invoiceDetailDialog.findViewById(R.id.invoice_exchange_button);
+            Button verify = (Button) invoiceDetailDialog.findViewById(R.id.invoice_verify_button);
+
+            verify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String invoiceContent = invoiceItem.getStoreName() + invoiceItem.getDeadline() + invoiceItem.getInvoiceNum() +
+                            invoiceItem.getCurrentTime() + invoiceItem.getStoreNum() + invoiceItem.getStorePhone() +
+                            invoiceItem.getGoodsHash() + invoiceItem.getGoodsQuantity() + invoiceItem.getTotalMoney() +
+                            invoiceItem.getPayDetail() + invoiceItem.getPayBack();
+                    byte[] sign = Base64.decode(invoiceItem.getSignature(), Base64.DEFAULT);
+
+                    final BigInteger modulus = new BigInteger("143854915996257127934881054745501985707406774855370276858724537089683610417734462144878408350385351936928074881758294135729179360855649990564573120807132735483900454934423182320371509048850680540170791226428301729715812898784678966973762034475582944989766417228246806000963630333109717268688718033060706449657");
+
+                    final BigInteger publicExponent = new BigInteger("65537");
+                    RSAPublicKey publicKey = RSA.getPublicKey(modulus, publicExponent);
+
+                    boolean result = RSA.verify(invoiceContent, sign, publicKey);
+                    if (result) {
+                        Toast.makeText(mainActivity, "簽章：" + '\n' + invoiceItem.getSignature() + '\n' + "驗證結果：驗證成功", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(mainActivity, "簽章：" + '\n' + invoiceItem.getSignature() + '\n' + "驗證結果：驗證失敗", Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+            });
+
             if(invoiceItem.getIsExchanged() == 1) {
-                send.setVisibility(View.INVISIBLE);
+                send.setVisibility(View.GONE);
             } else {
                 send.setOnClickListener(new View.OnClickListener() {
                     @Override
