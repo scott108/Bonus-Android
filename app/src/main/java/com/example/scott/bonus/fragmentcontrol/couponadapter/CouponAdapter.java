@@ -76,7 +76,7 @@ public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.V
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView couponName, deadline, couponBonus;
+        private TextView couponName, deadline, couponBonus, isUsed;
         private ImageView image;
         private NumberProgressBar bnp;
 
@@ -102,10 +102,15 @@ public abstract class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.V
             return bnp;
         }
 
+        public TextView getIsUsed() {
+            return isUsed;
+        }
+
         public ViewHolder(final View itemView) {
             super(itemView);
             couponName = (TextView) itemView.findViewById(R.id.coupon_name);
             couponBonus = (TextView) itemView.findViewById(R.id.couponBonus);
+            isUsed = (TextView) itemView.findViewById(R.id.isUsed);
             bnp = (NumberProgressBar) itemView.findViewById(R.id.number_progress_bar);
 
             image = (ImageView) itemView.findViewById(R.id.countryImage);

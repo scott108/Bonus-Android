@@ -52,6 +52,16 @@ public class MyCouponFragment extends Fragment {
                 final CouponItem couponItem = getCoupons().get(i);
 
                 viewHolder.getCouponName().setText(couponItem.getStoreName() + "\n" + couponItem.getCouponName());
+                if(couponItem.getIsUsed() == 0) {
+                    viewHolder.getIsUsed().setText("未使用");
+                    viewHolder.getIsUsed().setTextColor(mainActivity.getResources().getColor(R.color.green));
+                } else {
+                    viewHolder.getIsUsed().setText("已使用");
+                    viewHolder.getIsUsed().setTextColor(mainActivity.getResources().getColor(R.color.red));
+                }
+
+                viewHolder.getIsUsed().setVisibility(View.VISIBLE);
+
                 viewHolder.getCouponBonus().setVisibility(View.GONE);
 
                 viewHolder.getBnp().setVisibility(View.GONE);

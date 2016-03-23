@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.interfaces.RSAPublicKey;
 
@@ -115,14 +116,15 @@ public class CouponFragmentControl {
         TextView couponName = (TextView) couponDetailDialog.findViewById(R.id.couponNameTextView);
         TextView couponID = (TextView) couponDetailDialog.findViewById(R.id.couponIDTextView);
         TextView couponContent = (TextView) couponDetailDialog.findViewById(R.id.couponContentTextView);
-        final TextView couponBonus = (TextView) couponDetailDialog.findViewById(R.id.couponBonusTextView);
+        TextView couponBonus = (TextView) couponDetailDialog.findViewById(R.id.couponBonusTextView);
         TextView startTime = (TextView) couponDetailDialog.findViewById(R.id.startTimeTextView);
         TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
         Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
         Button couponVerifyBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_verify_button);
         ImageView couponImage = (ImageView) couponDetailDialog.findViewById(R.id.coupon_image);
 
-        couponVerifyBbutton.setVisibility(View.VISIBLE);
+        couponVerifyBbutton.setVisibility(View.GONE);
+
         couponExchangeBbutton.setText("使用優惠券");
 
         couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
@@ -147,7 +149,15 @@ public class CouponFragmentControl {
         couponExchangeBbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String couponString = gson.toJson(couponItem);
+                String base64String = null;
+                try {
+                    base64String = Base64.encodeToString(couponString.getBytes("UTF-8"), Base64.DEFAULT);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                byte[] couponByte = Base64.decode(base64String, Base64.DEFAULT);
+                mainActivity.setNfcMessage(couponByte);
             }
         });
 
