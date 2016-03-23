@@ -65,6 +65,10 @@ public class InvoiceFragmentControl {
     int height;
     private static final int MESSAGE_RECEIVE = 0;
 
+    final BigInteger modulus = new BigInteger("143854915996257127934881054745501985707406774855370276858724537089683610417734462144878408350385351936928074881758294135729179360855649990564573120807132735483900454934423182320371509048850680540170791226428301729715812898784678966973762034475582944989766417228246806000963630333109717268688718033060706449657");
+    final BigInteger publicExponent = new BigInteger("65537");
+    RSAPublicKey publicKey = RSA.getPublicKey(modulus, publicExponent);
+
     private InvoiceAdapter isNotExchangedInvoiceAdapter = new InvoiceAdapter() {
         @Override
         protected View getTitleView(String title, int index, View convertView, ViewGroup parent) {
@@ -331,11 +335,6 @@ public class InvoiceFragmentControl {
                             invoiceItem.getGoodsHash() + invoiceItem.getGoodsQuantity() + invoiceItem.getTotalMoney() +
                             invoiceItem.getPayDetail() + invoiceItem.getPayBack();
                     byte[] sign = Base64.decode(invoiceItem.getSignature(), Base64.DEFAULT);
-
-                    final BigInteger modulus = new BigInteger("143854915996257127934881054745501985707406774855370276858724537089683610417734462144878408350385351936928074881758294135729179360855649990564573120807132735483900454934423182320371509048850680540170791226428301729715812898784678966973762034475582944989766417228246806000963630333109717268688718033060706449657");
-
-                    final BigInteger publicExponent = new BigInteger("65537");
-                    RSAPublicKey publicKey = RSA.getPublicKey(modulus, publicExponent);
 
                     boolean result = RSA.verify(invoiceContent, sign, publicKey);
                     if (result) {

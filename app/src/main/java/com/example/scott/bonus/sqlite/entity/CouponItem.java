@@ -12,7 +12,16 @@ public class CouponItem {
     private String endTime;
     private String imageUrl;
     private int couponBonus;
+    private String signature;
     private int isUsed = 0;
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
 
     public String getCouponID() {
         return couponID;

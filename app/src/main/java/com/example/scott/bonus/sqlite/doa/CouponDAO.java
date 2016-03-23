@@ -27,6 +27,7 @@ public class CouponDAO {
     public static final String COUPONBONUS_COLUMN = "coupon_bonus";
     public static final String STARTTIME_COLUMN = "start_time";
     public static final String ENDTIME_COLUMN = "end_time";
+    public static final String SIGNATURE_COLUMN = "coupon_signature";
     public static final String ISUSED_COLUMN = "is_used";
 
     // 使用上面宣告的變數建立表格的SQL指令
@@ -39,7 +40,8 @@ public class CouponDAO {
                     IMAGEURL_COLUMN + " TEXT NOT NULL, " +
                     COUPONBONUS_COLUMN + " INTEGER NOT NULL, " +
                     STARTTIME_COLUMN + " TEXT NOT NULL, " +
-                    ENDTIME_COLUMN + " TEXT NOT NULL," +
+                    ENDTIME_COLUMN + " TEXT NOT NULL, " +
+                    SIGNATURE_COLUMN + " TEXT NOT NULL, " +
                     ISUSED_COLUMN + " INTEGER DEFAULT 0)";
 
     // 資料庫物件
@@ -70,6 +72,7 @@ public class CouponDAO {
         cv.put(COUPONBONUS_COLUMN, couponItem.getCouponBonus());
         cv.put(STARTTIME_COLUMN, couponItem.getStartTime());
         cv.put(ENDTIME_COLUMN, couponItem.getEndTime());
+        cv.put(SIGNATURE_COLUMN, couponItem.getSignature());
 
         // 第一個參數是表格名稱
         // 第二個參數是沒有指定欄位值的預設值
@@ -95,6 +98,7 @@ public class CouponDAO {
         cv.put(COUPONBONUS_COLUMN, couponItem.getCouponBonus());
         cv.put(STARTTIME_COLUMN, couponItem.getStartTime());
         cv.put(ENDTIME_COLUMN, couponItem.getEndTime());
+        cv.put(SIGNATURE_COLUMN, couponItem.getSignature());
         cv.put(ISUSED_COLUMN, couponItem.getIsUsed());
 
         // 設定修改資料的條件為編號
@@ -162,7 +166,8 @@ public class CouponDAO {
         result.setCouponBonus(cursor.getInt(5));
         result.setStartTime(cursor.getString(6));
         result.setEndTime(cursor.getString(7));
-        result.setIsUsed(cursor.getInt(8));
+        result.setSignature(cursor.getString(8));
+        result.setIsUsed(cursor.getInt(9));
 
         // 回傳結果
         return result;

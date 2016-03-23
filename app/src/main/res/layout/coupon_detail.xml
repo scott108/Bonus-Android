@@ -70,6 +70,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/coupon_exchange_button"
             android:layout_gravity="center"
-            android:text="兌換"/>
+            android:text="兌換優惠券"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/coupon_verify_button"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text="驗證優惠券"/>
     </LinearLayout>
 </ScrollView>

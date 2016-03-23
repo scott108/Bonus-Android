@@ -2,6 +2,7 @@ package com.example.scott.bonus.fragmentcontrol;
 
 import android.app.Dialog;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,12 +15,16 @@ import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
+import com.example.scott.bonus.rsa.RSA;
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sqlite.entity.CouponItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+
+import java.math.BigInteger;
+import java.security.interfaces.RSAPublicKey;
 
 import de.greenrobot.event.EventBus;
 import retrofit.Callback;
@@ -36,6 +41,10 @@ public class CouponFragmentControl {
     int width;
     int height;
     Gson gson = new Gson();
+
+    final BigInteger modulus = new BigInteger("107241757999324904109676237233998063372282760155581141342752413692887583048814821221030706707167921452158792708120548149058657917192427214697842032427487630966828799686728050147100820423608156536978307513903790660036654957441997168808342303029956119479061610128933276777366502321051631391540621213726816239821");
+    final BigInteger publicExponent = new BigInteger("65537");
+    RSAPublicKey publicKey = RSA.getPublicKey(modulus, publicExponent);
 
     public CouponFragmentControl(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -106,11 +115,14 @@ public class CouponFragmentControl {
         TextView couponName = (TextView) couponDetailDialog.findViewById(R.id.couponNameTextView);
         TextView couponID = (TextView) couponDetailDialog.findViewById(R.id.couponIDTextView);
         TextView couponContent = (TextView) couponDetailDialog.findViewById(R.id.couponContentTextView);
-        TextView couponBonus = (TextView) couponDetailDialog.findViewById(R.id.couponBonusTextView);
+        final TextView couponBonus = (TextView) couponDetailDialog.findViewById(R.id.couponBonusTextView);
         TextView startTime = (TextView) couponDetailDialog.findViewById(R.id.startTimeTextView);
         TextView endTime = (TextView) couponDetailDialog.findViewById(R.id.endTimeTextView);
         Button couponExchangeBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_exchange_button);
+        Button couponVerifyBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_verify_button);
         ImageView couponImage = (ImageView) couponDetailDialog.findViewById(R.id.coupon_image);
+
+        couponVerifyBbutton.setVisibility(View.VISIBLE);
         couponExchangeBbutton.setText("使用優惠券");
 
         couponName.setText(couponItem.getStoreName() + " " + couponItem.getCouponName());
@@ -136,6 +148,24 @@ public class CouponFragmentControl {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        couponVerifyBbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String couponContent = couponItem.getCouponID() + couponItem.getCouponName() + couponItem.getCouponContent() + couponItem.getStoreName() +
+                        couponItem.getCouponBonus() + couponItem.getStartTime() + couponItem.getEndTime();
+
+                byte[] sign = Base64.decode(couponItem.getSignature(), Base64.DEFAULT);
+
+                boolean result = RSA.verify(couponContent, sign, publicKey);
+                if (result) {
+                    Toast.makeText(mainActivity, "簽章：" + '\n' + couponItem.getSignature() + '\n' + "驗證結果：驗證成功", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mainActivity, "簽章：" + '\n' + couponItem.getSignature() + '\n' + "驗證結果：驗證失敗", Toast.LENGTH_LONG).show();
+
+                }
             }
         });
 
