@@ -123,7 +123,7 @@ public class CouponFragmentControl {
         Button couponVerifyBbutton = (Button) couponDetailDialog.findViewById(R.id.coupon_verify_button);
         ImageView couponImage = (ImageView) couponDetailDialog.findViewById(R.id.coupon_image);
 
-        couponVerifyBbutton.setVisibility(View.GONE);
+        couponVerifyBbutton.setVisibility(View.VISIBLE);
 
         couponExchangeBbutton.setText("使用優惠券");
 
