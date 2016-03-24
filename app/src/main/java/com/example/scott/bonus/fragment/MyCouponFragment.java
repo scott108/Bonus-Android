@@ -25,6 +25,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by Scott on 15/9/28.
  */
@@ -34,6 +36,11 @@ public class MyCouponFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private CouponAdapter mAdapter;
     private TextView mHintTextView;
+
+
+    public CouponAdapter getmAdapter() {
+        return mAdapter;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -104,7 +111,13 @@ public class MyCouponFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
+        mAdapter.notifyDataSetChanged();
+        super.onPause();
+    }
+
+    @Override
+     public void onDestroy() {
         super.onDestroy();
     }
 
@@ -119,7 +132,7 @@ public class MyCouponFragment extends Fragment {
         return new BitmapDrawable(mainActivity.getResources(), bitmapResized);
     }
 
-    private void getAllMyCoupon() {
+    public void getAllMyCoupon() {
         mAdapter.getCoupons().clear();
         mAdapter.addApplications(mainActivity.getCouponDAO().getAll());
         mAdapter.notifyDataSetChanged();

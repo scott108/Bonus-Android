@@ -154,6 +154,10 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         return invoiceDAO;
     }
 
+    public Fragment getMyCouponFragment() {
+        return myCouponFragment;
+    }
+
     public CouponDAO getCouponDAO() {
         return couponDAO;
     }
@@ -269,6 +273,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
     public void onNdefPushComplete(NfcEvent event) {
         System.out.println("Finish Pushed");
         ndefMessage = null;
+        couponFragmentControl.nfcDeliverComplete();
     }
 
     @Override
@@ -335,7 +340,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
     }
 
-    private void switchFragment(Fragment nextFragment) {
+    public void switchFragment(Fragment nextFragment) {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, nextFragment).commit();
 

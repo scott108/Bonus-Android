@@ -15,6 +15,7 @@ import com.example.scott.bonus.API;
 import com.example.scott.bonus.MainActivity;
 import com.example.scott.bonus.R;
 import com.example.scott.bonus.UserInfoManager;
+import com.example.scott.bonus.fragment.MyCouponFragment;
 import com.example.scott.bonus.rsa.RSA;
 import com.example.scott.bonus.session.SessionManager;
 import com.example.scott.bonus.sqlite.entity.CouponItem;
@@ -46,6 +47,8 @@ public class CouponFragmentControl {
     final BigInteger modulus = new BigInteger("107241757999324904109676237233998063372282760155581141342752413692887583048814821221030706707167921452158792708120548149058657917192427214697842032427487630966828799686728050147100820423608156536978307513903790660036654957441997168808342303029956119479061610128933276777366502321051631391540621213726816239821");
     final BigInteger publicExponent = new BigInteger("65537");
     RSAPublicKey publicKey = RSA.getPublicKey(modulus, publicExponent);
+
+    CouponItem couponItemGlobal;
 
     public CouponFragmentControl(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -158,6 +161,8 @@ public class CouponFragmentControl {
                 }
                 byte[] couponByte = Base64.decode(base64String, Base64.DEFAULT);
                 mainActivity.setNfcMessage(couponByte);
+                Toast.makeText(mainActivity, "請靠近POS", Toast.LENGTH_LONG).show();
+                couponItemGlobal = couponItem;
             }
         });
 
@@ -189,8 +194,22 @@ public class CouponFragmentControl {
         couponDetailDialog.getWindow().setAttributes(params);
     }
 
-    class GetCouponTask extends AsyncTask<String, Integer, String> {
+    public void nfcDeliverComplete() {
+        couponItemGlobal.setIsUsed(1);
+        mainActivity.getCouponDAO().update(couponItemGlobal);
 
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                couponDetailDialog.dismiss();
+                MyCouponFragment myCouponFragment = (MyCouponFragment) mainActivity.getSupportFragmentManager().findFragmentById(R.id.frame_content);
+                myCouponFragment.getmAdapter().notifyDataSetChanged();
+            }
+        });
+
+    }
+
+    class GetCouponTask extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
             API.getInstance().getHttp().getCoupon(SessionManager.getSessionID(), params[0], new Callback<JsonObject>() {

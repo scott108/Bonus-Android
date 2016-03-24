@@ -155,7 +155,6 @@ public class CouponFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);
-
     }
 
     @Override
