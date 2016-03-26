@@ -505,7 +505,7 @@ public class MainActivity extends ActionBarActivity implements CreateNdefMessage
                 invoiceGoodsItem.setGoodsPrice(token[1]);
                 invoiceGoodsItem.setGoodsQuantity(token[2]);
                 invoiceGoodsItem.setGoodsTotalPrice(token[3]);
-                invoiceItem.setGoodsHash(jsonObject.getString("InvoiceNum"));
+                invoiceItem.setGoodsHash(jsonObject.getString("GoodsHash"));
                 invoiceGoodsDAO.insert(invoiceGoodsItem);
             }
         } catch (JSONException e) {
